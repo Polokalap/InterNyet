@@ -38,9 +38,9 @@ export default function Notice({ title, message, canHide = true, onClose }: Manu
 
                 <div className={"flex flex-row justify-between pl-1 pr-1 w-full border-b-1 bg-[#721C24] items-center"}>
 
-                    <p className={"text-white font-bold"}>{ title }</p>
+                    <p className={"text-white font-bold text-lg"}>{ title }</p>
 
-                    {canHide && <div className={"relative h-5 w-5 border-1 cursor-pointer"} onClick={handleClose}>
+                    {canHide && <div className={"relative h-5 w-5 text-xl border-white border-1 cursor-pointer"} onClick={handleClose}>
 
                         <span className={"absolute bottom-1/2 right-1/2 translate-1/2 text-white font-mono font-bold"}>x</span>
 
@@ -93,9 +93,9 @@ export function FileNotice({ title, file, canHide = true, onClose }: FileProps) 
 
                 <div className={"flex flex-row justify-between pl-1 pr-1 w-full border-b-1 bg-[#721C24] items-center"}>
 
-                    <p className={"text-white font-bold"}>{ title }</p>
+                    <p className={"text-white font-bold text-lg"}>{ title }</p>
 
-                    {canHide && <div className={"relative h-5 w-5 border-1 cursor-pointer"} onClick={handleClose}>
+                    {canHide && <div className={"relative h-5 w-5 text-xl border-white border-1 cursor-pointer"} onClick={handleClose}>
 
                         <span className={"absolute bottom-1/2 right-1/2 translate-1/2 text-white font-mono font-bold"}>x</span>
 

@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Japanese Culture",
+    "boards": [
+      {
+        "name": "Anime & Manga",
+        "path": "weeb"
+      },
+      {
+        "name": "Cute",
+        "path": "gooner"
+      },
+      {
+        "name": "Cosplay",
+        "path": "cos"
+      },
+      {
+        "name": "Culture",
+        "path": "japan"
+      }
+    ]
+  },
+  {
+    "name": "Internet",
+    "boards": [
+      {
+        "name": "General",
+        "path": "goon"
+      },
+      {
+        "name": "Linux",
+        "path": "linux"
+      },
+      {
+        "name": "Spyware",
+        "path": "il"
+      },
+      {
+        "name": "Decentralization",
+        "path": "d"
+      },
+      {
+        "name": "Security",
+        "path": "sec"
+      },
+      {
+        "name": "IT",
+        "path": "it"
+      }
+    ]
+  },
+  {
+    "name": "Video Games",
+    "boards": [
+      {
+        "name": "Half-Life",
+        "path": "hl"
+      },
+      {
+        "name": "Portal",
+        "path": "aperture"
+      },
+      {
+        "name": "Pokémon",
+        "path": "pk"
+      },
+      {
+        "name": "Minecraft",
+        "path": "mc"
+      },
+      {
+        "name": "Counter-Strike",
+        "path": "cs"
+      }
+    ]
+  },
+  {
+    "name": "Interests",
+    "boards": [
+      {
+        "name": "Sports",
+        "path": "sports"
+      },
+      {
+        "name": "Math",
+        "path": "math"
+      }
+    ]
+  }
+]
