@@ -1,0 +1,32 @@
+.navbar {
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.navbar ul {
+
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 0 5px 0 5px;
+    gap: 10px;
+
+}
+
+.navbar a {
+
+    color: #721C24;
+    text-decoration: underline;
+
+}
+
+.navbar a:hover {
+
+    color: #C62828;
+
+}
