@@ -5,8 +5,6 @@ const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {
@@ -20,6 +18,11 @@ const nextConfig: NextConfig = {
       {
         source: "/faq",
         destination: "/posts/faq",
+        permanent: true,
+      },
+      {
+        source: "/rules",
+        destination: "/posts/rules",
         permanent: true,
       }
     ]

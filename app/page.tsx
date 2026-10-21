@@ -1,23 +1,41 @@
 import Image from "next/image";
-import Notice, { FileNotice } from "@/app/components/notice/Notice";
+import { cookies } from "next/headers";
+import { FileNotice } from "@/app/components/notice/Notice";
 import Boards from "@/app/components/boards/Boards";
 
-export default function Home() {
+export default async function Home() {
 
-  return (
+    const storage = await cookies();
 
-      <>
+    const welcome = storage.has("welcome");
 
-        <div className={"flex flex-col gap-4 w-full md:w-215 mt-0 m-auto pt-5 pb-5"}>
+    return (
 
-            <FileNotice title={"Welcome to InterNyet!"} file={"./notices/welcome.md"} />
+        <>
 
-            <Boards title={"Boards"} />
+            <div className={"flex flex-col gap-4 w-full md:w-215 mt-0 m-auto pt-5 pb-5"}>
 
-        </div>
+                {!welcome && <FileNotice title={"Welcome to InterNyet!"} file={"./notices/welcome.md"} id={"welcome-notice"} onClose={handleCloseWelcome} />}
 
-      </>
+                <Boards title={"Boards"}/>
 
-  );
+            </div>
+
+        </>
+
+    );
+
+}
+
+async function handleCloseWelcome() {
+
+    "use server";
+
+    const storage = await cookies();
+
+    storage.set("welcome", "true", {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+    });
 
 }

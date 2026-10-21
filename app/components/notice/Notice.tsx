@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import ToMarkdown from "@/app/components/markdown/Markdown";
 
 type ManualProps = {
     title: string;
     message: string;
+    id?: string;
     canHide?: boolean;
     onClose?: () => void;
 }
@@ -13,11 +14,12 @@ type ManualProps = {
 type FileProps = {
     title: string;
     file: string;
+    id?: string;
     canHide?: boolean;
     onClose?: () => void;
 }
 
-export default function Notice({ title, message, canHide = true, onClose }: ManualProps) {
+export default function Notice({ title, message, id, canHide = true, onClose }: ManualProps) {
 
     const [close, setClose] = useState(false);
 
@@ -34,7 +36,7 @@ export default function Notice({ title, message, canHide = true, onClose }: Manu
 
         <>
 
-            <div className={"flex flex-col w-full border-2"}>
+            <div className={"flex flex-col w-full border-2"} id={id}>
 
                 <div className={"flex flex-row justify-between pl-1 pr-1 w-full border-b-1 bg-[#721C24] items-center"}>
 
@@ -62,7 +64,7 @@ export default function Notice({ title, message, canHide = true, onClose }: Manu
 
 }
 
-export function FileNotice({ title, file, canHide = true, onClose }: FileProps) {
+export function FileNotice({ title, file, id, canHide = true, onClose }: FileProps) {
 
     const [close, setClose] = useState(false);
     const [message, setMessage] = useState("");
@@ -89,7 +91,7 @@ export function FileNotice({ title, file, canHide = true, onClose }: FileProps) 
 
         <>
 
-            <div className={"flex flex-col w-full border-2"}>
+            <div className={"flex flex-col w-full border-2"} id={id}>
 
                 <div className={"flex flex-row justify-between pl-1 pr-1 w-full border-b-1 bg-[#721C24] items-center"}>
 
