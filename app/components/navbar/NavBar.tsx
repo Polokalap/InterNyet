@@ -17,6 +17,7 @@ export default function NavBar() {
 
             <ul>
 
+                <Link href={"/account"}><li>Donate</li></Link>
                 <Link href={"/account"}><li>Account</li></Link>
 
             </ul>
