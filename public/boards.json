@@ -17,6 +17,22 @@
       {
         "name": "Culture",
         "path": "japan"
+      },
+      {
+        "name": "Visual Novels",
+        "path": "vn"
+      },
+      {
+        "name": "Vtubers",
+        "path": "vt"
+      },
+      {
+        "name": "Idols",
+        "path": "idol"
+      },
+      {
+        "name": "Japanese Language",
+        "path": "nihongo"
       }
     ]
   },
@@ -46,12 +62,36 @@
       {
         "name": "IT",
         "path": "it"
+      },
+      {
+        "name": "Programming",
+        "path": "prog"
+      },
+      {
+        "name": "Web Development",
+        "path": "web"
+      },
+      {
+        "name": "Privacy",
+        "path": "priv"
+      },
+      {
+        "name": "Open Source",
+        "path": "oss"
+      },
+      {
+        "name": "Retro Computing",
+        "path": "retro"
       }
     ]
   },
   {
     "name": "Video Games",
     "boards": [
+      {
+        "name": "Video Games",
+        "path": "v"
+      },
       {
         "name": "Half-Life",
         "path": "hl"
@@ -71,6 +111,46 @@
       {
         "name": "Counter-Strike",
         "path": "cs"
+      },
+      {
+        "name": "Retro Games",
+        "path": "rg"
+      },
+      {
+        "name": "Indie Games",
+        "path": "indie"
+      },
+      {
+        "name": "Speedrunning",
+        "path": "sr"
+      },
+      {
+        "name": "Emulation",
+        "path": "emu"
+      },
+      {
+        "name": "Fighting Games",
+        "path": "fgc"
+      },
+      {
+        "name": "Tabletop & RPGs",
+        "path": "rpg"
+      },
+      {
+        "name": "Mods & Modding",
+        "path": "mod"
+      },
+      {
+        "name": "Team Fortress 2",
+        "path": "tf2"
+      },
+      {
+        "name": "Garry's Mod",
+        "path": "gmod"
+      },
+      {
+        "name": "Terraria",
+        "path": "terraria"
       }
     ]
   },
@@ -79,11 +159,258 @@
     "boards": [
       {
         "name": "Sports",
-        "path": "sports"
+        "path": "sp"
       },
       {
-        "name": "Math",
+        "name": "Mathematics",
         "path": "math"
+      },
+      {
+        "name": "Literature",
+        "path": "lit"
+      },
+      {
+        "name": "Food & Cooking",
+        "path": "ck"
+      },
+      {
+        "name": "Film & TV",
+        "path": "tv"
+      },
+      {
+        "name": "Music",
+        "path": "mu"
+      },
+      {
+        "name": "Science & Nature",
+        "path": "sci"
+      },
+      {
+        "name": "History",
+        "path": "his"
+      },
+      {
+        "name": "Philosophy",
+        "path": "phil"
+      },
+      {
+        "name": "Space & Astronomy",
+        "path": "space"
+      },
+      {
+        "name": "Economics",
+        "path": "econ"
+      },
+      {
+        "name": "Geography",
+        "path": "geo"
+      },
+      {
+        "name": "Languages",
+        "path": "lang"
+      },
+      {
+        "name": "Comics",
+        "path": "comics"
+      },
+      {
+        "name": "Board Games",
+        "path": "bg"
+      },
+      {
+        "name": "Chess",
+        "path": "chess"
+      },
+      {
+        "name": "Mythology & Religion",
+        "path": "relig"
+      },
+      {
+        "name": "Paranormal",
+        "path": "x"
+      },
+      {
+        "name": "Education & Study",
+        "path": "edu"
+      },
+      {
+        "name": "Trivia",
+        "path": "trivia"
+      }
+    ]
+  },
+  {
+    "name": "Lifestyle",
+    "boards": [
+      {
+        "name": "Health & Fitness",
+        "path": "fit"
+      },
+      {
+        "name": "Mental Health",
+        "path": "mh"
+      },
+      {
+        "name": "Business & Finance",
+        "path": "biz"
+      },
+      {
+        "name": "Careers",
+        "path": "jobs"
+      },
+      {
+        "name": "Relationships",
+        "path": "rel"
+      },
+      {
+        "name": "Travel",
+        "path": "trv"
+      },
+      {
+        "name": "Fashion",
+        "path": "fa"
+      },
+      {
+        "name": "Animals & Pets",
+        "path": "an"
+      },
+      {
+        "name": "Home & Garden",
+        "path": "hg"
+      },
+      {
+        "name": "Cars & Bikes",
+        "path": "o"
+      },
+      {
+        "name": "Nutrition",
+        "path": "nut"
+      },
+      {
+        "name": "Parenting",
+        "path": "par"
+      },
+      {
+        "name": "Productivity",
+        "path": "prod"
+      },
+      {
+        "name": "Minimalism",
+        "path": "min"
+      },
+      {
+        "name": "Outdoors",
+        "path": "out"
+      },
+      {
+        "name": "Hiking",
+        "path": "hike"
+      },
+      {
+        "name": "Beauty & Skincare",
+        "path": "bty"
+      },
+      {
+        "name": "Frugal Living",
+        "path": "frugal"
+      },
+      {
+        "name": "Real Estate",
+        "path": "re"
+      },
+      {
+        "name": "Coffee & Tea",
+        "path": "tea"
+      }
+    ]
+  },
+  {
+    "name": "Creative",
+    "boards": [
+      {
+        "name": "Art & Design",
+        "path": "art"
+      },
+      {
+        "name": "Creative Writing",
+        "path": "cw"
+      },
+      {
+        "name": "DIY & Crafts",
+        "path": "diy"
+      },
+      {
+        "name": "Drawing",
+        "path": "draw"
+      },
+      {
+        "name": "Photography",
+        "path": "ph"
+      },
+      {
+        "name": "3D & Animation",
+        "path": "3d"
+      },
+      {
+        "name": "Game Development",
+        "path": "gd"
+      },
+      {
+        "name": "Music Production",
+        "path": "mp"
+      },
+      {
+        "name": "Poetry",
+        "path": "po"
+      },
+      {
+        "name": "Typography",
+        "path": "type"
+      },
+      {
+        "name": "Filmmaking",
+        "path": "film"
+      },
+      {
+        "name": "Wallpapers",
+        "path": "wp"
+      }
+    ]
+  },
+  {
+    "name": "Misc",
+    "boards": [
+      {
+        "name": "Random",
+        "path": "r"
+      },
+      {
+        "name": "International",
+        "path": "int"
+      },
+      {
+        "name": "Meta",
+        "path": "meta"
+      },
+      {
+        "name": "Advice",
+        "path": "adv"
+      },
+      {
+        "name": "News",
+        "path": "news"
+      },
+      {
+        "name": "Nostalgia",
+        "path": "nost"
+      },
+      {
+        "name": "Requests",
+        "path": "req"
+      },
+      {
+        "name": "Show & Tell",
+        "path": "show"
       }
     ]
   }

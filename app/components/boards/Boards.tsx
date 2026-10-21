@@ -7,7 +7,8 @@ type Props = {
     title: string;
 }
 
-const PER_COLUMN = 22;
+const PER_COLUMN = 18;
+const MIN_SPLIT = 5;
 
 export default function Boards({ title }: Props) {
 
@@ -36,8 +37,9 @@ export default function Boards({ title }: Props) {
         const size = 1 + items.length;
         let current = columns[columns.length - 1];
         const remaining = PER_COLUMN - current.length;
+        const boardsThatFit = remaining - 1;
 
-        const needsNewColumn = current.length > 0 && (size <= PER_COLUMN ? size > remaining : remaining < 2);
+        const needsNewColumn = current.length > 0 && size > remaining && boardsThatFit <= MIN_SPLIT;
 
         if (needsNewColumn) {
 
@@ -63,7 +65,7 @@ export default function Boards({ title }: Props) {
 
     return (
 
-        <div className={"flex flex-col w-full h-100 border-2"}>
+        <div className={"flex flex-col w-full min-h-90 border-2 bg-[#FFF9F0]"}>
 
             <div className={"flex flex-row justify-between pl-1 pr-1 w-full border-b-1 bg-[#e89b68] items-center"}>
 
@@ -71,7 +73,7 @@ export default function Boards({ title }: Props) {
 
             </div>
 
-            <div className={"flex flex-row w-full h-full gap-1 p-1 bg-[#FFF9F0] text-sm"}>
+            <div className={"flex flex-row w-full h-full gap-1 p-1 text-sm"}>
 
                 {columns.map((column, i) => (
 
