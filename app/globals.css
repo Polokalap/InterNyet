@@ -13,3 +13,22 @@ body {
     font-size: 90%;
 
 }
+
+.button {
+
+    @apply border-1 border-[#8f8f9d] hover:bg-[#676774] rounded-md pl-1 pr-1 bg-[#e9e9ed] hover:bg-[#d0d0d7] font-bold cursor-pointer;
+
+}
+
+a {
+
+    color: #721C24;
+    text-decoration: underline;
+
+}
+
+a:hover {
+
+    color: #C62828;
+
+}

@@ -43,13 +43,13 @@ function hashSha(token: string) {
 
 }
 
-async function addUser(user: string, password: string): Promise<AuthResponse> {
+export async function addUser(user: string, password: string): Promise<AuthResponse> {
 
     const username = user.toLowerCase();
 
     if (!allowedCharacters.test(username)) {
 
-        return { success: false, message: "You can only use english letters, numbers and underscores" };
+        return { success: false, message: "Your username can only have english letters, numbers and underscores, and must be between 2 and 16 characters" };
 
     }
 
@@ -75,11 +75,23 @@ async function addUser(user: string, password: string): Promise<AuthResponse> {
         .prepare(`INSERT INTO accounts (user, password) VALUES (?, ?)`)
         .run(username, hashed);
 
-    return { success: true };
+    const account = db
+        .prepare("SELECT * FROM accounts WHERE user = ?")
+        .get(username) as Account | undefined;
+
+    if (!account) {
+
+        return { success: false, message: "Internal error" };
+
+    }
+
+    const session = await createSession(account, 180);
+
+    return { success: true, key: session };
 
 }
 
-async function authenticate(user: string, password: string): Promise<AuthResponse> {
+export async function authenticate(user: string, password: string): Promise<AuthResponse> {
 
     const username = user.toLowerCase();
 
@@ -120,11 +132,11 @@ async function createSession(account: Account, days: number) {
 
 }
 
-async function validate(account: Account, token: string): Promise<AuthResponse> {
+export async function validate(token: string): Promise<AuthResponse> {
 
     const session = db
-        .prepare("SELECT * FROM sessions WHERE account = ? AND token = ?")
-        .get(account.id, hashSha(token)) as SessionToken | undefined;
+        .prepare("SELECT * FROM sessions WHERE token = ?")
+        .get(hashSha(token)) as SessionToken | undefined;
 
     if (!session) {
 
@@ -135,8 +147,8 @@ async function validate(account: Account, token: string): Promise<AuthResponse> 
     if (session.expiration < Math.floor(Date.now() / 1000)) {
 
         db
-            .prepare("DELETE FROM sessions WHERE account = ? AND token = ?")
-            .run(account.id, hashSha(token));
+            .prepare("DELETE FROM sessions WHERE token = ?")
+            .run(hashSha(token));
 
         return { success: false, message: "Session expired" };
 
@@ -146,5 +158,22 @@ async function validate(account: Account, token: string): Promise<AuthResponse> 
 
 }
 
-// addUser("Polokalap", "meow").then(r => console.log(r));
-authenticate("Polokalap", "meow").then(r => console.log(r));
+export async function removeSession(token: string): Promise<AuthResponse> {
+
+    const session = db
+        .prepare("SELECT * FROM sessions WHERE token = ?")
+        .get(hashSha(token)) as SessionToken | undefined;
+
+    if (!session) {
+
+        return { success: false, message: "Invalid session" };
+
+    }
+
+    db
+        .prepare("DELETE FROM sessions WHERE token = ?")
+        .run(hashSha(token));
+
+    return { success: false, message: "Session removed" };
+
+}

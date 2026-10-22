@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         source: "/rules",
         destination: "/posts/rules",
         permanent: true,
+      },
+      {
+        source: "/logout",
+        destination: "/account/logout",
+        permanent: true,
       }
     ]
   }

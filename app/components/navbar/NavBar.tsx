@@ -1,5 +1,5 @@
-import Link from "next/link";
 import "./NavBar.css";
+import NavLink from "@/app/components/navbar/NavLink";
 
 export default function NavBar() {
 
@@ -9,16 +9,16 @@ export default function NavBar() {
 
             <ul>
 
-                <Link href={"/posts"}><li>Posts</li></Link>
-                <Link href={"/rules"}><li>Rules</li></Link>
-                <Link href={"/faq"}><li>FAQ</li></Link>
+                <NavLink title={"Main"} path={"/"} />
+                <NavLink title={"Rules"} path={"/rules"} />
+                <NavLink title={"FAQ"} path={"/faq"} />
 
             </ul>
 
             <ul>
 
-                <Link href={"/account"}><li>Donate</li></Link>
-                <Link href={"/account"}><li>Account</li></Link>
+                <NavLink title={"Donate"} path={"/donate"} />
+                <NavLink title={"Account"} path={"/account"} />
 
             </ul>
 
