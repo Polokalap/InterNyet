@@ -19,7 +19,13 @@ function init() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user TEXT NOT NULL,
             password TEXT NOT NULL,
-            ceeated INTEGER NOT NULL DEFAULT (unixepoch())
+            created INTEGER NOT NULL DEFAULT (unixepoch())
+        );
+        CREATE TABLE IF NOT EXISTS sessions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            token TEXT NOT NULL,
+            expiration TIMESTAMP NOT NULL
         );
     `);
 
