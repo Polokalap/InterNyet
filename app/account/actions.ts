@@ -13,7 +13,7 @@ export async function login(formData: FormData) {
 
     if (!result.success || !result.key) {
 
-        redirect("/account/login?error=true");
+        redirect(`/account/login?error=true&code=${result.code}`);
 
     }
 
@@ -38,7 +38,7 @@ export async function register(formData: FormData) {
 
     if (!result.success || !result.key) {
 
-        redirect(`/account/register?error=true&message=${result.message}`);
+        redirect(`/account/register?error=true&code=${result.code}`);
 
     }
 

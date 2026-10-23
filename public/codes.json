@@ -1,0 +1,12 @@
+{
+  "1": "Your username can only have english letters, numbers and underscores, and must be between 1 and 16 characters",
+  "2": "Your password must be between 8 and 128 characters",
+  "3": "Username already taken",
+  "4": "Internal Server Error",
+  "5": "Username or password doesn't exist",
+  "6": "Authentication successful!",
+  "7": "Invalid session",
+  "8": "Session expired",
+  "9": "Valid session",
+  "10": "Session removed"
+}

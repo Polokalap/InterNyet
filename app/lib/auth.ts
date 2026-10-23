@@ -15,7 +15,7 @@ const options: HashOptions = {
 
 type AuthResponse = {
     success: boolean;
-    message?: string;
+    code?: number;
     key?: string;
 };
 
@@ -53,13 +53,13 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     if (!allowedCharacters.test(username)) {
 
-        return { success: false, message: "Your username can only have english letters, numbers and underscores, and must be between 1 and 16 characters" };
+        return { success: false, code: 1 };
 
     }
 
     if (password.length < 8 || password.length > 128) {
 
-        return { success: false, message: "Your password must be between 8 and 128 characters" };
+        return { success: false, code: 2 };
 
     }
 
@@ -69,7 +69,7 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     if (userCheck) {
 
-        return { success: false, message: "Username already taken" };
+        return { success: false, code: 3 };
 
     }
 
@@ -78,13 +78,12 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
     try {
 
         db
-            .prepare(`INSERT INTO accounts (user, password)
-                      VALUES (?, ?)`)
+            .prepare(`INSERT INTO accounts (user, password) VALUES (?, ?)`)
             .run(username, hashed);
 
     } catch (err) {
 
-        return { success: false, message: "Internal Server Error" };
+        return { success: false, code: 4 };
 
     }
 
@@ -94,7 +93,7 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     if (!account) {
 
-        return { success: false, message: "Internal error" };
+        return { success: false, code: 4 };
 
     }
 
@@ -114,14 +113,14 @@ export async function authenticate(user: string, password: string): Promise<Auth
 
     if (password.length < 8 || password.length > 128) {
 
-        return { success: false, message: "Username or password doesn't exist" };
+        return { success: false, code: 5 };
 
     }
 
     if (!account) {
 
         await argon2.verify("$argon2id$v=19$m=65536,t=4,p=2$I2L57wqPXiYQgGJV6sPgRQ$DofqLXFb8A60KJsfC4z/fuv2Cq7vQnlsOy0uF90t1Nk", password);
-        return { success: false, message: "Username or password doesn't exist" };
+        return { success: false, code: 5 };
 
     }
 
@@ -129,13 +128,13 @@ export async function authenticate(user: string, password: string): Promise<Auth
 
     if (!match) {
 
-        return { success: false, message: "Username or password doesn't exist" };
+        return { success: false, code: 5 };
 
     }
 
     const session = await createSession(account, 180);
 
-    return { success: true, message: "Authentication successful!", key: session };
+    return { success: true, code: 6, key: session };
 
 }
 
@@ -160,7 +159,7 @@ export async function validate(token: string): Promise<AuthResponse> {
 
     if (!session) {
 
-        return { success: false, message: "Invalid session" };
+        return { success: false, code: 7 };
 
     }
 
@@ -170,11 +169,11 @@ export async function validate(token: string): Promise<AuthResponse> {
             .prepare("DELETE FROM sessions WHERE token = ?")
             .run(hashSha(token));
 
-        return { success: false, message: "Session expired" };
+        return { success: false, code: 8 };
 
     }
 
-    return { success: true, message: "Valid session" };
+    return { success: true, code: 9 };
 
 }
 
@@ -188,7 +187,7 @@ export async function removeSession(token: string): Promise<AuthResponse> {
 
     if (!session) {
 
-        return { success: false, message: "Invalid session" };
+        return { success: false, code: 7 };
 
     }
 
@@ -196,7 +195,7 @@ export async function removeSession(token: string): Promise<AuthResponse> {
         .prepare("DELETE FROM sessions WHERE token = ?")
         .run(hashSha(token));
 
-    return { success: true, message: "Session removed" };
+    return { success: true, code: 10 };
 
 }
 

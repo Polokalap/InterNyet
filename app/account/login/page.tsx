@@ -2,9 +2,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { validate } from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
-import {login} from "@/app/account/actions";
+import { login } from "@/app/account/actions";
+import { getMessage } from "@/app/lib/messages";
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, message?: string }>; }) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
     const storage = await cookies();
     const token = storage.get("session");
@@ -17,7 +18,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
     }
 
-    const { error, message } = await searchParams;
+    const { error, code } = await searchParams;
 
     return (
 
@@ -61,7 +62,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                         <p>Don't have an account yet? <a href="/account/register">register!</a></p>
 
-                        {error && <p className="text-red-700">{message ?? "Invalid username or password"}</p>}
+                        {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
 
                     </form>
 
