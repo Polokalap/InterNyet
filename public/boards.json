@@ -109,6 +109,10 @@
         "path": "mc"
       },
       {
+        "name": "ULTRAKILL",
+        "path": "peak"
+      },
+      {
         "name": "Counter-Strike",
         "path": "cs"
       },
