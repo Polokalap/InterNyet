@@ -17,7 +17,7 @@ function init() {
     db.exec(`
         CREATE TABLE IF NOT EXISTS accounts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user TEXT NOT NULL,
+            user TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             created INTEGER NOT NULL DEFAULT (unixepoch())
         );
@@ -27,7 +27,14 @@ function init() {
             token TEXT NOT NULL,
             expiration TIMESTAMP NOT NULL
         );
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+        CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
     `);
+
+    db.exec("ANALYZE");
+    db.pragma("optimize");
+
+    db.prepare("DELETE FROM sessions WHERE expiration < unixepoch()").run();
 
 }
 

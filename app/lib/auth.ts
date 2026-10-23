@@ -1,10 +1,14 @@
 import argon2, { HashOptions } from "argon2";
 import { randomBytes, createHash } from "crypto";
 import { getDatabase } from "@/app/lib/database";
+import "server-only";
+import {cache} from "react";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 
 const options: HashOptions = {
     type: argon2.argon2id,
-    memoryCost: 64000,
+    memoryCost: 65536,
     timeCost: 4,
     parallelism: 2,
 };
@@ -28,8 +32,8 @@ type SessionToken = {
     expiration: number;
 };
 
-export const db = getDatabase();
-const allowedCharacters = /^[a-z0-9]{1,16}$/;
+const db = getDatabase();
+const allowedCharacters = /^[a-z0-9_]{1,16}$/;
 
 async function hash(tohash: string) {
 
@@ -49,13 +53,13 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     if (!allowedCharacters.test(username)) {
 
-        return { success: false, message: "Your username can only have english letters, numbers and underscores, and must be between 2 and 16 characters" };
+        return { success: false, message: "Your username can only have english letters, numbers and underscores, and must be between 1 and 16 characters" };
 
     }
 
-    if (password.length < 6 || password.length > 128) {
+    if (password.length < 8 || password.length > 128) {
 
-        return { success: false, message: "Your password must be between 6 and 128 characters" };
+        return { success: false, message: "Your password must be between 8 and 128 characters" };
 
     }
 
@@ -71,9 +75,18 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     const hashed = await hash(password);
 
-    db
-        .prepare(`INSERT INTO accounts (user, password) VALUES (?, ?)`)
-        .run(username, hashed);
+    try {
+
+        db
+            .prepare(`INSERT INTO accounts (user, password)
+                      VALUES (?, ?)`)
+            .run(username, hashed);
+
+    } catch (err) {
+
+        return { success: false, message: "Internal Server Error" };
+
+    }
 
     const account = db
         .prepare("SELECT * FROM accounts WHERE user = ?")
@@ -99,8 +112,15 @@ export async function authenticate(user: string, password: string): Promise<Auth
         .prepare("SELECT * FROM accounts WHERE user = ?")
         .get(username) as Account | undefined;
 
+    if (password.length < 8 || password.length > 128) {
+
+        return { success: false, message: "Username or password doesn't exist" };
+
+    }
+
     if (!account) {
 
+        await argon2.verify("$argon2id$v=19$m=65536,t=4,p=2$I2L57wqPXiYQgGJV6sPgRQ$DofqLXFb8A60KJsfC4z/fuv2Cq7vQnlsOy0uF90t1Nk", password);
         return { success: false, message: "Username or password doesn't exist" };
 
     }
@@ -135,8 +155,8 @@ async function createSession(account: Account, days: number) {
 export async function validate(token: string): Promise<AuthResponse> {
 
     const session = db
-        .prepare("SELECT * FROM sessions WHERE token = ?")
-        .get(hashSha(token)) as SessionToken | undefined;
+        .prepare("SELECT expiration FROM sessions WHERE token = ?")
+        .get(hashSha(token)) as Pick<SessionToken, "expiration"> | undefined;
 
     if (!session) {
 
@@ -160,9 +180,11 @@ export async function validate(token: string): Promise<AuthResponse> {
 
 export async function removeSession(token: string): Promise<AuthResponse> {
 
+    const hashed = hashSha(token);
+
     const session = db
-        .prepare("SELECT * FROM sessions WHERE token = ?")
-        .get(hashSha(token)) as SessionToken | undefined;
+        .prepare("SELECT 1 FROM sessions WHERE token = ?")
+        .get(hashed);
 
     if (!session) {
 
@@ -174,6 +196,26 @@ export async function removeSession(token: string): Promise<AuthResponse> {
         .prepare("DELETE FROM sessions WHERE token = ?")
         .run(hashSha(token));
 
-    return { success: false, message: "Session removed" };
+    return { success: true, message: "Session removed" };
 
 }
+
+export async function getCurrentUser(token: string): Promise<{ id: number; name: string } | null> {
+
+    const row = db
+        .prepare(`SELECT a.id, a.user AS name FROM sessions s JOIN accounts a ON a.id = s.account WHERE s.token = ? AND s.expiration > unixepoch()`)
+        .get(hashSha(token)) as { id: number; name: string } | undefined;
+
+    return row ?? null;
+
+}
+export const requireUser = cache(async () => {
+
+    const token = (await cookies()).get("session")?.value;
+    const user = token ? await getCurrentUser(token) : null;
+
+    if (!user) redirect("/account/login");
+
+    return user;
+
+});
