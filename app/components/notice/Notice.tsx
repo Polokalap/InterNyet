@@ -71,9 +71,21 @@ export function FileNotice({ title, file, id, canHide = true, onClose }: FilePro
 
     useEffect(() => {
 
+        let cancelled = false;
+
         fetch(file)
-            .then((res) => res.text())
-            .then(setMessage);
+            .then((res) => {
+                if (!res.ok) return "";
+                return res.text();
+            })
+            .then((text) => {
+                if (!cancelled) setMessage(text.trim());
+            })
+            .catch(() => {
+                if (!cancelled) setMessage("");
+            });
+
+        return () => { cancelled = true; };
 
     }, []);
 

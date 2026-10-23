@@ -3,12 +3,15 @@
 body {
 
     margin: 0;
-    background: linear-gradient(
+    background-image: linear-gradient(
             to top,
             #fff1e1 0%,
             #fff1e1 85%,
             #F3C6C6 100%
     );
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 90%;
 
@@ -16,7 +19,19 @@ body {
 
 .button {
 
-    @apply border-1 border-[#8f8f9d] hover:bg-[#676774] rounded-md pl-1 pr-1 bg-[#e9e9ed] hover:bg-[#d0d0d7] font-bold cursor-pointer;
+    @apply border-1 border-[#8f8f9d] hover:bg-[#676774] rounded-md pl-1 pr-1 bg-[#e9e9ed] font-bold cursor-pointer;
+
+}
+
+.button-primary {
+
+    @apply border-1 border-black pl-1 pr-1 bg-[#721C24] hover:bg-[#C62828] font-bold cursor-pointer text-white;
+
+}
+
+.button-secondary {
+
+    @apply border-1 border-black pl-1 pr-1 bg-[#e9e9ed] hover:bg-[#8f8f9d] cursor-pointer text-black;
 
 }
 

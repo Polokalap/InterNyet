@@ -58,7 +58,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                         </div>
 
-                        <button className={"button scale-125"} type={"submit"}>Log in</button>
+                        <button className={"button-primary scale-125"} type={"submit"}>Log in</button>
 
                         <p>Don't have an account yet? <a href="/account/register">register!</a></p>
 

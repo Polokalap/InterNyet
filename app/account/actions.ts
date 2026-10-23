@@ -65,6 +65,7 @@ export async function logout() {
 
     }
 
+    storage.delete("session");
     redirect("/account/login");
 
 }
