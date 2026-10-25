@@ -42,7 +42,7 @@ export async function register(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "register"))) {
 
-        redirect("/account/login?error=true&code=16");
+        redirect("/account/logout?error=true&code=16");
 
     }
 
@@ -95,7 +95,7 @@ export async function settings(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "settings"))) {
 
-        redirect("/account/login?error=true&code=16");
+        redirect("/account/settings?error=true&code=16");
 
     }
 
