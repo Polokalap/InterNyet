@@ -5,8 +5,15 @@ import { redirect } from "next/navigation";
 import { authenticate, addUser, removeSession, requireUser } from "@/app/lib/auth";
 import { setDisplayName, setProfilePicture } from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
+import { verifyTurnstile } from "@/app/lib/security";
 
 export async function login(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "login"))) {
+
+        redirect("/account/login?error=true&code=16");
+
+    }
 
     const user = String(formData.get("user") ?? "");
     const password = String(formData.get("password") ?? "");
@@ -32,6 +39,12 @@ export async function login(formData: FormData) {
 }
 
 export async function register(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "register"))) {
+
+        redirect("/account/login?error=true&code=16");
+
+    }
 
     const user = String(formData.get("user") ?? "");
     const password = String(formData.get("password") ?? "");
@@ -73,6 +86,12 @@ export async function logout() {
 }
 
 export async function settings(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "settings"))) {
+
+        redirect("/account/login?error=true&code=16");
+
+    }
 
     const storage = await cookies();
     const session = storage.get("session");

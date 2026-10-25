@@ -13,5 +13,6 @@
   "12": "The image must be under 10mb!",
   "13": "The file is empty!",
   "14": "Image is corrupted.",
-  "15": "Display Name set successfully!"
+  "15": "Display Name set successfully!",
+  "16": "Please fill out the CAPTCHA!"
 }

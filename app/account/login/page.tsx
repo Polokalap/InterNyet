@@ -4,6 +4,7 @@ import { validate } from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
 import { login } from "@/app/account/actions";
 import { getMessage } from "@/app/lib/messages";
+import Check from "@/app/components/verification/Check";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -55,6 +56,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                                 <input name={"password"} className={"input"} type="password" maxLength={128} />
 
                             </div>
+
+                            <Check action={"login"}/>
 
                         </div>
 
