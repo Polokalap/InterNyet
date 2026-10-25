@@ -149,7 +149,7 @@ export async function authenticate(user: string, password: string): Promise<Auth
 
 async function createSession(account: Account, days: number) {
 
-    const token = randomBytes(32).toString("base64url");
+    const token = randomBytes(256).toString("base64url");
     const expiration = Math.floor(Date.now() / 1000) + days * 86400;
 
     db

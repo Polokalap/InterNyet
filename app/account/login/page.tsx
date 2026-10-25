@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
         <>
 
-            <div className={"flex flex-col gap-10 w-full md:w-215 mt-0 m-auto pt-5 pb-5"}>
+            <div className={"flex flex-col gap-10 w-full md:w-215 mt-0 m-auto p-5"}>
 
                 <NavBar />
 
