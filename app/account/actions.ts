@@ -69,7 +69,13 @@ export async function register(formData: FormData) {
 
 }
 
-export async function logout() {
+export async function logout(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "lotout"))) {
+
+        redirect("/account/logout?error=true&code=16");
+
+    }
 
     const storage = await cookies();
     const session = storage.get("session");

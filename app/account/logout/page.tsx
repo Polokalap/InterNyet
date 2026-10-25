@@ -1,13 +1,14 @@
 import { logout } from "@/app/account/actions";
 import NavBar from "@/app/components/navbar/NavBar";
 import { requireUser } from "@/app/lib/auth"
+import Check from "@/app/components/verification/Check";
+import {getMessage} from "@/app/lib/messages";
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
     const user = await requireUser();
 
-    // await logout();
-    // redirect("/account/login");
+    const { error, code } = await searchParams;
 
     return (
 
@@ -34,11 +35,17 @@ export default async function Page() {
                         <div className={"flex flex-row w-full justify-evenly p-20 pt-3"}>
 
                             <form action={logout}>
+
+                                <Check action={"logout"} />
                                 <button type="submit" className={"button-primary scale-125"}>Yes, log out</button>
+
                             </form>
+
                             <a href={"/account"}><button className={"button-secondary scale-125"}>No, go back</button></a>
 
                         </div>
+
+                        {error && <p className="text-red-700 m-auto">{getMessage(code) ?? "Invalid username or password"}</p>}
 
                     </div>
 
