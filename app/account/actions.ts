@@ -95,7 +95,7 @@ export async function settings(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "settings"))) {
 
-        redirect("/account/settings?error=true&code=16");
+        redirect("/account?error=true&code=16");
 
     }
 
