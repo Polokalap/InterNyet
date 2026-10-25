@@ -106,7 +106,7 @@ export async function settings(formData: FormData) {
 
     const display = formData.get("display");
 
-    if (display !== "") {
+    if (!(display instanceof File) && display !== "" && display) {
 
         const result = await setDisplayName(session.value, display);
 
