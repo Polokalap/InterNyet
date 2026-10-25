@@ -1,4 +1,13 @@
-export default function Card({ user }) {
+type Props = {
+    user: {
+        id: number;
+        name: string;
+        display: string;
+        created: number;
+    };
+}
+
+export default function Card({ user }: Props) {
 
     // eslint-disable-next-line react-hooks/purity
     const epoch = Date.now();

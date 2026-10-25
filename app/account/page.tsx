@@ -1,7 +1,7 @@
 import { requireUser } from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
-import {settings} from "@/app/account/actions";
-import {getMessage} from "@/app/lib/messages";
+import { settings } from "@/app/account/actions";
+import { getMessage } from "@/app/lib/messages";
 import Card from "@/app/components/user/Card";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
