@@ -71,7 +71,7 @@ export async function register(formData: FormData) {
 
 export async function logout(formData: FormData) {
 
-    if (!(await verifyTurnstile(formData, "lotout"))) {
+    if (!(await verifyTurnstile(formData, "logout"))) {
 
         redirect("/account/logout?error=true&code=16");
 
