@@ -5,6 +5,7 @@ import "server-only";
 import {cache} from "react";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import { cpSync, mkdirSync } from "node:fs";
 
 const options: HashOptions = {
     type: argon2.argon2id,
@@ -34,6 +35,8 @@ type SessionToken = {
 
 const db = getDatabase();
 const allowedCharacters = /^[a-z0-9_]{1,16}$/;
+
+mkdirSync("data/user", { recursive: true });
 
 async function hash(tohash: string) {
 
@@ -97,7 +100,13 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
 
     }
 
+    db
+        .prepare(`INSERT INTO settings (account, display) VALUES (?, ?)`)
+        .run(account.id, user);
+
     const session = await createSession(account, 180);
+
+    cpSync(`templates/user`, `data/user/${account.id}`, { recursive: true });
 
     return { success: true, key: session };
 
@@ -199,11 +208,17 @@ export async function removeSession(token: string): Promise<AuthResponse> {
 
 }
 
-export async function getCurrentUser(token: string): Promise<{ id: number; name: string } | null> {
+export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; created: number; } | null> {
 
     const row = db
-        .prepare(`SELECT a.id, a.user AS name FROM sessions s JOIN accounts a ON a.id = s.account WHERE s.token = ? AND s.expiration > unixepoch()`)
-        .get(hashSha(token)) as { id: number; name: string } | undefined;
+        .prepare(`
+            SELECT a.id, a.user AS name, st.display, a.created
+            FROM sessions s
+                     JOIN accounts a ON a.id = s.account
+                     LEFT JOIN settings st ON st.account = a.id
+            WHERE s.token = ? AND s.expiration > unixepoch()
+        `)
+        .get(hashSha(token)) as { id: number; name: string; display: string; created: number } | undefined;
 
     return row ?? null;
 

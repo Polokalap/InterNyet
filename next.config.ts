@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     agentFeedback: true,
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
   },
   turbopack: {
     rules: {
@@ -28,6 +31,16 @@ const nextConfig: NextConfig = {
       {
         source: "/logout",
         destination: "/account/logout",
+        permanent: true,
+      },
+      {
+        source: "/login",
+        destination: "/account/login",
+        permanent: true,
+      },
+      {
+        source: "/register",
+        destination: "/account/register",
         permanent: true,
       }
     ]

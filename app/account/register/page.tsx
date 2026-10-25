@@ -45,14 +45,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                             <div className={"flex flex-col"}>
 
                                 <p>Username:</p>
-                                <input name={"user"} className={"border-1"} type="text" maxLength={16} />
+                                <input name={"user"} className={"input"} type="text" maxLength={16} />
 
                             </div>
 
                             <div className={"flex flex-col"}>
 
                                 <p>Password:</p>
-                                <input name={"password"} className={"border-1"} type="password" maxLength={128} />
+                                <input name={"password"} className={"input"} type="password" maxLength={128} />
 
                             </div>
 

@@ -21,6 +21,10 @@ function init() {
             password TEXT NOT NULL,
             created INTEGER NOT NULL DEFAULT (unixepoch())
         );
+        CREATE TABLE IF NOT EXISTS settings (
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            display TEXT NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS sessions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,

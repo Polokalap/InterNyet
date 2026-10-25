@@ -2,7 +2,9 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { authenticate, addUser, removeSession } from "@/app/lib/auth";
+import { authenticate, addUser, removeSession, requireUser } from "@/app/lib/auth";
+import { setDisplayName, setProfilePicture } from "@/app/lib/settings";
+import { revalidatePath } from "next/cache";
 
 export async function login(formData: FormData) {
 
@@ -67,5 +69,56 @@ export async function logout() {
 
     storage.delete("session");
     redirect("/account/login");
+
+}
+
+export async function settings(formData: FormData) {
+
+    const storage = await cookies();
+    const session = storage.get("session");
+    const user = await requireUser();
+
+    if (!session) {
+
+        redirect("/account/login");
+
+    }
+
+    const profile = formData.get("profile");
+
+    if (profile instanceof File && profile.size > 0) {
+
+        if (profile.size > 10 * 1024 * 1024) {
+
+            redirect("/account?error=true&code=12");
+
+        }
+
+        const result = await setProfilePicture(session.value, profile);
+
+        if (!result.success) {
+
+            redirect(`/account?error=true&code=${result.code}`);
+
+        }
+
+    }
+
+    const display = formData.get("display");
+
+    if (display !== "") {
+
+        const result = await setDisplayName(session.value, display);
+
+        if (!result.success) {
+
+            redirect(`/account?error=true&code=${result.code}`);
+
+        }
+
+    }
+
+    revalidatePath("/account");
+    redirect("/account");
 
 }

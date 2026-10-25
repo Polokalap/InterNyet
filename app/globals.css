@@ -47,3 +47,9 @@ a:hover {
     color: #C62828;
 
 }
+
+.input {
+
+    @apply border-1 bg-[#FFF9F0] outline-none;
+
+}

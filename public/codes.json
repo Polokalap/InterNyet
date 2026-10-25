@@ -8,5 +8,10 @@
   "7": "Invalid session",
   "8": "Session expired",
   "9": "Valid session",
-  "10": "Session removed"
+  "10": "Session removed",
+  "11": "Profile Picture set successfully!",
+  "12": "The image must be under 10mb!",
+  "13": "The file is empty!",
+  "14": "Image is corrupted.",
+  "15": "Display Name set successfully!"
 }
