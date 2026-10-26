@@ -13,7 +13,7 @@ export default function LogoutForm() {
 
         <form action={logout}>
 
-            <Check action={"logout"} />
+            <Check action={"logout"} setFinished={setFinished} />
             <button className={`button-primary${finished ? "" : "-disabled"} scale-125`} type={"submit"} disabled={!finished}>Yes, log out</button>
 
         </form>
