@@ -4,4 +4,48 @@
 ## Basics of this imageboard
 You can log in with an account/post anonymously, and every inactive post gets deleted after a certain time. The platform is separated into boards, for different topics.
 
+## Moderation
+The moderation on the site is unique, because I do not believe in moderators. We let the community moderate content, and if a post violates our rules, it won't be taken down if the community likes it.
+
+## How to access it
+It's currently up at https://demo.fortnitefeet.com, but it's NOT functional at the moment, as it's still in development.
+
+## How to run it for yourself
+You need to clone the repository, and install all the packages `npm i`, then start the dev server `npm run dev`.
+
+## Contribution
+You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
+
+Todo:
+- [+] Add notices
+- - [+] Add markdown support
+- - [+] Add custom scripting on close
+- [ ] Add user accounts
+- - [+] Add registration
+- - [+] Add login
+- - [+] Add logout
+- - [+] Add sessions
+- - [+] Add settings
+- - - [+] Custom profile picture
+- - - [+] Display name
+- - - [ ] Username change
+- - - [ ] Password change
+- - [ ] 2FA
+- - - [ ] TOTP authenticator support
+- - - - [ ] QR Code
+- - - [ ] Security key support
+- - [ ] Turnstile CAPTCHA
+- [ ] Posting site news
+- - [ ] Markdown support
+- - [ ] User comments
+- - [ ] Reactions
+- [ ] Boards
+- - [ ] Posting
+- - - [ ] Markdown support
+- - - [ ] Image support
+- - [ ] Moderation
+- - - [ ] AI Review (don't assume the worst)
+- - - [ ] Turnstile captcha
+
+
 Currently WIP
