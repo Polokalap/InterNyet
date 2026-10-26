@@ -1,8 +1,10 @@
 import NavBar from "@/app/components/navbar/NavBar";
-import LoginForm from "@/app/components/login/LoginForm";
+import LoginForm from "@/app/components/account/login/LoginForm";
+import { requireNoUser } from "@/app/lib/auth";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
+    await requireNoUser();
     const { error, code } = await searchParams;
 
     return (

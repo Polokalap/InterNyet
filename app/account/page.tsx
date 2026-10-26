@@ -1,9 +1,8 @@
 import { requireUser } from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
-import { settings } from "@/app/account/actions";
 import { getMessage } from "@/app/lib/messages";
 import Card from "@/app/components/user/Card";
-import Check from "@/app/components/verification/Check";
+import SettingsForm from "@/app/components/account/settings/SettingsForm";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -28,39 +27,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                 </div>
 
-                <form className={"flex flex-col gap-3"} action={settings}>
-
-                    <h1 className={"text-3xl"}>Account settings</h1>
-
-                    <br />
-
-                    <div className={"flex flex-row justify-between"}>
-
-                        <p className={"text-lg"}>Profile picture:</p>
-
-                        <input className={"button"} name={"profile"} type="file" />
-
-                    </div>
-
-                    <div className={"flex flex-row justify-between"}>
-
-                        <p className={"text-lg"}>Display name:</p>
-
-                        <input className={"input"} name={"display"} type="text" defaultValue={user.display} placeholder={user.display} />
-
-                    </div>
-
-                    <div className={"flex flex-row justify-between pr-1.5"}>
-
-                        <br />
-
-                        <Check action={"settings"} />
-
-                        <button type={"submit"} className={"button-primary scale-125"}>Save</button>
-
-                    </div>
-
-                </form>
+                <SettingsForm error={error} code={code} user={user} />
 
             </div>
 

@@ -1,13 +1,11 @@
-import { logout } from "@/app/account/actions";
 import NavBar from "@/app/components/navbar/NavBar";
 import { requireUser } from "@/app/lib/auth"
-import Check from "@/app/components/verification/Check";
 import {getMessage} from "@/app/lib/messages";
+import LogoutForm from "@/app/components/account/logout/LogoutForm";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
     const user = await requireUser();
-
     const { error, code } = await searchParams;
 
     return (
@@ -34,12 +32,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                         <div className={"flex flex-row w-full justify-evenly p-20 pt-3"}>
 
-                            <form action={logout}>
-
-                                <Check action={"logout"} />
-                                <button type="submit" className={"button-primary scale-125"}>Yes, log out</button>
-
-                            </form>
+                            <LogoutForm />
 
                             <a href={"/account"}><button className={"button-secondary scale-125"}>No, go back</button></a>
 

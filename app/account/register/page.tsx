@@ -1,24 +1,10 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { validate } from "@/app/lib/auth";
+import {requireNoUser, validate} from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
-import { register } from "@/app/account/actions";
-import { getMessage } from "@/app/lib/messages";
-import Check from "@/app/components/verification/Check";
+import RegisterForm from "@/app/components/account/register/RegisterForm";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
-    const storage = await cookies();
-    const token = storage.get("session");
-
-    const result = token ? await validate(token.value) : null;
-
-    if (result?.success) {
-
-        redirect("/account");
-
-    }
-
+    await requireNoUser();
     const { error, code } = await searchParams;
 
     return (
@@ -37,37 +23,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                     </div>
 
-                    <form action={register} className="flex flex-col gap-5 items-center">
-
-                        <p className={"text-3xl"}>Register</p>
-
-                        <div className={"flex flex-col"}>
-
-                            <div className={"flex flex-col"}>
-
-                                <p>Username:</p>
-                                <input name={"user"} className={"input"} type="text" maxLength={16} />
-
-                            </div>
-
-                            <div className={"flex flex-col"}>
-
-                                <p>Password:</p>
-                                <input name={"password"} className={"input"} type="password" maxLength={128} />
-
-                            </div>
-
-                            <Check action={"register"} />
-
-                        </div>
-
-                        <button className={"button-primary scale-125"} type={"submit"}>Register</button>
-
-                        <p>Already have an account? <a href="/account/login">log in!</a></p>
-
-                        {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
-
-                    </form>
+                    <RegisterForm error={error} code={code} />
 
                 </div>
 
