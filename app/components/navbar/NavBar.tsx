@@ -1,31 +1,13 @@
 import NavLink from "@/app/components/navbar/NavLink";
-import { getCurrentUser } from "@/app/lib/auth";
-import { cookies } from "next/headers";
+import { getIfUser } from "@/app/lib/auth";
 import Link from "next/link";
 import "./NavBar.css";
 
 export default async function NavBar() {
 
-    const storage = await cookies();
-    const token = storage.get("session");
-
-    let user = null;
+    const user = await getIfUser();
     // eslint-disable-next-line react-hooks/purity
     const epoch = Date.now();
-
-    if (token) {
-
-        try {
-
-            user = await getCurrentUser(token.value);
-
-        } catch {
-
-            user = null;
-
-        }
-
-    }
 
     return (
 

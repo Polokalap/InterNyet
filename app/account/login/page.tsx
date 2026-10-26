@@ -1,23 +1,7 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { validate } from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
-import { login } from "@/app/account/actions";
-import { getMessage } from "@/app/lib/messages";
-import Check from "@/app/components/verification/Check";
+import LoginForm from "@/app/components/login/LoginForm";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
-
-    const storage = await cookies();
-    const token = storage.get("session");
-
-    const result = token ? await validate(token.value) : null;
-
-    if (result?.success) {
-
-        redirect("/account");
-
-    }
 
     const { error, code } = await searchParams;
 
@@ -37,37 +21,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                     </div>
 
-                    <form action={login} className="flex flex-col gap-5 items-center">
-
-                        <p className={"text-3xl"}>Log in</p>
-
-                        <div className={"flex flex-col"}>
-
-                            <div className={"flex flex-col"}>
-
-                                <p>Username:</p>
-                                <input name={"user"} className={"input"} type="text" maxLength={16} />
-
-                            </div>
-
-                            <div className={"flex flex-col"}>
-
-                                <p>Password:</p>
-                                <input name={"password"} className={"input"} type="password" maxLength={128} />
-
-                            </div>
-
-                            <Check action={"login"}/>
-
-                        </div>
-
-                        <button className={"button-primary scale-125"} type={"submit"}>Log in</button>
-
-                        <p>Don't have an account yet? <a href="/account/register">register!</a></p>
-
-                        {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
-
-                    </form>
+                    <LoginForm error={error} code={code} />
 
                 </div>
 

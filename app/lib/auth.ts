@@ -223,6 +223,16 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
     return row ?? null;
 
 }
+
+export async function getIfUser(): Promise<{ id: number; name: string; display: string; created: number; } | null> {
+
+    const token = (await cookies()).get("session")?.value;
+    const user = token ? await getCurrentUser(token) : null;
+
+    return user ?? null;
+
+}
+
 export const requireUser = cache(async () => {
 
     const token = (await cookies()).get("session")?.value;
@@ -231,5 +241,14 @@ export const requireUser = cache(async () => {
     if (!user) redirect("/account/login");
 
     return user;
+
+});
+
+export const requireNoUser = cache(async () => {
+
+    const token = (await cookies()).get("session")?.value;
+    const user = token ? await getCurrentUser(token) : null;
+
+    if (user) redirect("/account");
 
 });

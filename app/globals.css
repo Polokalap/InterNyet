@@ -35,6 +35,13 @@ body {
 
 }
 
+.button-primary-disabled {
+
+    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] font-bold text-white pointer-events-none;
+
+
+}
+
 a {
 
     color: #721C24;
