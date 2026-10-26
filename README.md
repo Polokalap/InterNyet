@@ -16,36 +16,45 @@ You need to clone the repository, and install all the packages `npm i`, then sta
 ## Contribution
 You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
 
-Todo:
-- [+] Add notices
-- - [+] Add markdown support
-- - [+] Add custom scripting on close
-- [ ] Add user accounts
-- - [+] Add registration
-- - [+] Add login
-- - [+] Add logout
-- - [+] Add sessions
-- - [+] Add settings
-- - - [+] Custom profile picture
-- - - [+] Display name
-- - - [ ] Username change
-- - - [ ] Password change
-- - [ ] 2FA
-- - - [ ] TOTP authenticator support
-- - - - [ ] QR Code
-- - - [ ] Security key support
-- - [ ] Turnstile CAPTCHA
-- [ ] Posting site news
-- - [ ] Markdown support
-- - [ ] User comments
-- - [ ] Reactions
-- [ ] Boards
-- - [ ] Posting
-- - - [ ] Markdown support
-- - - [ ] Image support
-- - [ ] Moderation
-- - - [ ] AI Review (don't assume the worst)
-- - - [ ] Turnstile captcha
+# Todo
 
+* [x] Add notices
+
+  * [x] Add markdown support
+  * [x] Add custom scripting on close
+* [ ] Add user accounts
+
+  * [x] Add registration
+  * [x] Add login
+  * [x] Add logout
+  * [x] Add sessions
+  * [x] Add settings
+
+    * [x] Custom profile picture
+    * [x] Display name
+    * [ ] Username change
+    * [ ] Password change
+  * [ ] 2FA
+
+    * [ ] TOTP authenticator support
+
+      * [ ] QR Code
+    * [ ] Security key support
+  * [ ] Turnstile CAPTCHA
+* [ ] Posting site news
+
+  * [ ] Markdown support
+  * [ ] User comments
+  * [ ] Reactions
+* [ ] Boards
+
+  * [ ] Posting
+
+    * [ ] Markdown support
+    * [ ] Image support
+  * [ ] Moderation
+
+    * [ ] AI Review (don't assume the worst)
+    * [ ] Turnstile captcha
 
 Currently WIP
