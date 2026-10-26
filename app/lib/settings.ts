@@ -1,7 +1,7 @@
 import sharp, {SharpInput} from "sharp";
-import {getCurrentUser, validate} from "@/app/lib/auth";
+import { getCurrentUser } from "@/app/lib/auth";
 import { fileTypeFromBlob } from "file-type";
-import {mkdir, writeFile } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { getDatabase } from "@/app/lib/database";
 

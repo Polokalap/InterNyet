@@ -2,6 +2,14 @@ import {headers} from "next/headers";
 
 export async function verifyTurnstile(formData: FormData, expectedAction: string) {
 
+    const isProd = process.env.NODE_ENV === "production";
+
+    if (!isProd) {
+
+        return true;
+
+    }
+
     const token = String(formData.get("cf-turnstile-response") ?? "");
     if (!token) return false;
 
@@ -30,7 +38,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
         return (
             data.success === true &&
             data.action === expectedAction &&
-            data.hostname === process.env.TURNSTILE_EXPECTED_HOSTNAME
+            data.hostname === process.env.TURNSTILE_HOSTNAME
         );
 
     } catch {
