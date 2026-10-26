@@ -2,7 +2,7 @@
 
 import { Turnstile } from "@marsidev/react-turnstile";
 
-export default function Check({ action, setFinished }: { action: string, setFinished: (finished: boolean) => void }) {
+export default function Check({ action, setFinished }: { action: string, setFinished?: (finished: boolean) => void; }) {
 
     return (
 
@@ -13,7 +13,7 @@ export default function Check({ action, setFinished }: { action: string, setFini
                 size: "invisible",
                 action,
             }}
-            onSuccess={() => setFinished(true)}
+            onSuccess={() => setFinished?.(true)}
             onError={(code) => console.error("Turnstile error", code)}
         />
 
