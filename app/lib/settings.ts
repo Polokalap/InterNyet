@@ -11,7 +11,7 @@ type SettingsResponse = {
 };
 
 const db = getDatabase();
-const allowedCharacters = /^[A-z0-9_]{1,16}$/;
+const allowedCharacters = /^(?! )(?!.* {2})(?!.* $)[\p{L}\p{N}_ ]{1,32}$/u;
 
 async function convertImage(input: SharpInput): Promise<Buffer<ArrayBuffer>> {
 

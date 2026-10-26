@@ -14,5 +14,6 @@
   "13": "The file is empty!",
   "14": "Image is corrupted.",
   "15": "Display Name set successfully!",
-  "16": "CAPTCHA failed."
+  "16": "CAPTCHA failed.",
+  "17": "Your display name can only contain up to 32 letters, with spaces!"
 }
