@@ -45,6 +45,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
         const data = (await res.json()) as SiteverifyResponse;
 
         if (data.success !== true) {
+            // e.g. timeout-or-duplicate, invalid-input-response, invalid-input-secret
             console.warn("[turnstile] verification failed", {
                 errorCodes: data["error-codes"],
                 hostname: data.hostname,
