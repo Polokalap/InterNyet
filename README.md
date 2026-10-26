@@ -11,7 +11,7 @@ The moderation on the site is unique, because I do not believe in moderators. We
 It's currently up at https://demo.fortnitefeet.com, but it's NOT functional at the moment, as it's still in development.
 
 ## How to run it for yourself
-You need to clone the repository, and install all the packages `npm i`, then start the dev server `npm run dev`. You'll need a .env, which I'll add today to the codebase as an example!
+You need to clone the repository, and install all the packages `npm i`, then start the dev server `npm run dev`. You'll need a .env, which you can copy from `.env.example`!
 
 ## Contribution
 You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
