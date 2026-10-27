@@ -43,7 +43,7 @@ body {
 
 .button-secondary-disabled {
 
-    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] font-bold text-white cursor-not-allowed;
+    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] text-white cursor-not-allowed;
 
 }
 

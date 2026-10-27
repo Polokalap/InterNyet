@@ -153,7 +153,7 @@ export async function settings(formData: FormData) {
 
     const username = formData.get("username");
 
-    if (!(username instanceof File) && username !== "" && username && user.cooldowns["namechange"] == undefined) {
+    if (!(username instanceof File) && username !== "" && user.name != username && username && user.cooldowns["namechange"] == undefined) {
 
         const result = await setUsername(session.value, username);
 
