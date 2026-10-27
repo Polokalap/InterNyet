@@ -3,8 +3,9 @@
 import { settings } from "@/app/account/actions";
 import Check from "@/app/components/verification/Check";
 import { useState } from "react";
+import Link from "next/link";
 
-export default function SettingsForm({ error, code, user }: { error: string | undefined, code: string | undefined, user: { id: number; name: string; display: string; created: number; } | null }) {
+export default function SettingsForm({ user }: { user: { id: number; name: string; display: string; created: number; cooldowns: Record<string, number> } | null }) {
 
     const [finished, setFinished] = useState(false);
 
@@ -14,7 +15,7 @@ export default function SettingsForm({ error, code, user }: { error: string | un
 
         <form className={"flex flex-col gap-3"} action={settings}>
 
-            <h1 className={"text-3xl"}>Account settings</h1>
+            <h1 className={"text-3xl"}>Profile settings</h1>
 
             <br />
 
@@ -22,7 +23,7 @@ export default function SettingsForm({ error, code, user }: { error: string | un
 
                 <p className={"text-lg"}>Profile picture:</p>
 
-                <input className={"button"} name={"profile"} type="file" />
+                <input className={"button-secondary w-46"} name={"profile"} type="file" />
 
             </div>
 
@@ -34,13 +35,70 @@ export default function SettingsForm({ error, code, user }: { error: string | un
 
             </div>
 
-            <div className={"flex flex-row justify-between pr-1.5"}>
+            <h1 className={"text-3xl"}>Account settings</h1>
 
-                <br />
+            <br />
+
+            <div className={"flex flex-row justify-between"}>
+
+                <p className={"text-lg"}>Change username:</p>
+
+
+                <input
+                    className={`input${user.cooldowns["namechange"] !== undefined ? "-disabled" : ""}`}
+                    name="username"
+                    type="text"
+                    defaultValue={user.name}
+                    placeholder={user.name}
+                    disabled={user.cooldowns["namechange"] !== undefined}
+                />
+
+            </div>
+
+            <div className={"flex flex-row justify-between"}>
+
+                <p className={"text-lg"}>Change password:</p>
+
+                <button
+                    className={`button-secondary${user.cooldowns["passwordChange"] !== undefined ? "-disabled" : ""}`}
+                    onClick={() => window.location.href = "/account/changepass"}
+                    disabled={user.cooldowns["passwordChange"] !== undefined}
+                >
+                    Change password
+                </button>
+
+            </div>
+
+            <h1 className={"text-3xl text-[#721C24]"}>Danger zone</h1>
+
+            <br />
+
+            <div className={"flex flex-row justify-between"}>
+
+                <p className={"text-lg"}>Log out:</p>
+
+                <button className="button-primary" onClick={() => window.location.href = "/account/logout"}>Log out</button>
+
+            </div>
+
+            <div className={"flex flex-row justify-between"}>
+
+                <p className={"text-lg"}>Delete account:</p>
+
+                <button className="button-primary" onClick={() => window.location.href = "/account/delete"}>Delete account</button>
+
+            </div>
+
+            <div className={"flex flex-row justify-between pr-1.5 mt-10"}>
 
                 <Check action={"settings"} setFinished={setFinished} />
 
-                <button className={`button-primary${finished ? "" : "-disabled"} scale-125`} type={"submit"} disabled={!finished}>Save</button>
+                <div className={"flex flex-row gap-7"}>
+
+                    <button className="button-secondary scale-125" onClick={() => window.location.href = "/account"}>Revert changes</button>
+                    <button className={`button-primary${finished ? "" : "-disabled"} scale-125`} type={"submit"} disabled={!finished}>Save</button>
+
+                </div>
 
             </div>
 

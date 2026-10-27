@@ -25,6 +25,11 @@ function init() {
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
             display TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS cooldowns (
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            key TEXT NOT NULL,
+            expiration TIMESTAMP NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS sessions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,

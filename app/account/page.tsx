@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                 </div>
 
-                <SettingsForm error={error} code={code} user={user} />
+                <SettingsForm user={user} />
 
             </div>
 

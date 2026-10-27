@@ -147,6 +147,39 @@ export async function authenticate(user: string, password: string): Promise<Auth
 
 }
 
+export async function verifyPassword(user: string, password: string): Promise<AuthResponse> {
+
+    const username = user.toLowerCase();
+
+    const account = db
+        .prepare("SELECT * FROM accounts WHERE user = ?")
+        .get(username) as Account | undefined;
+
+    if (password.length < 8 || password.length > 128) {
+
+        return { success: false, code: 5 };
+
+    }
+
+    if (!account) {
+
+        await argon2.verify("$argon2id$v=19$m=65536,t=4,p=2$I2L57wqPXiYQgGJV6sPgRQ$DofqLXFb8A60KJsfC4z/fuv2Cq7vQnlsOy0uF90t1Nk", password);
+        return { success: false, code: 5 };
+
+    }
+
+    const match = await argon2.verify(account.password, password);
+
+    if (!match) {
+
+        return { success: false, code: 5 };
+
+    }
+
+    return { success: true, code: 6 };
+
+}
+
 async function createSession(account: Account, days: number) {
 
     const token = randomBytes(256).toString("base64url");
@@ -208,19 +241,64 @@ export async function removeSession(token: string): Promise<AuthResponse> {
 
 }
 
-export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; created: number; } | null> {
+export async function removeUser(token: string): Promise<AuthResponse> {
+
+    const hashed = hashSha(token);
+
+    const session = db
+        .prepare("SELECT account FROM sessions WHERE token = ?")
+        .get(hashed) as { account: number } | undefined;
+
+    if (!session) {
+
+        return { success: false, code: 7 };
+
+    }
+
+    db
+        .prepare("DELETE FROM accounts WHERE id = ?")
+        .run(session.account);
+
+    return { success: true, code: 21 };
+
+}
+
+export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; created: number; cooldowns: Record<string, number>; } | null> {
 
     const row = db
         .prepare(`
-            SELECT a.id, a.user AS name, st.display, a.created
+            SELECT a.id,
+                   a.user AS name,
+                   st.display,
+                   a.created,
+                   (
+                       SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
+                       FROM cooldowns c
+                       WHERE c.account = a.id AND c.expiration > unixepoch()
+                   ) AS cooldowns
             FROM sessions s
                      JOIN accounts a ON a.id = s.account
                      LEFT JOIN settings st ON st.account = a.id
             WHERE s.token = ? AND s.expiration > unixepoch()
         `)
-        .get(hashSha(token)) as { id: number; name: string; display: string; created: number } | undefined;
+        .get(hashSha(token)) as
+        | { id: number; name: string; display: string; created: number; cooldowns: string }
+        | undefined;
 
-    return row ?? null;
+    if (!row) return null;
+
+    const cooldowns: Record<string, number> = Object.fromEntries(
+        (JSON.parse(row.cooldowns) as { key: string; expiration: number }[])
+            .map(c => [c.key, c.expiration])
+    );
+
+    return {
+        id: row.id,
+        name: row.name,
+        display: row.display,
+        created: row.created,
+        cooldowns,
+    };
 
 }
 
@@ -230,6 +308,40 @@ export async function getIfUser(): Promise<{ id: number; name: string; display: 
     const user = token ? await getCurrentUser(token) : null;
 
     return user ?? null;
+
+}
+
+export async function setPassword(id: number, newPassword: string): Promise<AuthResponse> {
+
+    const account = db
+        .prepare("SELECT * FROM accounts WHERE id = ?")
+        .get(id) as Account | undefined;
+
+    if (!account) {
+
+        return { success: false, code: 7 };
+
+    }
+
+    if (newPassword.length < 8 || newPassword.length > 128) {
+
+        return { success: false, code: 2 };
+
+    }
+
+    const hashed = await hash(newPassword);
+
+    db
+        .prepare("UPDATE accounts SET password = ? WHERE id = ?")
+        .run(hashed, account.id);
+
+    db
+        .prepare("DELETE FROM sessions WHERE account = ?")
+        .run(account.id);
+
+    const session = await createSession(account, 180);
+
+    return { success: true, code: 23, key: session };
 
 }
 

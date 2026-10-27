@@ -37,8 +37,13 @@ body {
 
 .button-primary-disabled {
 
-    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] font-bold text-white pointer-events-none;
+    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] font-bold text-white cursor-not-allowed;
 
+}
+
+.button-secondary-disabled {
+
+    @apply border-1 border-black pl-1 pr-1 bg-[#6e6e6e] font-bold text-white cursor-not-allowed;
 
 }
 
@@ -60,3 +65,10 @@ a:hover {
     @apply border-1 bg-[#FFF9F0] outline-none;
 
 }
+
+.input-disabled {
+
+    @apply border-1 bg-[#e9e9ed] outline-none cursor-not-allowed;
+
+}
+

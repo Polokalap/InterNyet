@@ -4,7 +4,6 @@ import Check from "@/app/components/verification/Check";
 import { useState } from "react";
 import { logout } from "@/app/account/actions";
 
-
 export default function LogoutForm() {
 
     const [finished, setFinished] = useState(false);

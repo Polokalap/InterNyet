@@ -15,5 +15,11 @@
   "14": "Image is corrupted.",
   "15": "Display Name set successfully!",
   "16": "CAPTCHA failed.",
-  "17": "Your display name can only contain up to 32 letters, with spaces!"
+  "17": "Your display name can only contain up to 32 letters, with spaces!",
+  "18": "Username already taken!",
+  "19": "Username updated!",
+  "20": "You are on cooldown!",
+  "21": "User removed!",
+  "22": "Incorrect password!",
+  "23": "New password has been set!"
 }

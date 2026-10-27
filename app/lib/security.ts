@@ -1,10 +1,10 @@
-import {headers} from "next/headers";
+import { headers } from "next/headers";
 
 export async function verifyTurnstile(formData: FormData, expectedAction: string) {
 
-    const isProd = process.env.NODE_ENV === "production";
+    const isDev = process.env.NODE_ENV === "development";
 
-    if (!isProd) {
+    if (isDev) {
 
         return true;
 
@@ -13,6 +13,10 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
     const token = String(formData.get("cf-turnstile-response") ?? "");
     if (!token) return false;
 
+    const secret = process.env.TURNSTILE_SECRET_KEY;
+    const expectedHostname = process.env.TURNSTILE_HOSTNAME;
+    if (!secret || !expectedHostname) return false;
+
     const h = await headers();
     const ip =
         h.get("CF-Connecting-IP") ??
@@ -20,7 +24,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
         null;
 
     const body = new URLSearchParams({
-        secret: process.env.TURNSTILE_SECRET_KEY!,
+        secret,
         response: token,
     });
 
@@ -38,7 +42,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
         return (
             data.success === true &&
             data.action === expectedAction &&
-            data.hostname === process.env.TURNSTILE_HOSTNAME
+            data.hostname === expectedHostname
         );
 
     } catch {

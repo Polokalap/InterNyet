@@ -2,8 +2,16 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { authenticate, addUser, removeSession, requireUser } from "@/app/lib/auth";
-import { setDisplayName, setProfilePicture } from "@/app/lib/settings";
+import {
+    authenticate,
+    addUser,
+    removeSession,
+    requireUser,
+    removeUser,
+    setPassword,
+    verifyPassword
+} from "@/app/lib/auth";
+import {getCooldown, setCooldown, setDisplayName, setProfilePicture, setUsername} from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
 import { verifyTurnstile } from "@/app/lib/security";
 
@@ -42,7 +50,7 @@ export async function register(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "register"))) {
 
-        redirect("/account/logout?error=true&code=16");
+        redirect("/account/register?error=true&code=16");
 
     }
 
@@ -143,7 +151,121 @@ export async function settings(formData: FormData) {
 
     }
 
+    const username = formData.get("username");
+
+    if (!(username instanceof File) && username !== "" && username && user.cooldowns["namechange"] == undefined) {
+
+        const result = await setUsername(session.value, username);
+
+        if (!result.success) {
+
+            redirect(`/account?error=true&code=${result.code}`);
+
+        }
+
+    }
+
     revalidatePath("/account");
+    redirect("/account");
+
+}
+
+export async function deleteAccount(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "deleteAccount"))) {
+
+        redirect("/account/delete?error=true&code=16");
+
+    }
+
+    const storage = await cookies();
+    const session = storage.get("session");
+
+    if (!session) {
+
+        redirect("/account/login");
+
+    }
+
+    const user = await requireUser();
+    const password = String(formData.get("password") ?? "");
+
+    const result = await verifyPassword(user.name, password);
+
+    if (!result.success) {
+
+        redirect("/account/delete?error=true&code=22");
+
+    }
+
+    const removal = await removeUser(session.value);
+
+    if (!removal.success) {
+
+        redirect(`/account/delete?error=true&code=${removal.code}`);
+
+    }
+
+    storage.delete("session");
+    redirect("/account/login");
+
+}
+
+export async function changePassword(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "changePassword"))) {
+
+        redirect("/account/changepass?error=true&code=16");
+
+    }
+
+    const storage = await cookies();
+    const session = storage.get("session");
+
+    if (!session) {
+
+        redirect("/account/login");
+
+    }
+
+    const user = await requireUser();
+    const currentPassword = String(formData.get("current-password") ?? "");
+    const newPassword = String(formData.get("new-password") ?? "");
+
+    if (await getCooldown(user.id, "passwordChange")) {
+
+        redirect("/account/changepass?error=true&code=20");
+
+    }
+
+    const result = await verifyPassword(user.name, currentPassword);
+
+    if (!result.success) {
+
+        redirect("/account/changepass?error=true&code=22");
+
+    }
+
+    const change = await setPassword(user.id, newPassword);
+
+    if (!change.success || !change.key) {
+
+        redirect(`/account/changepass?error=true&code=${change.code}`);
+
+    }
+
+    await removeSession(session.value);
+
+    setCooldown(user.id, "passwordChange", 604800);
+
+    storage.set("session", change.key, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 180,
+    });
+
     redirect("/account");
 
 }

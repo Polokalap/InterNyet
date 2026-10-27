@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { cookies } from "next/headers";
 import { FileNotice } from "@/app/components/notice/Notice";
 import Boards from "@/app/components/boards/Boards";

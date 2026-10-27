@@ -28,12 +28,13 @@ You can contribute to this project, as long as the change you are making isn't m
   * [x] Add login
   * [x] Add logout
   * [x] Add sessions
+  * [ ] Add info bubble
   * [x] Add settings
 
     * [x] Custom profile picture
     * [x] Display name
-    * [ ] Username change
-    * [ ] Password change
+    * [x] Username change
+    * [x] Password change
   * [ ] 2FA
 
     * [ ] TOTP authenticator support
