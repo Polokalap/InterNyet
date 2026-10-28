@@ -3,7 +3,7 @@
 import { settings } from "@/app/account/actions";
 import Check from "@/app/components/verification/Check";
 import { useState } from "react";
-import Link from "next/link";
+import Bubble from "@/app/components/bubble/Bubble";
 
 export default function SettingsForm({ user }: { user: { id: number; name: string; display: string; created: number; cooldowns: Record<string, number> } | null }) {
 
@@ -43,15 +43,20 @@ export default function SettingsForm({ user }: { user: { id: number; name: strin
 
                 <p className={"text-lg"}>Change username:</p>
 
+                <div className={"flex flex-row gap-2"}>
 
-                <input
-                    className={`input${user.cooldowns["namechange"] !== undefined ? "-disabled" : ""}`}
-                    name="username"
-                    type="text"
-                    defaultValue={user.name}
-                    placeholder={user.name}
-                    disabled={user.cooldowns["namechange"] !== undefined}
-                />
+                    <Bubble description={"You can only change your username every 7 days"} />
+
+                    <input
+                        className={`input${user.cooldowns["namechange"] !== undefined ? "-disabled" : ""}`}
+                        name="username"
+                        type="text"
+                        defaultValue={user.name}
+                        placeholder={user.name}
+                        disabled={user.cooldowns["namechange"] !== undefined}
+                    />
+
+                </div>
 
             </div>
 
@@ -59,13 +64,19 @@ export default function SettingsForm({ user }: { user: { id: number; name: strin
 
                 <p className={"text-lg"}>Change password:</p>
 
-                <button
-                    className={`button-secondary${user.cooldowns["passwordChange"] !== undefined ? "-disabled" : ""}`}
-                    onClick={() => window.location.href = "/account/changepass"}
-                    disabled={user.cooldowns["passwordChange"] !== undefined}
-                >
-                    Change password
-                </button>
+                <div className={"flex flex-row gap-2"}>
+
+                    <Bubble description={"You can only change your password every 7 days"} />
+
+                    <button
+                        className={`button-secondary${user.cooldowns["passwordChange"] !== undefined ? "-disabled" : ""}`}
+                        onClick={() => window.location.href = "/account/changepass"}
+                        disabled={user.cooldowns["passwordChange"] !== undefined}
+                    >
+                        Change password
+                    </button>
+
+                </div>
 
             </div>
 
