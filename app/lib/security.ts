@@ -2,9 +2,9 @@ import { headers } from "next/headers";
 
 export async function verifyTurnstile(formData: FormData, expectedAction: string) {
 
-    const isDev = process.env.NODE_ENV === "development";
+    const isProd = process.env.PUBLIC_NEXT_PUBLIC_PRODUCTION;
 
-    if (isDev) {
+    if (!isProd) {
 
         return true;
 
