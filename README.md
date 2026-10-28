@@ -41,7 +41,7 @@ You can contribute to this project, as long as the change you are making isn't m
 
       * [ ] QR Code
     * [ ] Security key support
-  * [ ] Turnstile CAPTCHA
+  * [x] Turnstile CAPTCHA
 * [ ] Posting site news
 
   * [ ] Markdown support
