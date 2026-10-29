@@ -4,10 +4,12 @@ import { settings } from "@/app/account/actions";
 import Check from "@/app/components/verification/Check";
 import { useState } from "react";
 import Bubble from "@/app/components/bubble/Bubble";
+import {HexColorPicker} from "react-colorful";
 
-export default function SettingsForm({ user }: { user: { id: number; name: string; display: string; created: number; cooldowns: Record<string, number> } | null }) {
+export default function SettingsForm({ user }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null }) {
 
     const [finished, setFinished] = useState(false);
+    const [color, setColor] = useState(user?.color ?? "#000000");
 
     if (!user) return null;
 
@@ -34,6 +36,29 @@ export default function SettingsForm({ user }: { user: { id: number; name: strin
                 <input className={"input"} name={"display"} type="text" defaultValue={user.display} placeholder={user.display} />
 
             </div>
+
+            {
+
+                user.role > 0 ? (
+
+                <div className={"flex flex-row justify-between"}>
+
+                    <p className={"text-lg"}>Name color:</p>
+
+                    <div className={"flex flex-row gap-2"}>
+
+                        <Bubble description={"You can only set your name color if you are an admin!"} />
+
+                        <HexColorPicker className={"color-picker"} color={color} onChange={setColor} />
+                        <input type={"hidden"} name={"color"} value={color} />
+
+                    </div>
+
+                </div>
+
+                ) : null
+
+            }
 
             <h1 className={"text-3xl"}>Account settings</h1>
 

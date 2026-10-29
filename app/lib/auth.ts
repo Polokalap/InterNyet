@@ -263,13 +263,15 @@ export async function removeUser(token: string): Promise<AuthResponse> {
 
 }
 
-export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; created: number; cooldowns: Record<string, number>; } | null> {
+export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null> {
 
     const row = db
         .prepare(`
             SELECT a.id,
                    a.user AS name,
+                   a.role,
                    st.display,
+                   st.color,
                    a.created,
                    (
                        SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
@@ -282,7 +284,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
             WHERE s.token = ? AND s.expiration > unixepoch()
         `)
         .get(hashSha(token)) as
-        | { id: number; name: string; display: string; created: number; cooldowns: string }
+        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number }
         | undefined;
 
     if (!row) return null;
@@ -296,7 +298,9 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
         id: row.id,
         name: row.name,
         display: row.display,
+        color: row.color,
         created: row.created,
+        role: row.role,
         cooldowns,
     };
 

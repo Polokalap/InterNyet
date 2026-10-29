@@ -163,6 +163,30 @@ export async function setUsername(session: string, name: string): Promise<Settin
 
 }
 
+export async function setColor(session: string, color: string): Promise<SettingsResponse> {
+
+    const account = await getCurrentUser(session);
+
+    if (!account) {
+
+        return {success: false, code: 7};
+
+    }
+
+    const update = db.transaction(() => {
+
+        db
+            .prepare("UPDATE settings SET color = ? WHERE account = ?")
+            .run(color, account.id);
+
+    });
+
+    update();
+
+    return { success: true, code: 19 };
+
+}
+
 export async function getCooldown(id: number, key: string): Promise<unknown> {
 
     const epoch = Math.floor(Date.now() / 1000);

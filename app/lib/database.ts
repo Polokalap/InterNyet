@@ -19,11 +19,13 @@ function init() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
+            role INTEGER NOT NULL DEFAULT 0,
             created INTEGER NOT NULL DEFAULT (unixepoch())
         );
         CREATE TABLE IF NOT EXISTS settings (
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-            display TEXT NOT NULL
+            display TEXT NOT NULL,
+            color TEXT NOT NULL DEFAULT "#000000"
         );
         CREATE TABLE IF NOT EXISTS cooldowns (
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,

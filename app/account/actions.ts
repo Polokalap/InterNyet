@@ -11,9 +11,10 @@ import {
     setPassword,
     verifyPassword
 } from "@/app/lib/auth";
-import {getCooldown, setCooldown, setDisplayName, setProfilePicture, setUsername} from "@/app/lib/settings";
+import { getCooldown, setColor, setCooldown, setDisplayName, setProfilePicture, setUsername } from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
 import { verifyTurnstile } from "@/app/lib/security";
+import Color from "@img/colour";
 
 export async function login(formData: FormData) {
 
@@ -156,6 +157,20 @@ export async function settings(formData: FormData) {
     if (!(username instanceof File) && username !== "" && user.name != username && username && user.cooldowns["namechange"] == undefined) {
 
         const result = await setUsername(session.value, username);
+
+        if (!result.success) {
+
+            redirect(`/account?error=true&code=${result.code}`);
+
+        }
+
+    }
+
+    const color = formData.get("color");
+
+    if (typeof color === "string" && /^#[0-9a-f]{6}$/i.test(color) && user.role > 0 && color !== user.color) {
+
+        const result = await setColor(session.value, color);
 
         if (!result.success) {
 
