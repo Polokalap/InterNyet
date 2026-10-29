@@ -20,12 +20,12 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/faq",
-        destination: "/posts/faq",
+        destination: "/news/faq",
         permanent: true,
       },
       {
         source: "/rules",
-        destination: "/posts/rules",
+        destination: "/news/rules",
         permanent: true,
       },
       {
