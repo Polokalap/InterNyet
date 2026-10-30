@@ -306,6 +306,43 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
 
 }
 
+export async function getUser(id: number): Promise<{ id: number; name: string; display: string; color: string; created: number; role: number; } | null> {
+
+    const row = db
+        .prepare(`
+            SELECT a.id,
+                   a.user AS name,
+                   a.role,
+                   st.display,
+                   st.color,
+                   a.created,
+                   (
+                       SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
+                       FROM cooldowns c
+                       WHERE c.account = a.id AND c.expiration > unixepoch()
+                   ) AS cooldowns
+            FROM sessions s
+                     JOIN accounts a ON a.id = s.account
+                     LEFT JOIN settings st ON st.account = a.id
+            WHERE a.id = ?
+        `)
+        .get(id) as
+        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number }
+        | undefined;
+
+    if (!row) return null;
+
+    return {
+        id: row.id,
+        name: row.name,
+        display: row.display,
+        color: row.color,
+        created: row.created,
+        role: row.role,
+    };
+
+}
+
 export async function getIfUser(): Promise<{ id: number; name: string; display: string; created: number; } | null> {
 
     const token = (await cookies()).get("session")?.value;

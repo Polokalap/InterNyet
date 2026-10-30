@@ -18,7 +18,7 @@ export default function DeleteForm() {
 
                 <button className={`button-primary${finished ? "" : "-disabled"} scale-125`} type={"submit"} disabled={!finished}>Yes, delete</button>
                 <Check action={"deleteAccount"} setFinished={setFinished} />
-                <a href={"/account"}><button className={"button-secondary scale-125"}>Go back</button></a>
+                <a href={"/account"}><button type={"button"} className={"button-secondary scale-125"}>Go back</button></a>
 
             </div>
 

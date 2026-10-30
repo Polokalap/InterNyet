@@ -28,7 +28,7 @@ export default function PasswordChangeForm({ user }: { user: { id: number; name:
                 </button>
 
                 <Check action={"changePassword"} setFinished={setFinished} />
-                <a href={"/account"}><button className={"button-secondary scale-125"}>Go back</button></a>
+                <a href={"/account"}><button type={"button"} className={"button-secondary scale-125"}>Go back</button></a>
 
             </div>
 
