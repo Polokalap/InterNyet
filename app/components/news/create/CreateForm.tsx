@@ -53,19 +53,17 @@ export default function CreateForm({ user }: { user: { id: number; name: string;
 
                         :
 
-                        (
-
-                            <textarea
-                                className={"input min-h-100 max-h-200"}
-                                name={"content"}
-                                placeholder={"Text"}
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                            />
-
-                        )
+                        null
 
                 }
+
+                <textarea
+                    className={`input min-h-100 max-h-200 ${isPreview ? "hidden" : ""}`}
+                    name={"content"}
+                    placeholder={"Text"}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
 
                 <div className={"flex flex-row gap-1 justify-end pr-2 pl-2"}>
 
