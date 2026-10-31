@@ -3,6 +3,7 @@
 import Check from "@/app/components/verification/Check";
 import { useState } from "react";
 import PostPreview from "@/app/components/news/posts/PostPreview";
+import { createPost } from "@/app/news/actions";
 
 export default function CreateForm({ user }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null  }) {
 
@@ -17,7 +18,7 @@ export default function CreateForm({ user }: { user: { id: number; name: string;
 
         <>
 
-            <form className={"flex flex-col gap-5 w-full"}>
+            <form action={createPost} className={"flex flex-col gap-5 w-full"}>
 
                 <input
                     type={"text"}

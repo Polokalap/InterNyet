@@ -35,6 +35,7 @@ function init() {
         CREATE TABLE IF NOT EXISTS news (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            title TEXT NOT NULL,
             path TEXT NOT NULL,
             release TIMESTAMP NOT NULL
         );

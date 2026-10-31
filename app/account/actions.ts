@@ -14,7 +14,6 @@ import {
 import { getCooldown, setColor, setCooldown, setDisplayName, setProfilePicture, setUsername } from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
 import { verifyTurnstile } from "@/app/lib/security";
-import Color from "@img/colour";
 
 export async function login(formData: FormData) {
 

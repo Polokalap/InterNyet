@@ -24,7 +24,7 @@ export default function PostPreview({ contents, title, user }: Props) {
                     <div className={"flex flex-row gap-1 items-center"}>
 
                         <img src="/api/account/1/profile.jpeg" alt="Profile picture" className={"border-1"} width={30} />
-                        <p className={`font-bold text-[${user.color}]`}>{ user.name }</p>
+                        <p className={`font-bold text-[${user.color}]`}>{ user.display }</p>
                         <Bubble description={"This user is an administrator"} />
 
                     </div>

@@ -2,11 +2,30 @@ import { getDatabase } from "@/app/lib/database";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "path";
 
-export type Post = {
+type PostRow = {
     id: number;
     account: number;
+    title: string;
     path: string;
-    release: number;
+    release: number
+};
+
+export class Post {
+
+    constructor(
+        public id: number,
+        public account: number,
+        public title: string,
+        public path: string,
+        public release: number,
+    ) {}
+
+    static fromRow(row: { id: number; account: number; title: string; path: string; release: number }): Post {
+
+        return new Post(row.id, row.account, row.title, row.path, row.release);
+
+    }
+
 }
 
 export type NewsResponse = {
@@ -17,16 +36,16 @@ export type NewsResponse = {
 
 const db = getDatabase();
 
-export async function createPost(account: number, content: string): Promise<Post|NewsResponse> {
+export async function createNewsPost(account: number, title: string, content: string): Promise<Post|NewsResponse> {
 
     const { count } = db.prepare<[], { count: number }>(`SELECT COUNT(*) AS count FROM news`).get()!;
-    const path = `/data/user/${account}/news/`;
+    const path = `data/user/${account}/news/${count}`;
 
-    const post = db
-        .prepare(`INSERT INTO news (account, path, release) VALUES (?, ?, unixepoch()) RETURNING *`)
-        .get(account, path) as Post | undefined;
+    const row = db
+        .prepare(`INSERT INTO news (account, title, path, release) VALUES (?, ?, ?, unixepoch()) RETURNING *`)
+        .get(account, title, path) as PostRow | undefined;
 
-    if (!post) {
+    if (!row) {
 
         return {
             success: false,
@@ -36,9 +55,9 @@ export async function createPost(account: number, content: string): Promise<Post
     }
 
     mkdirSync(path, { recursive: true });
-    writeFileSync(join(path, `${count}.md`), content, "utf8");
+    writeFileSync(join(path, `post.md`), content, "utf8");
 
-    return post;
+    return Post.fromRow(row);
 
 }
 
