@@ -44,7 +44,7 @@ You can contribute to this project, as long as the change you are making isn't m
   * [x] Turnstile CAPTCHA
 * [ ] Posting site news
 
-  * [ ] Markdown support
+  * [x] Markdown support
   * [ ] User comments
   * [ ] Reactions
 * [ ] Boards

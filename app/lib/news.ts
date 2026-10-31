@@ -38,12 +38,21 @@ const db = getDatabase();
 
 export async function createNewsPost(account: number, title: string, content: string): Promise<Post|NewsResponse> {
 
-    const { count } = db.prepare<[], { count: number }>(`SELECT COUNT(*) AS count FROM news`).get()!;
-    const path = `data/user/${account}/news/${count}`;
+    const insert = db.transaction((): PostRow | undefined => {
 
-    const row = db
-        .prepare(`INSERT INTO news (account, title, path, release) VALUES (?, ?, ?, unixepoch()) RETURNING *`)
-        .get(account, title, path) as PostRow | undefined;
+        const { id } = db
+            .prepare(`INSERT INTO news (account, title, path, release) VALUES (?, ?, '', unixepoch()) RETURNING id`)
+            .get(account, title) as { id: number };
+
+        const path = `data/user/${account}/news/${id}`;
+
+        return db
+            .prepare(`UPDATE news SET path = ? WHERE id = ? RETURNING *`)
+            .get(path, id) as PostRow | undefined;
+
+    });
+
+    const row = insert();
 
     if (!row) {
 
@@ -54,20 +63,32 @@ export async function createNewsPost(account: number, title: string, content: st
 
     }
 
-    mkdirSync(path, { recursive: true });
-    writeFileSync(join(path, `post.md`), content, "utf8");
+    try {
+
+        mkdirSync(row.path, {recursive: true});
+        writeFileSync(join(row.path, `post.md`), content, "utf8");
+
+    } catch {
+
+        db.prepare("DELETE FROM news WHERE id = ?").run(row.id);
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
 
     return Post.fromRow(row);
 
 }
 
-export async function getPost(id: number): Promise<Post|NewsResponse> {
+export async function getPost(id: number | string): Promise<Post|NewsResponse> {
 
-    const post = db
+    const row = db
         .prepare(`SELECT * FROM news WHERE id = ?`)
-        .get(id) as Post | undefined;
+        .get(id) as PostRow | undefined;
 
-    if (!post) {
+    if (!row) {
 
         return {
             success: false,
@@ -76,6 +97,6 @@ export async function getPost(id: number): Promise<Post|NewsResponse> {
 
     }
 
-    return post;
+    return Post.fromRow(row);
 
 }
