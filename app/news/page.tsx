@@ -1,6 +1,10 @@
 import NavBar from "@/app/components/navbar/NavBar";
+import { getIfUser } from "@/app/lib/auth";
+import AllPosts from "@/app/components/news/posts/AllPosts";
 
-export default function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }>; }) {
+
+    const user = await getIfUser();
 
     return (
 
@@ -12,9 +16,25 @@ export default function Page() {
 
                 <div className={"flex flex-col gap-5 w-full m-2"}>
 
+                    {
 
+                        user && user.role > 0 ?
+
+                            (
+
+                                <div className={"flex flex-row justify-end pr-3 pl-3"}>
+
+                                    <a href={"/news/posts/new"}><button type={"button"} className={"button-primary"}>New post</button></a>
+
+                                </div>
+
+                            ) : null
+
+                    }
 
                 </div>
+
+                <AllPosts searchParams={searchParams} />
 
             </div>
 

@@ -343,7 +343,7 @@ export async function getUser(id: number): Promise<{ id: number; name: string; d
 
 }
 
-export async function getIfUser(): Promise<{ id: number; name: string; display: string; created: number; } | null> {
+export async function getIfUser(): Promise<{ id: number; name: string; display: string; color: string; created: number; role: number; } | null> {
 
     const token = (await cookies()).get("session")?.value;
     const user = token ? await getCurrentUser(token) : null;

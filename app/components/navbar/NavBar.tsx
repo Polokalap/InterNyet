@@ -17,7 +17,7 @@ export default async function NavBar() {
 
                 <NavLink title={"Main"} path={"/"} />
                 <NavLink title={"Rules"} path={"/rules"} />
-                <NavLink title={"FAQ"} path={"/faq"} />
+                <NavLink title={"News"} path={"/news"} />
 
             </ul>
 

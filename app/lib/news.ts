@@ -100,3 +100,57 @@ export async function getPost(id: number | string): Promise<Post|NewsResponse> {
     return Post.fromRow(row);
 
 }
+
+export async function getPostsFromUser(account: number | string): Promise<Post[]|NewsResponse> {
+
+    const rows = db
+        .prepare(`SELECT * FROM news WHERE account = ?`)
+        .all(account) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
+export async function getPosts(from: number, to: number): Promise<Post[]|NewsResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            SELECT * FROM news
+            ORDER BY release DESC
+            LIMIT ? OFFSET ?
+        `)
+        .all(limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
+export async function getPostCount(): Promise<number> {
+
+    const row = db
+        .prepare(`SELECT COUNT(*) AS total FROM news`)
+        .get() as { total: number };
+
+    return row.total;
+
+}
