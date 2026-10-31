@@ -8,7 +8,7 @@ export default async function AllPosts({ searchParams }: { searchParams: Promise
 
     const { page } = await searchParams;
     const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
-    const totalPages = Math.max(await getPostCount() / LIMIT, 1);
+    const totalPages = Math.max(Math.ceil(await getPostCount() / LIMIT), 1);
 
     const posts = await getPosts(currentPage * LIMIT - LIMIT, currentPage * LIMIT);
 
@@ -17,6 +17,8 @@ export default async function AllPosts({ searchParams }: { searchParams: Promise
         <>
 
             <div className={"flex flex-col gap-10"}>
+
+                <PageNavigator page={currentPage} totalPages={totalPages} />
 
                 {Array.isArray(posts) ? (
 
