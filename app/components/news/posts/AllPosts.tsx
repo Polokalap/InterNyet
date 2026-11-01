@@ -18,8 +18,6 @@ export default async function AllPosts({ searchParams }: { searchParams: Promise
 
             <div className={"flex flex-col gap-10"}>
 
-                <PageNavigator page={currentPage} totalPages={totalPages} />
-
                 {Array.isArray(posts) ? (
 
                     posts.map((post) => <SmallPost key={post.id} id={`${post.id}`} />)

@@ -1,8 +1,10 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import { requireUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
+import Card from "@/app/components/user/Card";
+import AllPostsFromUser from "@/app/components/news/posts/AllPostsFromUser";
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }>; }) {
 
     const user = await requireUser();
 
@@ -22,7 +24,9 @@ export default async function Page() {
 
                 <div className={"flex flex-col gap-5 w-full m-2"}>
 
-                    <h1 className={"text-3xl"}>Your posts</h1>
+                    <Card user={user} />
+
+                    <AllPostsFromUser searchParams={searchParams} id={user.id} />
 
                 </div>
 

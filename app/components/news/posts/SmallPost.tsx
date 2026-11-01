@@ -41,9 +41,9 @@ export default async function SmallPost({ id }: Props) {
 
                     <div className={"flex flex-row gap-1 items-center"}>
 
-                        <a style={{ textDecoration: "none" }} className={"flex flex-row gap-1 items-center"} href={`/news/author/${poster.id}`}>
+                        <a style={{ textDecoration: "none" }} className={"flex flex-row gap-1 items-center"} href={`/news/posts/${poster.id}`}>
 
-                            <img src="/api/account/1/profile.jpeg" alt="Profile picture" className={"border-1"} width={30} />
+                            <img src={`/api/account/${poster.id}/profile.jpeg`} alt="Profile picture" className={"border-1 border-black"} width={30} />
                             <p className={`font-bold`} style={{ color: poster.color }}>{ poster.display }</p>
 
                         </a>

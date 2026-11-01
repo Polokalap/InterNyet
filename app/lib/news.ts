@@ -101,11 +101,18 @@ export async function getPost(id: number | string): Promise<Post|NewsResponse> {
 
 }
 
-export async function getPostsFromUser(account: number | string): Promise<Post[]|NewsResponse> {
+export async function getPostsFromUser(from: number, to: number, account: number): Promise<Post[]|NewsResponse> {
+
+    const limit = to - from;
 
     const rows = db
-        .prepare(`SELECT * FROM news WHERE account = ?`)
-        .all(account) as PostRow[];
+        .prepare(`
+            SELECT * FROM news
+            WHERE account = ?
+            ORDER BY release DESC
+            LIMIT ? OFFSET ?
+        `)
+        .all(account, limit, from) as PostRow[];
 
     if (rows.length === 0) {
 
@@ -150,6 +157,16 @@ export async function getPostCount(): Promise<number> {
     const row = db
         .prepare(`SELECT COUNT(*) AS total FROM news`)
         .get() as { total: number };
+
+    return row.total;
+
+}
+
+export async function getPostCountFromUser(id: number): Promise<number> {
+
+    const row = db
+        .prepare(`SELECT COUNT(*) AS total FROM news WHERE account = ?`)
+        .get(id) as { total: number };
 
     return row.total;
 
