@@ -17,6 +17,12 @@ I try to add a feature each week, and polish last week's feature. That's why the
 ## License
 The project is licensed under Creative Commons Zero, which you can learn more about [here](https://creativecommons.org/publicdomain/zero/1.0/)
 
+## How to run
+After cloning the repository, you have to install node packages via `npm i`. You'll need a .env, but for local testing, doing `mv .env.example .env` works fine. Then you can start a develapment server with `npm run dev`.
+
+You can give your account admin by executing the following SQL query on the database, found at data/app.db:
+`UPDATE accounts SET role = 1 WHERE id = YOUR ID;`.
+
 ## Contribution
 You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
 
