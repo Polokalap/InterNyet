@@ -2,7 +2,7 @@ import { getDatabase } from "@/app/lib/database";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "path";
 
-type PostRow = {
+type NewsRow = {
     id: number;
     account: number;
     title: string;
@@ -10,7 +10,7 @@ type PostRow = {
     release: number
 };
 
-export class Post {
+export class News {
 
     constructor(
         public id: number,
@@ -20,9 +20,9 @@ export class Post {
         public release: number,
     ) {}
 
-    static fromRow(row: { id: number; account: number; title: string; path: string; release: number }): Post {
+    static fromRow(row: { id: number; account: number; title: string; path: string; release: number }): News {
 
-        return new Post(row.id, row.account, row.title, row.path, row.release);
+        return new News(row.id, row.account, row.title, row.path, row.release);
 
     }
 
@@ -36,9 +36,9 @@ export type NewsResponse = {
 
 const db = getDatabase();
 
-export async function createNewsPost(account: number, title: string, content: string): Promise<Post|NewsResponse> {
+export async function createNewsPost(account: number, title: string, content: string): Promise<News|NewsResponse> {
 
-    const insert = db.transaction((): PostRow | undefined => {
+    const insert = db.transaction((): NewsRow | undefined => {
 
         const { id } = db
             .prepare(`INSERT INTO news (account, title, path, release) VALUES (?, ?, '', unixepoch()) RETURNING id`)
@@ -48,7 +48,7 @@ export async function createNewsPost(account: number, title: string, content: st
 
         return db
             .prepare(`UPDATE news SET path = ? WHERE id = ? RETURNING *`)
-            .get(path, id) as PostRow | undefined;
+            .get(path, id) as NewsRow | undefined;
 
     });
 
@@ -78,15 +78,15 @@ export async function createNewsPost(account: number, title: string, content: st
 
     }
 
-    return Post.fromRow(row);
+    return News.fromRow(row);
 
 }
 
-export async function getPost(id: number | string): Promise<Post|NewsResponse> {
+export async function getPost(id: number | string): Promise<News|NewsResponse> {
 
     const row = db
         .prepare(`SELECT * FROM news WHERE id = ?`)
-        .get(id) as PostRow | undefined;
+        .get(id) as NewsRow | undefined;
 
     if (!row) {
 
@@ -97,11 +97,11 @@ export async function getPost(id: number | string): Promise<Post|NewsResponse> {
 
     }
 
-    return Post.fromRow(row);
+    return News.fromRow(row);
 
 }
 
-export async function getPostsFromUser(from: number, to: number, account: number): Promise<Post[]|NewsResponse> {
+export async function getPostsFromUser(from: number, to: number, account: number): Promise<News[]|NewsResponse> {
 
     const limit = to - from;
 
@@ -112,7 +112,7 @@ export async function getPostsFromUser(from: number, to: number, account: number
             ORDER BY release DESC
             LIMIT ? OFFSET ?
         `)
-        .all(account, limit, from) as PostRow[];
+        .all(account, limit, from) as NewsRow[];
 
     if (rows.length === 0) {
 
@@ -123,11 +123,11 @@ export async function getPostsFromUser(from: number, to: number, account: number
 
     }
 
-    return rows.map((row) => Post.fromRow(row));
+    return rows.map((row) => News.fromRow(row));
 
 }
 
-export async function getPosts(from: number, to: number): Promise<Post[]|NewsResponse> {
+export async function getPosts(from: number, to: number): Promise<News[]|NewsResponse> {
 
     const limit = to - from;
 
@@ -137,7 +137,7 @@ export async function getPosts(from: number, to: number): Promise<Post[]|NewsRes
             ORDER BY release DESC
             LIMIT ? OFFSET ?
         `)
-        .all(limit, from) as PostRow[];
+        .all(limit, from) as NewsRow[];
 
     if (rows.length === 0) {
 
@@ -148,7 +148,7 @@ export async function getPosts(from: number, to: number): Promise<Post[]|NewsRes
 
     }
 
-    return rows.map((row) => Post.fromRow(row));
+    return rows.map((row) => News.fromRow(row));
 
 }
 

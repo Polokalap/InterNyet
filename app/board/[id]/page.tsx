@@ -3,12 +3,14 @@ import { getAllBoardIds, getBoardById } from "@/app/lib/board";
 import { redirect } from "next/navigation";
 import CreateBoardPost from "@/app/components/boards/posting/CreateBoardPost";
 import { getIfUser } from "@/app/lib/auth";
+import {getMessage} from "@/app/lib/messages";
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
 
     const { id } = await params;
     const user = await getIfUser();
     const boards = getAllBoardIds();
+    const { error, code } = await searchParams;
 
     if (!boards.includes(id)) {
 
@@ -41,7 +43,22 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
                     </div>
 
-                    { user && <CreateBoardPost user={user} /> }
+                    <div className={"flex flex-row w-full justify-center items-center"}>
+
+                        {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
+
+                        {
+                            user ?
+
+                                <CreateBoardPost user={user} board={board.id} />
+
+                        :
+
+                                <p className={"text-red-600"}>For this demonstration, only registered users can post!</p>
+
+                        }
+
+                    </div>
 
                 </div>
 

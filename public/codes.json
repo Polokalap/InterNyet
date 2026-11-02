@@ -24,5 +24,8 @@
   "23": "New password has been set!",
   "24": "Your color has been changed!",
   "25": "You do not have permission to do this!",
-  "26": "Post doesn't exist!"
+  "26": "Post doesn't exist!",
+  "27": "Title too short!",
+  "28": "Body too short!",
+  "29": "Invalid media!"
 }

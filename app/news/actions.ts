@@ -3,11 +3,11 @@
 import { verifyTurnstile } from "@/app/lib/security";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
-import {createNewsPost, Post} from "@/app/lib/news";
+import {createNewsPost, News} from "@/app/lib/news";
 
 export async function createPost(formData: FormData) {
 
-    if (!(await verifyTurnstile(formData, "login"))) {
+    if (!(await verifyTurnstile(formData, "createPost"))) {
 
         redirect("/news/posts/new?error=true&code=16");
 
@@ -20,7 +20,7 @@ export async function createPost(formData: FormData) {
 
     const result = await createNewsPost(user.id, title, content);
 
-    if ("success" in result && !result.success || !(result instanceof Post)) {
+    if ("success" in result && !result.success || !(result instanceof News)) {
 
         redirect(`/news/posts/new?error=true&code=${result.code}`);
 

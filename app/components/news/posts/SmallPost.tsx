@@ -1,6 +1,6 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
 import Bubble from "@/app/components/bubble/Bubble";
-import { getPost, Post } from "@/app/lib/news";
+import { getPost, News } from "@/app/lib/news";
 import { redirect } from "next/navigation";
 import { getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
@@ -14,7 +14,7 @@ export default async function SmallPost({ id }: Props) {
 
     const post = await getPost(id);
 
-    if (!(post instanceof Post)) {
+    if (!(post instanceof News)) {
 
         redirect("/news");
 

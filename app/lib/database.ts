@@ -45,6 +45,14 @@ function init() {
             token TEXT NOT NULL,
             expiration TIMESTAMP NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            board TEXT NOT NULL,
+            title TEXT NOT NULL,
+            path TEXT NOT NULL,
+            release TIMESTAMP NOT NULL
+        );
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
     `);
