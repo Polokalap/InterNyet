@@ -1,23 +1,26 @@
-## Internyet
-> An amazing image board for nerds!
+# InterNyet
+InterNyet is an ImageBoard made as a submission for [HackClub Terra](https://terra.hackclub.com)! They are really cool people, check them out!
 
-## Basics of this imageboard
-You can log in with an account/post anonymously, and every inactive post gets deleted after a certain time. The platform is separated into boards, for different topics.
+## What is an ImageBoard?
+An ImageBoard is kind of like a forum where people share pictures and memes, like 2chan, or 4chan! Posts are categorized by boards, and they disappear after some tide if not bumped!
 
-## Moderation
-The moderation on the site is unique, because I do not believe in moderators. We let the community moderate content, and if a post violates our rules, it won't be taken down if the community likes it.
+## State & Development of the project
+This section is intended for Terra reviewers (yes, you!!), explaining how I work on this project, where the project is at right now.
 
-## How to access it
-It's currently up at https://demo.fortnitefeet.com, but it's NOT functional at the moment, as it's still in development.
+There is a demo instance up at https://demo.fortnitefeet.com, which always pulls changes from this repository. That's why you see that Week 1's and Week 2's ships were identdcal. I didn't expect the review to take so long, so that's why it's like that.
 
-## How to run it for yourself
-You need to clone the repository, and install all the packages `npm i`, then start the dev server `npm run dev`. You'll need a .env, which you can copy from `.env.example`!
-If you want to test admin settings, set your "role" to 1 in the "account" table for your user.
+You can see the state of the project at the "tree" bellow, marked as Tree/State. It shows what's done, and what I plan to add. It will have more content in the future, but as of writing this, it's 1:30 which would be fine if I wasn't on melatonin.
+
+In Week 1's, I added a basic account system, and captcha (via Turnstile). In Week 2's ship, I added a major update on profile settings, and added the base for site news.
+I try to add a feature each week, and polish last week's feature. That's why there is very little content every week, but I focus on quality over the volume of code/features I add.
+
+## License
+The project is licensed under Creative Commons Zero, which you can learn more about [here](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ## Contribution
 You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
 
-## Todo
+### Todo/State
 
 * [x] Add notices
 
