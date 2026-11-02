@@ -28,7 +28,7 @@ export default function Boards({ title }: Props) {
         const items = category.boards.map((board) => (
             <p key={`${category.name}/${board.name}`} className={"zeroh"}>
 
-                <Link href={`/board/${board.path}`}
+                <Link href={`/board/${board.id}`}
                       className={"board"}>{board.name}</Link>
 
             </p>

@@ -4,35 +4,35 @@
     "boards": [
       {
         "name": "Anime & Manga",
-        "path": "weeb"
+        "id": "weeb"
       },
       {
         "name": "Cute",
-        "path": "gooner"
+        "id": "ct"
       },
       {
         "name": "Cosplay",
-        "path": "cos"
+        "id": "cos"
       },
       {
         "name": "Culture",
-        "path": "japan"
+        "id": "japan"
       },
       {
         "name": "Visual Novels",
-        "path": "vn"
+        "id": "vn"
       },
       {
         "name": "Vtubers",
-        "path": "vt"
+        "id": "vt"
       },
       {
         "name": "Idols",
-        "path": "idol"
+        "id": "idol"
       },
       {
         "name": "Japanese Language",
-        "path": "nihongo"
+        "id": "nihongo"
       }
     ]
   },
@@ -41,47 +41,47 @@
     "boards": [
       {
         "name": "General",
-        "path": "goon"
+        "id": "goon"
       },
       {
         "name": "Linux",
-        "path": "linux"
+        "id": "linux"
       },
       {
         "name": "Spyware",
-        "path": "il"
+        "id": "il"
       },
       {
         "name": "Decentralization",
-        "path": "d"
+        "id": "d"
       },
       {
         "name": "Security",
-        "path": "sec"
+        "id": "sec"
       },
       {
         "name": "IT",
-        "path": "it"
+        "id": "it"
       },
       {
         "name": "Programming",
-        "path": "prog"
+        "id": "prog"
       },
       {
         "name": "Web Development",
-        "path": "web"
+        "id": "web"
       },
       {
         "name": "Privacy",
-        "path": "priv"
+        "id": "priv"
       },
       {
         "name": "Open Source",
-        "path": "oss"
+        "id": "oss"
       },
       {
         "name": "Retro Computing",
-        "path": "retro"
+        "id": "retro"
       }
     ]
   },
@@ -90,71 +90,71 @@
     "boards": [
       {
         "name": "Video Games",
-        "path": "v"
+        "id": "v"
       },
       {
         "name": "Half-Life",
-        "path": "hl"
+        "id": "hl"
       },
       {
         "name": "Portal",
-        "path": "aperture"
+        "id": "aperture"
       },
       {
         "name": "Pokémon",
-        "path": "pk"
+        "id": "pk"
       },
       {
         "name": "Minecraft",
-        "path": "mc"
+        "id": "mc"
       },
       {
         "name": "ULTRAKILL",
-        "path": "peak"
+        "id": "peak"
       },
       {
         "name": "Counter-Strike",
-        "path": "cs"
+        "id": "cs"
       },
       {
         "name": "Retro Games",
-        "path": "rg"
+        "id": "rg"
       },
       {
         "name": "Indie Games",
-        "path": "indie"
+        "id": "indie"
       },
       {
         "name": "Speedrunning",
-        "path": "sr"
+        "id": "sr"
       },
       {
         "name": "Emulation",
-        "path": "emu"
+        "id": "emu"
       },
       {
         "name": "Fighting Games",
-        "path": "fgc"
+        "id": "fgc"
       },
       {
         "name": "Tabletop & RPGs",
-        "path": "rpg"
+        "id": "rpg"
       },
       {
         "name": "Mods & Modding",
-        "path": "mod"
+        "id": "mod"
       },
       {
         "name": "Team Fortress 2",
-        "path": "tf2"
+        "id": "tf2"
       },
       {
         "name": "Garry's Mod",
-        "path": "gmod"
+        "id": "gmod"
       },
       {
         "name": "Terraria",
-        "path": "terraria"
+        "id": "terraria"
       }
     ]
   },
@@ -163,79 +163,79 @@
     "boards": [
       {
         "name": "Sports",
-        "path": "sp"
+        "id": "sp"
       },
       {
         "name": "Mathematics",
-        "path": "math"
+        "id": "math"
       },
       {
         "name": "Literature",
-        "path": "lit"
+        "id": "lit"
       },
       {
         "name": "Food & Cooking",
-        "path": "ck"
+        "id": "ck"
       },
       {
         "name": "Film & TV",
-        "path": "tv"
+        "id": "tv"
       },
       {
         "name": "Music",
-        "path": "mu"
+        "id": "mu"
       },
       {
         "name": "Science & Nature",
-        "path": "sci"
+        "id": "sci"
       },
       {
         "name": "History",
-        "path": "his"
+        "id": "his"
       },
       {
         "name": "Philosophy",
-        "path": "phil"
+        "id": "phil"
       },
       {
         "name": "Space & Astronomy",
-        "path": "space"
+        "id": "space"
       },
       {
         "name": "Economics",
-        "path": "econ"
+        "id": "econ"
       },
       {
         "name": "Geography",
-        "path": "geo"
+        "id": "geo"
       },
       {
         "name": "Languages",
-        "path": "lang"
+        "id": "lang"
       },
       {
         "name": "Comics",
-        "path": "comics"
+        "id": "comics"
       },
       {
         "name": "Board Games",
-        "path": "bg"
+        "id": "bg"
       },
       {
         "name": "Chess",
-        "path": "chess"
+        "id": "chess"
       },
       {
         "name": "Paranormal",
-        "path": "x"
+        "id": "x"
       },
       {
         "name": "Education & Study",
-        "path": "edu"
+        "id": "edu"
       },
       {
         "name": "Trivia",
-        "path": "trivia"
+        "id": "trivia"
       }
     ]
   },
@@ -244,83 +244,83 @@
     "boards": [
       {
         "name": "Health & Fitness",
-        "path": "fit"
+        "id": "fit"
       },
       {
         "name": "Mental Health",
-        "path": "mh"
+        "id": "mh"
       },
       {
         "name": "Business & Finance",
-        "path": "biz"
+        "id": "biz"
       },
       {
         "name": "Careers",
-        "path": "jobs"
+        "id": "jobs"
       },
       {
         "name": "Relationships",
-        "path": "rel"
+        "id": "rel"
       },
       {
         "name": "Travel",
-        "path": "trv"
+        "id": "trv"
       },
       {
         "name": "Fashion",
-        "path": "fa"
+        "id": "fa"
       },
       {
         "name": "Animals & Pets",
-        "path": "an"
+        "id": "an"
       },
       {
         "name": "Home & Garden",
-        "path": "hg"
+        "id": "hg"
       },
       {
         "name": "Cars & Bikes",
-        "path": "o"
+        "id": "o"
       },
       {
         "name": "Nutrition",
-        "path": "nut"
+        "id": "nut"
       },
       {
         "name": "Parenting",
-        "path": "par"
+        "id": "par"
       },
       {
         "name": "Productivity",
-        "path": "prod"
+        "id": "prod"
       },
       {
         "name": "Minimalism",
-        "path": "min"
+        "id": "min"
       },
       {
         "name": "Outdoors",
-        "path": "out"
+        "id": "out"
       },
       {
         "name": "Hiking",
-        "path": "hike"
+        "id": "hike"
       },
       {
         "name": "Beauty & Skincare",
-        "path": "bty"
+        "id": "bty"
       },
       {
         "name": "Frugal Living",
-        "path": "frugal"
+        "id": "frugal"
       },
       {
         "name": "Real Estate",
-        "path": "re"
+        "id": "re"
       },
       {
         "name": "Coffee & Tea",
-        "path": "tea"
+        "id": "tea"
       }
     ]
   },
@@ -329,51 +329,51 @@
     "boards": [
       {
         "name": "Art & Design",
-        "path": "art"
+        "id": "art"
       },
       {
         "name": "Creative Writing",
-        "path": "cw"
+        "id": "cw"
       },
       {
         "name": "DIY & Crafts",
-        "path": "diy"
+        "id": "diy"
       },
       {
         "name": "Drawing",
-        "path": "draw"
+        "id": "draw"
       },
       {
         "name": "Photography",
-        "path": "ph"
+        "id": "ph"
       },
       {
         "name": "3D & Animation",
-        "path": "3d"
+        "id": "3d"
       },
       {
         "name": "Game Development",
-        "path": "gd"
+        "id": "gd"
       },
       {
         "name": "Music Production",
-        "path": "mp"
+        "id": "mp"
       },
       {
         "name": "Poetry",
-        "path": "po"
+        "id": "po"
       },
       {
         "name": "Typography",
-        "path": "type"
+        "id": "type"
       },
       {
         "name": "Filmmaking",
-        "path": "film"
+        "id": "film"
       },
       {
         "name": "Wallpapers",
-        "path": "wp"
+        "id": "wp"
       }
     ]
   },
@@ -382,35 +382,35 @@
     "boards": [
       {
         "name": "Random",
-        "path": "r"
+        "id": "r"
       },
       {
         "name": "International",
-        "path": "int"
+        "id": "int"
       },
       {
         "name": "Meta",
-        "path": "meta"
+        "id": "meta"
       },
       {
         "name": "Advice",
-        "path": "adv"
+        "id": "adv"
       },
       {
         "name": "News",
-        "path": "news"
+        "id": "news"
       },
       {
         "name": "Nostalgia",
-        "path": "nost"
+        "id": "nost"
       },
       {
         "name": "Requests",
-        "path": "req"
+        "id": "req"
       },
       {
         "name": "Show & Tell",
-        "path": "show"
+        "id": "show"
       }
     ]
   }
