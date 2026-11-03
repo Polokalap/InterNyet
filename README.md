@@ -26,6 +26,9 @@ You can give your account admin by executing the following SQL query on the data
 ## Contribution
 You can contribute to this project, as long as the change you are making isn't minor (spelling correction in a markdown file), and makes sense. Please write the code by hand.
 
+## Image of the site running
+![img.png](public/img.png)
+
 ### Todo/State
 
 * [x] Add notices
