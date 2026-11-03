@@ -7,7 +7,7 @@ An ImageBoard is kind of like a forum where people share pictures and memes, lik
 ## State & Development of the project
 This section is intended for Terra reviewers (yes, you!!), explaining how I work on this project, where the project is at right now.
 
-There is a demo instance up at https://demo.fortnitefeet.com, which always pulls changes from this repository. That's why you see that Week 1's and Week 2's ships were identdcal. I didn't expect the review to take so long, so that's why it's like that.
+There is a demo instance up at https://demo.polokalap.hu which always pulls changes from this repository. That's why you see that Week 1's and Week 2's ships were identdcal. I didn't expect the review to take so long, so that's why it's like that.
 
 You can see the state of the project at the "tree" bellow, marked as Tree/State. It shows what's done, and what I plan to add. It will have more content in the future, but as of writing this, it's 1:30 which would be fine if I wasn't on melatonin.
 
