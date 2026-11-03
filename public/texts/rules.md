@@ -17,4 +17,6 @@
 
 ## 4. Posting pornography & CSAM & gore
 - Posting of any kind of CSAM/gore in strictly prohibited.
-- Posting pornography is not preferred, but if you do end up posting it, make sure to spoiler it
+- Posting pornography is not preferred, but if you do end up posting it, make sure to spoiler it.
+
+## PLEASE USE ENGLISH
