@@ -29,7 +29,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     if (!post || !(post instanceof Post)) {
 
-        redirect("/board/not-found");
+        redirect("/board/posts/not-found");
 
     }
 
@@ -42,6 +42,13 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 <NavBar />
 
                 <div className={"flex flex-col gap-5 w-full m-2"}>
+
+                    <div className={"flex flex-col gap-1 items-center justify-center"}>
+
+                        <a className={"!no-underline"} href={`/board/${id}`}><h1 className={"text-[#721C24] text-7xl"}>/{ board.id }/</h1></a>
+                        <h1 className={"text-[#C62828] text-4xl"}>{ board.name }</h1>
+
+                    </div>
 
                     <BoardPost post={post} />
 

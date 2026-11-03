@@ -12,7 +12,7 @@ export default function Page() {
                 <NavBar />
 
                 <h1 className={"text-[#721C24] text-center text-6xl mt-10"}>404 Board not found</h1>
-                <p className={"text-[#721C24] text-center text-2xl m-1"}>Go back to <Link href="/public">home</Link></p>
+                <p className={"text-[#721C24] text-center text-2xl m-1"}>Go back to <Link href="/">home</Link></p>
 
             </div>
 

@@ -33,7 +33,7 @@ type SessionToken = {
     expiration: number;
 };
 
-type User = {
+export type User = {
     id: number;
     name: string;
     display: string;

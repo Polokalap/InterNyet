@@ -1,10 +1,11 @@
 import boards from "@/public/boards.json";
 import { getDatabase } from "@/app/lib/database";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "path";
 import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
-import {News, NewsResponse} from "@/app/lib/news";
+import { rm } from "node:fs/promises";
+import { User } from "@/app/lib/auth";
 
 const db = getDatabase();
 
@@ -196,7 +197,7 @@ export async function getPostById(id: number | string): Promise<Post|BoardRespon
 
 }
 
-export async function getBoardPosts(id: string, from: number, to: number): Promise<Post[]|NewsResponse> {
+export async function getBoardPosts(id: string, from: number, to: number): Promise<Post[]|BoardResponse> {
 
     const limit = to - from;
 
@@ -225,9 +226,112 @@ export async function getBoardPosts(id: string, from: number, to: number): Promi
 export async function getBoardPostCount(id: string): Promise<number> {
 
     const row = db
-        .prepare(`SELECT COUNT(*) AS count FROM posts WHERE board = ?`)
+        .prepare(`SELECT COUNT(*) AS count
+                  FROM posts
+                  WHERE board = ?`)
         .get(id) as { count: number };
 
     return row.count;
+
+}
+
+export async function removePostMedia(id: number) {
+
+    const row = db
+        .prepare("SELECT * FROM posts WHERE id = ?")
+        .get(id) as PostRow | undefined;
+
+    if (!row) return;
+
+    const imagePath = join(row?.path, "media.jpg");
+
+    copyFileSync("public/media.png", imagePath);
+
+}
+
+export async function deletePost(id: number) {
+
+    const row = db
+        .prepare("SELECT * FROM posts WHERE id = ?")
+        .get(id) as PostRow | undefined;
+
+    if (!row) return;
+
+    db
+        .prepare("DELETE FROM posts WHERE id = ?")
+        .run(id);
+
+    await rm(row.path, { recursive: true, force: true });
+
+}
+
+export async function updateBoardPost(user: User, id: number, title: string, content: string, media: Blob | null): Promise<Post|BoardResponse> {
+
+    const post = await getPostById(id);
+
+    if (!(post instanceof Post)) {
+
+        return { success: false, code: 26 };
+
+    }
+
+    if (post.account !== user.id && user.role <= 0) {
+
+        return { success: false, code: 7 };
+
+    }
+
+    if (title.length < 3) {
+
+        return { success: false, code: 27 };
+
+    }
+
+    if (content.length < 10) {
+
+        return { success: false, code: 28 };
+
+    }
+
+    if (media && media.size > 0) {
+
+        if (media.size > 10 * 1024 * 1024) {
+
+            return { success: false, code: 12 };
+
+        }
+
+        const type = await fileTypeFromBlob(media);
+
+        if (!type || !["image/png", "image/jpeg", "image/webp"].includes(type.mime)) {
+
+            return { success: false, code: 29 };
+
+        }
+
+    }
+
+    try {
+
+        writeFileSync(join(post.path, "post.md"), content, "utf8");
+
+        if (media && media.size > 0) {
+
+            const image = await convertImage(await media.arrayBuffer());
+            writeFileSync(join(post.path, "media.jpg"), image);
+
+        }
+
+    } catch {
+
+        return { success: false, code: 26 };
+
+    }
+
+    const row = db
+        .prepare("UPDATE posts SET title = ? WHERE id = ? RETURNING *")
+        .get(title, id) as PostRow | undefined;
+
+    return row ? Post.fromRow(row) : { success: false, code: 26 };
 
 }

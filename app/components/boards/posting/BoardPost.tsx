@@ -1,18 +1,24 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
 import { Post } from "@/app/lib/board";
-import { getAnon, getUser } from "@/app/lib/auth";
+import {getAnon, getIfUser, getUser} from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
 import PostImage from "./PostImage";
+import ContextMenu from "@/app/components/boards/posting/ContextMenu";
 
 type Props = {
     post: Post;
+    edit?: boolean;
 }
 
-export default async function BoardPost({ post }: Props) {
+export default async function BoardPost({ post, edit = false }: Props) {
 
     let uploader = await getUser(post.account);
+    const user = await getIfUser();
     if (!uploader) uploader = await getAnon();
+
+    const isOwner = !!user && user.id == post.account;
+    const isMod = !!user && user.role > 0;
 
     const content = await readFile(path.join(post.path, "post.md"), "utf-8");
     const buffer = await readFile(path.join(post.path, "media.jpg"));
@@ -39,13 +45,23 @@ export default async function BoardPost({ post }: Props) {
 
             </div>
 
-            <div className="flex flex-col gap-2 bg-[#FFF9F0] border-1 w-full p-1 items-center">
+            <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 w-full p-1 items-center"}>
+
+                <ContextMenu
+                    board={post.board}
+                    postId={post.id}
+                    canEdit={isOwner && !edit}
+                    canRemoveMedia={isMod}
+                    canRemove={isOwner || isMod}
+                />
 
                 <h1 className="text-3xl font-bold">{post.title}</h1>
 
                 <div className="flex flex-col gap-1 w-full pr-2 pl-2">
+
                     <PostImage src={media} />
                     <ToMarkdown text={content} />
+
                 </div>
 
             </div>
