@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "path";
 import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
+import {News, NewsResponse} from "@/app/lib/news";
 
 const db = getDatabase();
 
@@ -192,5 +193,41 @@ export async function getPostById(id: number | string): Promise<Post|BoardRespon
     }
 
     return Post.fromRow(row);
+
+}
+
+export async function getBoardPosts(id: string, from: number, to: number): Promise<Post[]|NewsResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            SELECT * FROM posts
+            WHERE board = ?
+            ORDER BY release DESC
+            LIMIT ? OFFSET ?
+        `)
+        .all(id, limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
+export async function getBoardPostCount(id: string): Promise<number> {
+
+    const row = db
+        .prepare(`SELECT COUNT(*) AS count FROM posts WHERE board = ?`)
+        .get(id) as { count: number };
+
+    return row.count;
 
 }

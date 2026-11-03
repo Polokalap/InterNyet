@@ -1,10 +1,8 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import { getAllBoardIds, getBoardById, getPostById, Post } from "@/app/lib/board";
 import { redirect } from "next/navigation";
-import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
+import { getIfUser } from "@/app/lib/auth";
 import BoardPost from "@/app/components/boards/posting/BoardPost";
-import {readFile} from "node:fs/promises";
-import path from "path";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string, postId: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -35,13 +33,6 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     }
 
-    let uploader = await getUser(post.account);
-    if (!uploader) uploader = await getAnon();
-
-    const content = await readFile(path.join(post.path, "post.md"), "utf-8");
-    const buffer = await readFile(path.join(post.path, "media.jpg"));
-    const media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
-
     return (
 
         <>
@@ -52,7 +43,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                 <div className={"flex flex-col gap-5 w-full m-2"}>
 
-                    <BoardPost user={uploader} title={post.title} contents={content} media={media} />
+                    <BoardPost post={post} />
 
                 </div>
 

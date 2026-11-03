@@ -1,75 +1,56 @@
-"use client"
-
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import Bubble from "@/app/components/bubble/Bubble";
-import {useState} from "react";
+import { Post } from "@/app/lib/board";
+import { getAnon, getUser } from "@/app/lib/auth";
+import { readFile } from "node:fs/promises";
+import path from "path";
+import PostImage from "./PostImage";
 
 type Props = {
-    title: string;
-    contents: string;
-    media: string;
-    user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> };
+    post: Post;
 }
 
-export default function BoardPost({ media, contents, title, user }: Props) {
+export default async function BoardPost({ post }: Props) {
 
-    // eslint-disable-next-line react-hooks/purity
-    const epoch = Date.now();
-    const date = new Date(epoch);
+    let uploader = await getUser(post.account);
+    if (!uploader) uploader = await getAnon();
 
-    const [fullImage, setFullImage] = useState(false);
+    const content = await readFile(path.join(post.path, "post.md"), "utf-8");
+    const buffer = await readFile(path.join(post.path, "media.jpg"));
+    const media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
     return (
 
-        <>
+        <div className="flex flex-col gap-1">
 
-            <div className={"flex flex-col gap-1"}>
+            <div className="flex flex-row justify-between mb-1 items-center">
 
-                <div className={"flex flex-row justify-between mb-1 items-center"}>
+                <div className="flex flex-row gap-1 items-center">
 
-                    <div className={"flex flex-row gap-1 items-center"}>
-
-                        <img src={`/api/account/${user.id}/profile.jpeg`} alt="Profile picture" className={"border-1"} width={30} />
-                        <p className={`font-bold`} style={{ color: user.color }}>{ user.display }</p>
-
-                    </div>
-
-                    <div>
-
-                        <p className={"text-inherit text-zinc-500"}>{ date.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }</p>
-
-                    </div>
+                    <img src={`/api/account/${uploader.id}/profile.jpeg`} alt="Profile picture" className="border-1" width={30} />
+                    <p className="font-bold" style={{ color: uploader.color }}>{uploader.display}</p>
 
                 </div>
 
-                <div className={"flex flex-col gap-2 bg-[#FFF9F0] border-1 w-full p-1 items-center"}>
+                <p className="text-inherit text-zinc-500">
 
-                    <h1 className={"text-3xl font-bold"}>{ title }</h1>
+                    {new Date(post.release * 1000).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}
 
-                    <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
+                </p>
 
-                        { media && (
-                            <img
-                                src={media}
-                                alt="Post media"
-                                className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 border-1 self-start cursor-pointer`}
-                                onClick={() => {
+            </div>
 
-                                    setFullImage(!fullImage);
+            <div className="flex flex-col gap-2 bg-[#FFF9F0] border-1 w-full p-1 items-center">
 
-                                }}
-                            />
-                        ) }
+                <h1 className="text-3xl font-bold">{post.title}</h1>
 
-                        <ToMarkdown text={contents} />
-
-                    </div>
-
+                <div className="flex flex-col gap-1 w-full pr-2 pl-2">
+                    <PostImage src={media} />
+                    <ToMarkdown text={content} />
                 </div>
 
             </div>
 
-        </>
+        </div>
 
     )
 

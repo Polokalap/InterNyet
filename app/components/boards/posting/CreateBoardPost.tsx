@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Check from "@/app/components/verification/Check";
-import BoardPost from "@/app/components/boards/posting/BoardPost";
 import { createPost } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
+import BoardPostPreview from "@/app/components/boards/posting/BoardPostPreview";
 
 export default function CreateBoardPost({ user, board }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null, board: string }) {
 
@@ -24,7 +24,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                 <div className={"w-full"}>
 
-                    { isPreview && <BoardPost user={user} title={title} media={media} contents={content} /> }
+                    { isPreview && <BoardPostPreview user={user} title={title} media={media} contents={content} /> }
 
                 </div>
 

@@ -28,7 +28,7 @@ export default async function AllPosts({ searchParams }: { searchParams: Promise
 
                 )}
 
-                <PageNavigator page={currentPage} totalPages={totalPages} />
+                { totalPages > 1 && <PageNavigator page={currentPage} totalPages={totalPages} /> }
 
             </div>
 

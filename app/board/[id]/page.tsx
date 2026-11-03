@@ -4,13 +4,14 @@ import { redirect } from "next/navigation";
 import CreateBoardPost from "@/app/components/boards/posting/CreateBoardPost";
 import { getIfUser } from "@/app/lib/auth";
 import {getMessage} from "@/app/lib/messages";
+import AllBoardsPosts from "@/app/components/boards/posting/AllBoardPosts";
 
-export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ error?: string, code?: string; page?: string; }>; }) {
 
     const { id } = await params;
     const user = await getIfUser();
     const boards = getAllBoardIds();
-    const { error, code } = await searchParams;
+    const { error, code, page } = await searchParams;
 
     if (!boards.includes(id)) {
 
@@ -59,6 +60,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                         }
 
                     </div>
+
+                    <AllBoardsPosts id={board.id} page={page} />
 
                 </div>
 
