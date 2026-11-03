@@ -23,7 +23,7 @@ export default async function AllBoardsPosts({ id, page }: { id: string; page?: 
 
                 ) : (
 
-                    <h1 className="text-4xl text-red-500 m-auto">No posts found...</h1>
+                    <h1 className="text-red-500 m-auto">No posts found...</h1>
 
                 )}
 
