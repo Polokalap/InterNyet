@@ -33,6 +33,16 @@ type SessionToken = {
     expiration: number;
 };
 
+type User = {
+    id: number;
+    name: string;
+    display: string;
+    color: string;
+    created: number;
+    role: number;
+    cooldowns: Record<string, number>;
+}
+
 const db = getDatabase();
 const allowedCharacters = /^[a-z0-9_]{1,16}$/;
 
@@ -306,7 +316,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
 
 }
 
-export async function getUser(id: number): Promise<{ id: number; name: string; display: string; color: string; created: number; role: number; } | null> {
+export async function getUser(id: number): Promise<{ id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null> {
 
     const row = db
         .prepare(`
@@ -327,10 +337,15 @@ export async function getUser(id: number): Promise<{ id: number; name: string; d
             WHERE a.id = ?
         `)
         .get(id) as
-        | { id: number; name: string; display: string; color: string; created: number; role: number; }
+        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number; }
         | undefined;
 
     if (!row) return null;
+
+    const cooldowns: Record<string, number> = Object.fromEntries(
+        (JSON.parse(row.cooldowns) as { key: string; expiration: number }[])
+            .map(c => [c.key, c.expiration])
+    );
 
     return {
         id: row.id,
@@ -339,11 +354,12 @@ export async function getUser(id: number): Promise<{ id: number; name: string; d
         color: row.color,
         created: row.created,
         role: row.role,
+        cooldowns,
     };
 
 }
 
-export async function getIfUser(): Promise<{ id: number; name: string; display: string; color: string; created: number; role: number; cooldowns: Record<string, number>; } | null> {
+export async function getIfUser(): Promise<User | null> {
 
     const token = (await cookies()).get("session")?.value;
     const user = token ? await getCurrentUser(token) : null;
@@ -405,3 +421,17 @@ export const requireNoUser = cache(async () => {
     if (user) redirect("/account");
 
 });
+
+export async function getAnon(): Promise<User> {
+
+    return {
+        id: -1,
+        name: "anonymous",
+        display: "Anonymous",
+        color: "#000000",
+        created: 0,
+        role: 0,
+        cooldowns: {},
+    };
+
+}

@@ -56,7 +56,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                             <td>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
-                                    name={"description"}
+                                    name={"content"}
                                     placeholder="Your post's description"
                                     onChange={(e) => setContent(e.target.value)}
                                     value={content}
@@ -96,7 +96,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                 <div className="flex flex-row items-center gap-1">
 
-                    <input className={"hidden"} type={"text"} name={"board"} value={board} />
+                    <input className={"hidden"} type={"text"} name={"board"} value={board} readOnly />
 
                     <Check action="createBoardPost" setFinished={setFinished} />
 
@@ -117,7 +117,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                         Post
                     </button>
 
-                    <Bubble description={"Requirements to post: \n- At least a 3 characters long title \n - At least a 10 characters long description \n - Some kind of media"} />
+                    <Bubble description={"Requirements to post: \n- At least a 3 characters long title \n - At least a 10 characters long description \n - Some kind of media (must be an image)"} />
 
                 </div>
 

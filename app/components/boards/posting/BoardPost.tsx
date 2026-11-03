@@ -1,3 +1,5 @@
+"use client"
+
 import ToMarkdown from "@/app/components/markdown/Markdown";
 import Bubble from "@/app/components/bubble/Bubble";
 import {useState} from "react";

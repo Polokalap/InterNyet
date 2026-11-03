@@ -1,9 +1,9 @@
 import boards from "@/public/boards.json";
 import { getDatabase } from "@/app/lib/database";
-import {mkdirSync, writeFileSync} from "node:fs";
-import {join} from "path";
-import sharp, {SharpInput} from "sharp";
-import {fileTypeFromBlob} from "file-type";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "path";
+import sharp, { SharpInput } from "sharp";
+import { fileTypeFromBlob } from "file-type";
 
 const db = getDatabase();
 
@@ -165,6 +165,25 @@ export async function createBoardPost(user: { id: number; name: string; display:
     } catch {
 
         db.prepare("DELETE FROM posts WHERE id = ?").run(row.id);
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return Post.fromRow(row);
+
+}
+
+export async function getPostById(id: number | string): Promise<Post|BoardResponse> {
+
+    const row = db
+        .prepare(`SELECT * FROM posts WHERE id = ?`)
+        .get(id) as PostRow | undefined;
+
+    if (!row) {
+
         return {
             success: false,
             code: 26

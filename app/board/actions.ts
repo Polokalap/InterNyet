@@ -42,6 +42,6 @@ export async function createPost(formData: FormData) {
 
     }
 
-    redirect(`/boards/${encodeURIComponent(board)}/posts/${result.id}`)
+    redirect(`/board/${encodeURIComponent(board)}/posts/${result.id}`)
 
 }

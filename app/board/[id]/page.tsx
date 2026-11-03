@@ -43,7 +43,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                     </div>
 
-                    <div className={"flex flex-row w-full justify-center items-center"}>
+                    <div className={"flex flex-col w-full justify-center items-center"}>
 
                         {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
 
