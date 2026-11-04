@@ -2,9 +2,10 @@ import ToMarkdown from "@/app/components/markdown/Markdown";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
-import { getComments, PostComment } from "@/app/lib/board";
+import { PostComment } from "@/app/lib/board";
 import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
+import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
 
 type Props = {
     comment: PostComment;
@@ -24,11 +25,13 @@ export default async function CommentPost({ comment, edit = false }: Props) {
 
     let media: string | null = null;
     const mediaPath = path.join(comment.path, "media.jpg");
+    let hasMedia = false;
 
     if (existsSync(mediaPath)) {
 
         const buffer = await readFile(mediaPath);
         media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+        hasMedia = true;
 
     }
 
@@ -52,6 +55,12 @@ export default async function CommentPost({ comment, edit = false }: Props) {
                 </div>
 
                 <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 min-w-50 max-w-110 p-1 pt-3 pb-3 items-center"}>
+
+                    <CommentContextMenu
+                        postId={comment.post}
+                        canRemoveMedia={isMod && hasMedia}
+                        canRemove={isOwner || isMod}
+                    />
 
                     <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
 

@@ -101,18 +101,18 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                     <Check action="createBoardPost" setFinished={setFinished} />
 
                     <button
-                        className={`button-secondary${finished && title.length > 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
+                        className={`button-secondary${finished && title.length >= 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
                         type="button"
                         onClick={() => {setIsPreview(!isPreview);}}
-                        disabled={ !finished || title.length <= 3 && content.length < 10 && media == ""}
+                        disabled={ !finished || title.length < 3 || content.length < 10 || media == ""}
                     >
                         { isPreview ? "Edit" : "Preview" }
                     </button>
 
                     <button
-                        className={`button-primary${finished && title.length > 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
+                        className={`button-primary${finished && title.length >= 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
                         type={"submit"}
-                        disabled={ !finished || title.length <= 3 && content.length < 10 && media == ""}
+                        disabled={ !finished || title.length < 3 || content.length < 10 || media == ""}
                     >
                         Post
                     </button>

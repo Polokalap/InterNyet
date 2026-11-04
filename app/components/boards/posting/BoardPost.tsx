@@ -7,6 +7,7 @@ import PostImage from "./PostImage";
 import ContextMenu from "@/app/components/boards/posting/ContextMenu";
 import CreateComment from "@/app/components/boards/posting/comment/CreateComment";
 import PostComments from "@/app/components/boards/posting/comment/PostComments";
+import Link from "next/link";
 
 type Props = {
     post: Post;
@@ -60,7 +61,13 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
                     canRemove={isOwner || isMod}
                 />
 
-                <h1 className="text-3xl font-bold">{post.title}</h1>
+                <Link
+                    className={"text-3xl font-bold"}
+                    href={`/board/${post.board}/posts/${post.id}`}
+                    style={{ textDecoration: "none", color: "black" }}
+                >
+                    {post.title}
+                </Link>
 
                 <div className="flex flex-col gap-1 w-full pr-2 pl-2">
 
@@ -72,7 +79,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
                         <div className={"flex flex-row gap-2 items-center"}>
 
                             <img src="/assets/icons/comment.png" alt="Comment" className={"w-4 h-4"} />
-                            <p>{ comments.length }</p>
+                            <Link href={`/board/${post.board}/posts/${post.id}`}>{ comments.length }</Link>
 
                         </div>
 
