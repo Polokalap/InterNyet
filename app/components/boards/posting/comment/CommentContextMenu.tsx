@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { removeMedia, removePost } from "@/app/board/actions";
+import { removeComment, removeCommentMedia } from "@/app/board/actions";
+import type { PostComment } from "@/app/lib/board";
 
 type Props = {
-    postId: number;
+    comment: PostComment;
     canRemoveMedia: boolean;
     canRemove: boolean;
 };
 
 const itemClass = "hover:bg-[#721C24] hover:text-white hover:font-bold pl-1 cursor-pointer";
 
-export default function CommentContextMenu({ postId, canRemoveMedia, canRemove }: Props) {
+export default function CommentContextMenu({ comment, canRemoveMedia, canRemove }: Props) {
 
     const [open, setOpen] = useState(false);
     const [pending, startTransition] = useTransition();
@@ -61,6 +62,9 @@ export default function CommentContextMenu({ postId, canRemoveMedia, canRemove }
 
     };
 
+    if (!comment) return null;
+    if ("success" in comment) return null;
+
     return (
 
         <div ref={ref} className={"absolute -top-2 right-1 select-none"}>
@@ -82,7 +86,7 @@ export default function CommentContextMenu({ postId, canRemoveMedia, canRemove }
                     { canRemoveMedia && (
 
                         <p role="menuitem" className={itemClass}
-                           onClick={() => run(() => removeMedia(postId))}>
+                           onClick={() => run(() => removeCommentMedia(comment.id))}>
                             Remove media
                         </p>
 
@@ -91,7 +95,7 @@ export default function CommentContextMenu({ postId, canRemoveMedia, canRemove }
                     { canRemove && (
 
                         <p role="menuitem" className={itemClass}
-                           onClick={() => run(() => removePost(postId))}>
+                           onClick={() => run(() => removeComment(comment.id))}>
                             Remove
                         </p>
 

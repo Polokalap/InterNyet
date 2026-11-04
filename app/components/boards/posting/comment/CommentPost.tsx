@@ -57,7 +57,7 @@ export default async function CommentPost({ comment, edit = false }: Props) {
                 <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 min-w-50 max-w-110 p-1 pt-3 pb-3 items-center"}>
 
                     <CommentContextMenu
-                        postId={comment.post}
+                        comment={comment}
                         canRemoveMedia={isMod && hasMedia}
                         canRemove={isOwner || isMod}
                     />

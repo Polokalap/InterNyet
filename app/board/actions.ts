@@ -3,7 +3,10 @@
 import { verifyTurnstile } from "@/app/lib/security";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
-import { createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost, createBoardComment } from "@/app/lib/board";
+import {
+    createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost, createBoardComment,
+    getCommentById, PostComment, deleteComment, deleteCommentMedia
+} from "@/app/lib/board";
 
 export async function createPost(formData: FormData) {
 
@@ -158,5 +161,37 @@ export async function createComment(formData: FormData) {
     }
 
     redirect(`/board/${encodeURIComponent(board)}/posts/${postId}`);
+
+}
+
+export async function removeCommentMedia(id: number) {
+
+    const user = await requireUser();
+
+    if (!Number.isInteger(id)) redirect("?error=true&code=26");
+
+    const comment = await getCommentById(id);
+
+    if (!(comment instanceof PostComment)) redirect("?error=true&code=7");
+
+    if (user.role <= 0) redirect("?error=true&code=30");
+
+    await deleteCommentMedia(comment.id);
+
+}
+
+export async function removeComment(id: number) {
+
+    const user = await requireUser();
+
+    if (!Number.isInteger(id)) redirect("?error=true&code=26");
+
+    const comment = await getCommentById(id);
+
+    if (!(comment instanceof PostComment)) redirect("?error=true&code=26");
+
+    if (comment.account !== user.id && user.role <= 0) redirect("?error=true&code=7");
+
+    await deleteComment(comment.id);
 
 }

@@ -459,3 +459,52 @@ export async function createBoardComment(user: User, postId: number, content: st
     return PostComment.fromRow(row);
 
 }
+
+export async function deleteCommentMedia(id: number) {
+
+    const row = db
+        .prepare("SELECT * FROM comments WHERE id = ?")
+        .get(id) as CommentRow | undefined;
+
+    if (!row) return;
+
+    const imagePath = join(row?.path, "media.jpg");
+
+    copyFileSync("public/media.png", imagePath);
+
+}
+
+export async function deleteComment(id: number) {
+
+    const row = db
+        .prepare("SELECT * FROM comments WHERE id = ?")
+        .get(id) as CommentRow | undefined;
+
+    if (!row) return;
+
+    db
+        .prepare("DELETE FROM comments WHERE id = ?")
+        .run(id);
+
+    await rm(row.path, { recursive: true, force: true });
+
+}
+
+export async function getCommentById(id: number | string): Promise<PostComment|BoardResponse> {
+
+    const row = db
+        .prepare(`SELECT * FROM comments WHERE id = ?`)
+        .get(id) as CommentRow | undefined;
+
+    if (!row) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return PostComment.fromRow(row);
+
+}
