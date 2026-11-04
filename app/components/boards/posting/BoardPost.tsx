@@ -1,17 +1,20 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import { Post } from "@/app/lib/board";
-import {getAnon, getIfUser, getUser} from "@/app/lib/auth";
+import { getComments, Post } from "@/app/lib/board";
+import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
 import PostImage from "./PostImage";
 import ContextMenu from "@/app/components/boards/posting/ContextMenu";
+import CreateComment from "@/app/components/boards/posting/comment/CreateComment";
+import PostComments from "@/app/components/boards/posting/comment/PostComments";
 
 type Props = {
     post: Post;
     edit?: boolean;
+    small?: boolean;
 }
 
-export default async function BoardPost({ post, edit = false }: Props) {
+export default async function BoardPost({ post, edit = false, small = true }: Props) {
 
     let uploader = await getUser(post.account);
     const user = await getIfUser();
@@ -23,6 +26,8 @@ export default async function BoardPost({ post, edit = false }: Props) {
     const content = await readFile(path.join(post.path, "post.md"), "utf-8");
     const buffer = await readFile(path.join(post.path, "media.jpg"));
     const media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+
+    const comments = await getComments(post.id);
 
     return (
 
@@ -62,9 +67,28 @@ export default async function BoardPost({ post, edit = false }: Props) {
                     <PostImage src={media} />
                     <ToMarkdown text={content} />
 
+                    <div className="flex flex-row gap-1 justify-between">
+
+                        <div className={"flex flex-row gap-2 items-center"}>
+
+                            <img src="/assets/icons/comment.png" alt="Comment" className={"w-4 h-4"} />
+                            <p>{ comments.length }</p>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
+
+            <div className={"ml-2"}>
+
+                <PostComments post={post} limit={small ? 3 : -1} />
+
+            </div>
+
+            { user && !small && <CreateComment board={post.board} postId={post.id} user={user} /> }
 
         </div>
 

@@ -37,6 +37,32 @@ export class Post {
 
 }
 
+type CommentRow = {
+    id: number;
+    account: number;
+    post: number;
+    path: string;
+    release: number
+};
+
+export class PostComment {
+
+    constructor(
+        public id: number,
+        public account: number,
+        public post: number,
+        public path: string,
+        public release: number,
+    ) {}
+
+    static fromRow(row: { id: number; account: number; post: number; path: string; release: number }): PostComment {
+
+        return new PostComment(row.id, row.account, row.post, row.path, row.release);
+
+    }
+
+}
+
 export type BoardResponse = {
     success: boolean;
     code?: number;
@@ -48,7 +74,7 @@ async function convertImage(input: SharpInput): Promise<Buffer<ArrayBuffer>> {
     const image = await sharp(input)
         .rotate()
         .flatten({ background: "#fff1e1"})
-        .jpeg({ quality: 20, mozjpeg: true })
+        .jpeg({ quality: 80, mozjpeg: true })
         .toBuffer();
 
     return image;
@@ -333,5 +359,103 @@ export async function updateBoardPost(user: User, id: number, title: string, con
         .get(title, id) as PostRow | undefined;
 
     return row ? Post.fromRow(row) : { success: false, code: 26 };
+
+}
+
+export async function getComments(id: number): Promise<PostComment[]> {
+
+    const rows = db
+        .prepare("SELECT * FROM comments WHERE post = ?")
+        .all(id) as PostComment[];
+
+    return rows;
+
+}
+
+export async function createBoardComment(user: User, postId: number, content: string, media: Blob | null): Promise<PostComment|BoardResponse> {
+
+    const post = await getPostById(postId);
+
+    if (!(post instanceof Post)) {
+
+        return { success: false, code: 26 };
+
+    }
+
+    if (content.length < 3) {
+
+        return { success: false, code: 28 };
+
+    }
+
+    if (media && media.size > 10 * 1024 * 1024) {
+
+        return { success: false, code: 12 };
+
+    }
+
+    const hasMedia = !!media && media.size > 0;
+
+    if (hasMedia && media) {
+
+        const type = await fileTypeFromBlob(media);
+
+        if (!type || !["image/png", "image/jpeg", "image/webp"].includes(type.mime)) {
+
+            return { success: false, code: 29 };
+
+        }
+
+    }
+
+    const insert = db.transaction((): CommentRow | undefined => {
+
+        const { id } = db
+            .prepare("INSERT INTO comments (account, post, path, release) VALUES (?, ?, ?, unixepoch()) RETURNING id")
+            .get(user.id, postId, "") as { id: number };
+
+        const path = `data/user/${user.id}/comments/${id}`;
+
+        return db
+            .prepare(`UPDATE comments SET path = ? WHERE id = ? RETURNING *`)
+            .get(path, id) as CommentRow | undefined;
+
+    });
+
+    const row = insert();
+
+    if (!row) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    try {
+
+        mkdirSync(row.path, { recursive: true });
+        writeFileSync(join(row.path, "post.md"), content, "utf8");
+
+        if (hasMedia && media) {
+
+            const image = await convertImage(await media.arrayBuffer());
+            writeFileSync(join(row.path, "media.jpg"), image);
+
+        }
+
+    } catch {
+
+        db.prepare("DELETE FROM comments WHERE id = ?").run(row.id);
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return PostComment.fromRow(row);
 
 }

@@ -3,7 +3,7 @@
 import { verifyTurnstile } from "@/app/lib/security";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
-import { createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost } from "@/app/lib/board";
+import { createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost, createBoardComment } from "@/app/lib/board";
 
 export async function createPost(formData: FormData) {
 
@@ -125,5 +125,38 @@ export async function updatePost(formData: FormData) {
     }
 
     redirect(`/board/${encodeURIComponent(board)}/posts/${result.id}`);
+
+}
+
+export async function createComment(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "createComment"))) {
+
+        redirect("?error=true&code=16");
+
+    }
+
+    const user = await requireUser();
+
+    const board = String(formData.get("board") ?? "");
+    const postId = Number(formData.get("postId"));
+    const content = String(formData.get("content") ?? "");
+    const media = formData.get("media");
+
+    if (!Number.isInteger(postId)) {
+
+        redirect("?error=true&code=26");
+
+    }
+
+    const result = await createBoardComment(user, postId, content, media instanceof File && media.size > 0 ? media : null);
+
+    if ("success" in result) {
+
+        redirect(`?error=true&code=${result.code}`);
+
+    }
+
+    redirect(`/board/${encodeURIComponent(board)}/posts/${postId}`);
 
 }

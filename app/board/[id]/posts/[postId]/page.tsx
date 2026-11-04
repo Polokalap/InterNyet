@@ -27,7 +27,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     const post = await getPostById(postId);
 
-    if (!post || !(post instanceof Post)) {
+    if (!post || !(post instanceof Post) || post.board != id.toLowerCase()) {
 
         redirect("/board/posts/not-found");
 
@@ -50,7 +50,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                     </div>
 
-                    <BoardPost post={post} />
+                    <BoardPost post={post} small={false} />
 
                 </div>
 
