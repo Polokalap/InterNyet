@@ -62,10 +62,10 @@ You can contribute to this project, as long as the change you are making isn't m
   * [ ] Reactions
 * [ ] Boards
 
-  * [ ] Posting
+  * [x] Posting
 
-    * [ ] Markdown support
-    * [ ] Image support
+    * [x] Markdown support
+    * [x] Image support
   * [ ] Moderation
 
     * [ ] AI Review (don't assume the worst)
