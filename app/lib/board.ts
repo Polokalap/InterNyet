@@ -279,12 +279,48 @@ export async function organizedBoardPosts(id: string, from: number, to: number):
 
 }
 
+export async function getAllUserPosts(id: string): Promise<Post[]|BoardResponse> {
+
+
+    const rows = db
+        .prepare(`
+            SELECT * FROM posts
+            WHERE account = ?
+            ORDER BY release DESC
+        `)
+        .all(id) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
 export async function getBoardPostCount(id: string): Promise<number> {
 
     const row = db
         .prepare(`SELECT COUNT(*) AS count
                   FROM posts
                   WHERE board = ?`)
+        .get(id) as { count: number };
+
+    return row.count;
+
+}
+
+export async function getUserPostCount(id: string): Promise<number> {
+
+    const row = db
+        .prepare(`SELECT COUNT(*) AS count
+                  FROM posts
+                  WHERE account = ?`)
         .get(id) as { count: number };
 
     return row.count;
