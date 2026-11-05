@@ -249,6 +249,35 @@ export async function getBoardPosts(id: string, from: number, to: number): Promi
 
 }
 
+export async function organizedBoardPosts(id: string, from: number, to: number): Promise<Post[]|BoardResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            SELECT posts.*,
+                   (unixepoch() - posts.release) / 86400
+                       - (SELECT COUNT(*) FROM likes WHERE likes.post = posts.id) AS score
+            FROM posts
+            WHERE posts.board = ?
+            ORDER BY score ASC, posts.release DESC
+                LIMIT ? OFFSET ?
+        `)
+        .all(id, limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
 export async function getBoardPostCount(id: string): Promise<number> {
 
     const row = db

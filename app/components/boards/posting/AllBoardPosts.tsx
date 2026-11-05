@@ -1,6 +1,6 @@
 import BoardPost from "./BoardPost";
 import PageNavigator from "@/app/components/navigator/PageNavigator";
-import {getBoardPostCount, getBoardPosts} from "@/app/lib/board";
+import { getBoardPostCount, organizedBoardPosts } from "@/app/lib/board";
 
 const LIMIT = 10;
 
@@ -9,7 +9,7 @@ export default async function AllBoardsPosts({ id, page }: { id: string; page?: 
     const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
     const totalPages = Math.max(Math.ceil(await getBoardPostCount(id) / LIMIT), 1);
 
-    const posts = await getBoardPosts(id, currentPage * LIMIT - LIMIT, currentPage * LIMIT);
+    const posts = await organizedBoardPosts(id, currentPage * LIMIT - LIMIT, currentPage * LIMIT);
 
     return (
 

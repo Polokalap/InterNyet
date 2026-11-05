@@ -68,6 +68,8 @@ function init() {
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+        CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board);
+        CREATE INDEX IF NOT EXISTS idx_likes_post ON likes(post);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
         CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_post_account ON likes(post, account);
     `);
