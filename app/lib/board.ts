@@ -257,7 +257,8 @@ export async function organizedBoardPosts(id: string, from: number, to: number):
         .prepare(`
             SELECT posts.*,
                    (unixepoch() - posts.release) / 86400
-                       - (SELECT COUNT(*) FROM likes WHERE likes.post = posts.id) AS score
+                       - (SELECT COUNT(*) FROM likes WHERE likes.post = posts.id)
+                       - (SELECT COUNT(*) FROM comments WHERE comments.post = posts.id) AS score
             FROM posts
             WHERE posts.board = ?
             ORDER BY score ASC, posts.release DESC
