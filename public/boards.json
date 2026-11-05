@@ -198,6 +198,10 @@
         "id": "phil"
       },
       {
+        "name": "Politics",
+        "id": "pol"
+      },
+      {
         "name": "Space & Astronomy",
         "id": "space"
       },
@@ -411,6 +415,10 @@
       {
         "name": "Show & Tell",
         "id": "show"
+      },
+      {
+        "name": "Suggestions",
+        "id": "sug"
       }
     ]
   }
