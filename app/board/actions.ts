@@ -24,6 +24,18 @@ export async function createPost(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
 
+    if (title.length > 100) {
+
+        redirect("?error=true&code=32");
+
+    }
+
+    if (content.length > 10000) {
+
+        redirect("?error=true&code=31");
+
+    }
+
     if (media != null && media instanceof File && media.size > 0) {
 
         if (media.size > 10 * 1024 * 1024) {
@@ -98,6 +110,18 @@ export async function updatePost(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
 
+    if (title.length > 100) {
+
+        redirect("?error=true&code=32");
+
+    }
+
+    if (content.length > 10000) {
+
+        redirect("?error=true&code=31");
+
+    }
+
     const post = await getPostById(id);
 
     if (!(post instanceof Post)) redirect(`/board/${board}`);
@@ -150,6 +174,12 @@ export async function createComment(formData: FormData) {
     if (!Number.isInteger(postId)) {
 
         redirect("?error=true&code=26");
+
+    }
+
+    if (content.length > 1000) {
+
+        redirect("?error=true&code=31");
 
     }
 

@@ -28,5 +28,8 @@
   "27": "Title too short!",
   "28": "Body too short!",
   "29": "Invalid media!",
-  "30": "You do not have permission to do that."
+  "30": "You do not have permission to do that.",
+  "31": "Your description is too long!",
+  "32": "Your title is too long!",
+  "33": "Your comment is too long!"
 }

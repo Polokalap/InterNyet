@@ -6,6 +6,7 @@ import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
 import { rm } from "node:fs/promises";
 import { User } from "@/app/lib/auth";
+import {redirect} from "next/navigation";
 
 const db = getDatabase();
 
@@ -157,6 +158,18 @@ export async function createBoardPost(user: { id: number; name: string; display:
 
     }
 
+    if (title.length > 100) {
+
+        return { success: false, code: 32 };
+
+    }
+
+    if (content.length > 10000) {
+
+        return { success: false, code: 31 };
+
+    }
+
     const insert = db.transaction((): PostRow | undefined => {
 
         const { id } = db
@@ -279,16 +292,18 @@ export async function organizedBoardPosts(id: string, from: number, to: number):
 
 }
 
-export async function getAllUserPosts(id: string): Promise<Post[]|BoardResponse> {
+export async function getAllUserPosts(id: string, from: number, to: number): Promise<Post[]|BoardResponse> {
 
+    const limit = to - from;
 
     const rows = db
         .prepare(`
             SELECT * FROM posts
             WHERE account = ?
             ORDER BY release DESC
+                LIMIT ? OFFSET ?
         `)
-        .all(id) as PostRow[];
+        .all(id, limit, from) as PostRow[];
 
     if (rows.length === 0) {
 

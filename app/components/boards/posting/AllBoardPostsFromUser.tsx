@@ -9,7 +9,7 @@ export default async function AllBoardPostsFromUser({ id, page }: { id: string; 
     const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
     const totalPages = Math.max(Math.ceil(await getUserPostCount(id) / LIMIT), 1);
 
-    const posts = await getAllUserPosts(id);
+    const posts = await getAllUserPosts(id, currentPage * LIMIT - LIMIT, currentPage * LIMIT);
 
     return (
 

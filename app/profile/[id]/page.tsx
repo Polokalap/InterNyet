@@ -3,9 +3,10 @@ import { getUser } from "@/app/lib/auth";
 import Card from "@/app/components/user/Card";
 import AllBoardPostsFromUser from "@/app/components/boards/posting/AllBoardPostsFromUser";
 
-export default async function Page({ params, searchParams }: { params: Promise<{ id: number }>; searchParams: Promise<{ page?: string }>; }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ id: number; }>; searchParams: Promise<{ page?: string }>; }) {
 
     const { id } = await params;
+    const { page } = await searchParams;
     const user = await getUser(id);
 
     if (!user) {
@@ -44,7 +45,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                     <Card user={user} />
 
-                    <AllBoardPostsFromUser id={`${id}`} />
+                    <AllBoardPostsFromUser id={`${id}`} page={`${page}`} />
 
                 </div>
 
