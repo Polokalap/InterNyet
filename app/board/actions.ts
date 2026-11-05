@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
 import {
     createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost, createBoardComment,
-    getCommentById, PostComment, deleteComment, deleteCommentMedia
+    getCommentById, PostComment, deleteComment, deleteCommentMedia, hasLikedPost, removeLike, likePost
 } from "@/app/lib/board";
+import {revalidatePath} from "next/cache";
 
 export async function createPost(formData: FormData) {
 
@@ -193,5 +194,29 @@ export async function removeComment(id: number) {
     if (comment.account !== user.id && user.role <= 0) redirect("?error=true&code=7");
 
     await deleteComment(comment.id);
+
+}
+
+export async function toggleLike(postId: number) {
+
+    const user = await requireUser();
+
+    if (!Number.isInteger(postId)) redirect("?error=true&code=26");
+
+    const post = await getPostById(postId);
+
+    if (!(post instanceof Post)) redirect("?error=true&code=26");
+
+    if (hasLikedPost(post.id, user.id)) {
+
+        await removeLike(user, post.id);
+
+    } else {
+
+        await likePost(user, post.id);
+
+    }
+
+    revalidatePath(`/board/${post.board}/posts/${post.id}`);
 
 }

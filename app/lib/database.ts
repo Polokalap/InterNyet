@@ -60,8 +60,16 @@ function init() {
             path TEXT NOT NULL,
             release TIMESTAMP NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS likes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            post INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE
+        );
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+        CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_post_account ON likes(post, account);
     `);
 
     db.exec("ANALYZE");

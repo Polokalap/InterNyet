@@ -9,7 +9,7 @@ import { User } from "@/app/lib/auth";
 
 const db = getDatabase();
 
-type PostRow = {
+export type PostRow = {
     id: number;
     account: number;
     board: string;
@@ -506,5 +506,41 @@ export async function getCommentById(id: number | string): Promise<PostComment|B
     }
 
     return PostComment.fromRow(row);
+
+}
+
+export async function likePost(user: User, id: number) {
+
+    db
+        .prepare(`INSERT OR IGNORE INTO likes (post, account) VALUES (?, ?)`)
+        .run(id, user.id);
+
+}
+
+export async function removeLike(user: User, id: number) {
+
+    db
+        .prepare(`DELETE FROM likes WHERE post = ? AND account = ?`)
+        .run(id, user.id);
+
+}
+
+export function getPostLikeCount(id: number): number {
+
+    const row = db
+        .prepare("SELECT COUNT(*) AS count FROM likes WHERE post = ?")
+        .get(id) as { count: number };
+
+    return row.count;
+
+}
+
+export function hasLikedPost(id: number, account: number): boolean {
+
+    const row = db
+        .prepare("SELECT 1 FROM likes WHERE post = ? AND account = ? LIMIT 1")
+        .get(id, account);
+
+    return !!row;
 
 }

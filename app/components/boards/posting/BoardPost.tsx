@@ -1,5 +1,5 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import { getComments, Post } from "@/app/lib/board";
+import {getComments, getPostLikeCount, hasLikedPost, Post} from "@/app/lib/board";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -8,6 +8,7 @@ import ContextMenu from "@/app/components/boards/posting/ContextMenu";
 import CreateComment from "@/app/components/boards/posting/comment/CreateComment";
 import PostComments from "@/app/components/boards/posting/comment/PostComments";
 import Link from "next/link";
+import PostReaction from "@/app/components/boards/posting/PostReaction";
 
 type Props = {
     post: Post;
@@ -29,6 +30,8 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
     const media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
     const comments = await getComments(post.id);
+    const likes = getPostLikeCount(post.id);
+    const liked = !!user && hasLikedPost(post.id, user.id);
 
     return (
 
@@ -74,16 +77,13 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
                     <PostImage src={media} />
                     <ToMarkdown text={content} />
 
-                    <div className="flex flex-row gap-1 justify-between">
-
-                        <div className={"flex flex-row gap-2 items-center"}>
-
-                            <img src="/assets/icons/comment.png" alt="Comment" className={"w-4 h-4"} />
-                            <Link href={`/board/${post.board}/posts/${post.id}`}>{ comments.length }</Link>
-
-                        </div>
-
-                    </div>
+                    <PostReaction
+                        postId={post.id}
+                        board={post.board}
+                        comments={comments.length}
+                        liked={liked}
+                        likes={likes}
+                    />
 
                 </div>
 
