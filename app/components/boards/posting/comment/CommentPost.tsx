@@ -6,6 +6,7 @@ import { PostComment } from "@/app/lib/board";
 import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
 import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
+import Link from "next/link";
 
 type Props = {
     comment: PostComment;
@@ -43,12 +44,16 @@ export default async function CommentPost({ comment, edit = false }: Props) {
 
                 <div className={"flex flex-row gap-3 justify-between mb-1 items-center w-110"}>
 
-                    <div className={"flex flex-row gap-1 items-center"}>
+                    <Link
+                        href={`/profile/${comment.account}`}
+                        className={"flex flex-row gap-1 items-center"}
+                        style={{ textDecoration: "none" }}
+                    >
 
-                        <img src={`/api/account/${uploader.id}/profile.jpeg`} alt="Profile picture" className={"border-1"} width={30} />
-                        <p className={`font-bold`} style={{ color: uploader.color }}>{ uploader.display }</p>
+                        <img src={`/api/account/${uploader.id}/profile.jpeg`} alt="Profile picture" className="border-1 border-black" width={30} />
+                        <p className="font-bold" style={{ color: uploader.color }}>{uploader.display}</p>
 
-                    </div>
+                    </Link>
 
                     <p className={"text-inherit text-zinc-500"}>{ new Date(comment.release * 1000).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }</p>
 
