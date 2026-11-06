@@ -13,13 +13,21 @@ import {
 } from "@/app/lib/auth";
 import { getCooldown, setColor, setCooldown, setDisplayName, setProfilePicture, setUsername } from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
-import { verifyTurnstile } from "@/app/lib/security";
+import {runAction, verifyTurnstile} from "@/app/lib/security";
 
 export async function login(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "login"))) {
 
         redirect("/account/login?error=true&code=16");
+
+    }
+
+    const action = await runAction("login");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
 
     }
 
@@ -51,6 +59,14 @@ export async function register(formData: FormData) {
     if (!(await verifyTurnstile(formData, "register"))) {
 
         redirect("/account/register?error=true&code=16");
+
+    }
+
+    const action = await runAction("register");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
 
     }
 
@@ -104,6 +120,14 @@ export async function settings(formData: FormData) {
     if (!(await verifyTurnstile(formData, "settings"))) {
 
         redirect("/account?error=true&code=16");
+
+    }
+
+    const action = await runAction("settings");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
 
     }
 

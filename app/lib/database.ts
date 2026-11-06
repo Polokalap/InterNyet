@@ -65,6 +65,13 @@ function init() {
             post INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE
         );
+        CREATE TABLE IF NOT EXISTS ratelimit (
+            fingerprint TEXT NOT NULL,
+            action TEXT NOT NULL,
+            count INTEGER NOT NULL,
+            window_start INTEGER NOT NULL,
+            PRIMARY KEY (fingerprint, action)
+        );
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);

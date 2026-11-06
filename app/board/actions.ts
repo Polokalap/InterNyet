@@ -1,6 +1,6 @@
 "use server"
 
-import { verifyTurnstile } from "@/app/lib/security";
+import {runAction, verifyTurnstile} from "@/app/lib/security";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
 import {
@@ -14,6 +14,14 @@ export async function createPost(formData: FormData) {
     if (!(await verifyTurnstile(formData, "createBoardPost"))) {
 
         redirect("?error=true&code=16");
+
+    }
+
+    const action = await runAction("post");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
 
     }
 
@@ -161,6 +169,14 @@ export async function createComment(formData: FormData) {
     if (!(await verifyTurnstile(formData, "createComment"))) {
 
         redirect("?error=true&code=16");
+
+    }
+
+    const action = await runAction("comment");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
 
     }
 

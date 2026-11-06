@@ -24,7 +24,7 @@ export default function PasswordChangeForm({ user }: { user: { id: number; name:
                     type={"submit"}
                     disabled={!finished || user.cooldowns["passwordChange"] !== undefined}
                 >
-                    Yes, delete
+                    Yes, change
                 </button>
 
                 <Check action={"changePassword"} setFinished={setFinished} />

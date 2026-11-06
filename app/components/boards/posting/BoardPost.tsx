@@ -1,5 +1,5 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import {getComments, getPostLikeCount, hasLikedPost, Post} from "@/app/lib/board";
+import { getComments, getPostLikeCount, hasLikedPost, Post } from "@/app/lib/board";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -9,6 +9,7 @@ import CreateComment from "@/app/components/boards/posting/comment/CreateComment
 import PostComments from "@/app/components/boards/posting/comment/PostComments";
 import Link from "next/link";
 import PostReaction from "@/app/components/boards/posting/PostReaction";
+import { getMessage } from "@/app/lib/messages";
 
 type Props = {
     post: Post;

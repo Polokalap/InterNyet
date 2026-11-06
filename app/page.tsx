@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { FileNotice } from "@/app/components/notice/Notice";
 import Boards from "@/app/components/boards/Boards";
 import NavBar from "@/app/components/navbar/NavBar";
+import Palantir from "@/app/components/palantir/Palantir";
 
 export default async function Home() {
 
@@ -12,6 +13,8 @@ export default async function Home() {
     return (
 
         <>
+
+            <Palantir />
 
             <div className={"flex flex-col gap-4 w-full md:w-215 mt-0 m-auto p-5"}>
 

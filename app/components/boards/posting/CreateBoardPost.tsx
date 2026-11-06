@@ -5,6 +5,7 @@ import Check from "@/app/components/verification/Check";
 import { createPost } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
 import BoardPostPreview from "@/app/components/boards/posting/BoardPostPreview";
+import Palantir from "@/app/components/palantir/Palantir";
 
 export default function CreateBoardPost({ user, board }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null, board: string }) {
 
@@ -19,6 +20,8 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     return (
 
         <>
+
+            <Palantir />
 
             <form action={createPost} className={"flex flex-col gap-3 w-full items-center justify-center"}>
 

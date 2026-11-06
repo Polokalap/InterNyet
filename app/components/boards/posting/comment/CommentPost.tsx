@@ -7,6 +7,7 @@ import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
 import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
 import Link from "next/link";
+import Palantir from "@/app/components/palantir/Palantir";
 
 type Props = {
     comment: PostComment;
@@ -39,6 +40,8 @@ export default async function CommentPost({ comment, edit = false }: Props) {
     return (
 
         <>
+
+            <Palantir />
 
             <div className={"flex flex-col gap-1 mt-5"}>
 

@@ -1,0 +1,27 @@
+[
+  {
+    "action": "login",
+    "allow": 5,
+    "timeout": 300
+  },
+  {
+    "action": "register",
+    "allow": 5,
+    "timeout": 300
+  },
+  {
+    "action": "settings",
+    "allow": 3,
+    "timeout": 60
+  },
+  {
+    "action": "post",
+    "allow": 3,
+    "timeout": 300
+  },
+  {
+    "action": "comment",
+    "allow": 3,
+    "timeout": 300
+  }
+]

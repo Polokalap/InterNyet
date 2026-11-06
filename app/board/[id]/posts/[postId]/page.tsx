@@ -3,6 +3,7 @@ import { getAllBoardIds, getBoardById, getPostById, Post } from "@/app/lib/board
 import { redirect } from "next/navigation";
 import { getIfUser } from "@/app/lib/auth";
 import BoardPost from "@/app/components/boards/posting/BoardPost";
+import { getMessage } from "@/app/lib/messages";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string, postId: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -50,6 +51,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                     </div>
 
+                    {error && <p className="text-red-700">{getMessage(code) ?? "Invalid username or password"}</p>}
                     <BoardPost post={post} small={false} />
 
                 </div>
