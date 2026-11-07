@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Check from "@/app/components/verification/Check";
 import { createComment } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
@@ -14,12 +14,37 @@ type Props = {
 
 export default function CreateComment({ user, board, postId }: Props) {
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const [finished, setFinished] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
 
     if (!user) return null;
+
+    useEffect(() => {
+
+        const onPaste = (e: ClipboardEvent) => {
+
+            const files = e.clipboardData?.files;
+
+            if (!files || files.length === 0) return;
+
+            const input = inputRef.current;
+            if (!input) return;
+
+            const dt = new DataTransfer();
+            for (const file of Array.from(files)) dt.items.add(file);
+            input.files = dt.files;
+
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+
+        };
+
+        document.addEventListener("paste", onPaste);
+        return () => document.removeEventListener("paste", onPaste);
+
+    }, []);
 
     return (
 
@@ -60,9 +85,11 @@ export default function CreateComment({ user, board, postId }: Props) {
                             <td>
                                 <input
                                     className={"button-secondary w-full"}
+                                    ref={inputRef}
                                     name={"media"}
                                     type={"file"}
-                                    accept="image/*"
+                                    accept={"image/*"}
+                                    multiple
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
 

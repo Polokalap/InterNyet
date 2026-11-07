@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Check from "@/app/components/verification/Check";
 import { createPost } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
@@ -9,11 +9,36 @@ import Palantir from "@/app/components/palantir/Palantir";
 
 export default function CreateBoardPost({ user, board }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null, board: string }) {
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const [finished, setFinished] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
+
+    useEffect(() => {
+
+        const onPaste = (e: ClipboardEvent) => {
+
+            const files = e.clipboardData?.files;
+
+            if (!files || files.length === 0) return;
+
+            const input = inputRef.current;
+            if (!input) return;
+
+            const dt = new DataTransfer();
+            for (const file of Array.from(files)) dt.items.add(file);
+            input.files = dt.files;
+
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+
+        };
+
+        document.addEventListener("paste", onPaste);
+        return () => document.removeEventListener("paste", onPaste);
+
+    }, []);
 
     if (!user) return null;
 
@@ -75,9 +100,11 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                             <td>
                                 <input
                                     className={"button-secondary w-full"}
+                                    ref={inputRef}
                                     name={"media"}
                                     type={"file"}
-                                    accept="image/*"
+                                    accept={"image/*"}
+                                    multiple
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
 

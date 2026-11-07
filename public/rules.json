@@ -17,11 +17,11 @@
   {
     "action": "post",
     "allow": 3,
-    "timeout": 300
+    "timeout": 120
   },
   {
     "action": "comment",
     "allow": 3,
-    "timeout": 300
+    "timeout": 60
   }
 ]
