@@ -316,7 +316,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
 
 }
 
-export async function getUser(id: number): Promise<{ id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null> {
+export async function getUser(id: number): Promise<User | null> {
 
     const row = db
         .prepare(`
@@ -338,6 +338,48 @@ export async function getUser(id: number): Promise<{ id: number; name: string; d
         `)
         .get(id) as
         | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number; }
+        | undefined;
+
+    if (!row) return null;
+
+    const cooldowns: Record<string, number> = Object.fromEntries(
+        (JSON.parse(row.cooldowns) as { key: string; expiration: number }[])
+            .map(c => [c.key, c.expiration])
+    );
+
+    return {
+        id: row.id,
+        name: row.name,
+        display: row.display,
+        color: row.color,
+        created: row.created,
+        role: row.role,
+        cooldowns,
+    };
+
+}
+
+export async function getUserByUsername(username: string): Promise<User | null> {
+
+    const row = db
+        .prepare(`
+            SELECT a.id,
+                   a.user AS name,
+                   a.role,
+                   st.display,
+                   st.color,
+                   a.created,
+                   (
+                       SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
+                       FROM cooldowns c
+                       WHERE c.account = a.id AND c.expiration > unixepoch()
+                   ) AS cooldowns
+            FROM accounts a
+                     LEFT JOIN settings st ON st.account = a.id
+            WHERE a.user = ?
+        `)
+        .get(username.toLowerCase()) as
+        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number }
         | undefined;
 
     if (!row) return null;

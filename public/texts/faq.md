@@ -1,5 +1,5 @@
 ### Who owns the website?
-The website is owned by [Polokalap](/profile/1).
+The website is owned by [Polokalap](/profile/@polokalap).
 
 ### Who are the moderators?
 The website doesn't have moderators.

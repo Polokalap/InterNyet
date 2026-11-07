@@ -1,5 +1,5 @@
 import NavBar from "@/app/components/navbar/NavBar";
-import { getUser } from "@/app/lib/auth";
+import {getUser, getUserByUsername} from "@/app/lib/auth";
 import Card from "@/app/components/user/Card";
 import AllBoardPostsFromUser from "@/app/components/boards/posting/AllBoardPostsFromUser";
 
@@ -7,7 +7,20 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     const { id } = await params;
     const { page } = await searchParams;
-    const user = await getUser(id);
+
+    console.log(id);
+
+    let user;
+
+    if (id.toString().startsWith("%40")) {
+
+        user = await getUserByUsername(id.toString().replace("%40", ""));
+
+    } else {
+
+        user = await getUser(id);
+
+    }
 
     if (!user) {
 
@@ -45,7 +58,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
                     <Card user={user} />
 
-                    <AllBoardPostsFromUser id={`${id}`} page={`${page}`} />
+                    <AllBoardPostsFromUser id={`${user.id}`} page={`${page}`} />
 
                 </div>
 

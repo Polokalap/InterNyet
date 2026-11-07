@@ -41,7 +41,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
             <div className="flex flex-row justify-between mb-1 items-center">
 
                 <Link
-                    href={`/profile/${post.account}`}
+                    href={`/profile/${uploader ? `@${uploader.name}` : post.account}`}
                     className={"flex flex-row gap-1 items-center"}
                     style={{ textDecoration: "none" }}
                 >

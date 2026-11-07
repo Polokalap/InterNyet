@@ -48,7 +48,7 @@ export default async function CommentPost({ comment, edit = false }: Props) {
                 <div className={"flex flex-row gap-3 justify-between mb-1 items-center w-110"}>
 
                     <Link
-                        href={`/profile/${comment.account}`}
+                        href={`/profile/${uploader ? `@${uploader.name}` : comment.account}`}
                         className={"flex flex-row gap-1 items-center"}
                         style={{ textDecoration: "none" }}
                     >
