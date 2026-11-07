@@ -8,8 +8,6 @@ export default async function Page({ params, searchParams }: { params: Promise<{
     const { id } = await params;
     const { page } = await searchParams;
 
-    console.log(id);
-
     let user;
 
     if (id.toString().startsWith("%40")) {
