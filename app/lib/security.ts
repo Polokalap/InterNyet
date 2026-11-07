@@ -4,6 +4,7 @@ import { createHash } from "crypto";
 import {clients, fingerprints, getClientByIp, getFingerprintByIp} from "@/app/lib/store";
 import { getDatabase } from "@/app/lib/database";
 import rules from "@/public/rules.json";
+import {RateLimiterMemory, RateLimiterRes} from "rate-limiter-flexible";
 
 export class Fingerprint {
 
@@ -76,6 +77,11 @@ const hit = db.prepare(`
     END
   RETURNING count, window_start
 `);
+
+const limiter = new RateLimiterMemory({
+    points: 5,
+    duration: 1,
+});
 
 export async function verifyTurnstile(formData: FormData, expectedAction: string) {
 
@@ -164,6 +170,10 @@ export async function runAction(action: string): Promise<RateLimit> {
         header.get("x-forwarded-for")?.split(",")[0].trim() ??
         "127.0.0.1";
 
+    const result = await checkLimit(ip, action);
+
+    if (!result.ok) return { allowed: false };
+
     try {
 
         const fingerprint = await getFingerprint(ip);
@@ -179,6 +189,22 @@ export async function runAction(action: string): Promise<RateLimit> {
     } catch (e) {
 
         return { allowed: true };
+
+    }
+
+}
+
+async function checkLimit(ip: string, key: string) {
+
+    try {
+
+        await limiter.consume(`${ip}:${key}`);
+        return { ok: true };
+
+    } catch (e) {
+
+        if (e instanceof RateLimiterRes) return { ok: false };
+        throw e;
 
     }
 

@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
     const body = await req.json();
-    clients.set(ip, { ip, ...body, lastSeen: Date.now() });
+    clients.set(ip, { ...body, ip, lastSeen: Date.now() });
 
     return NextResponse.json({ ok: true });
 
