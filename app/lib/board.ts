@@ -124,7 +124,7 @@ export function getBoardById(boardId: string) {
 
 }
 
-export async function createBoardPost(user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> }, board: string, title: string, content: string, media: Blob): Promise<Post|BoardResponse> {
+export async function createBoardPost(user: User, board: string, title: string, content: string, media: Blob, spoiler: boolean): Promise<Post|BoardResponse> {
 
     if (media.size > 10 * 1024 * 1024) {
 
@@ -173,8 +173,8 @@ export async function createBoardPost(user: { id: number; name: string; display:
     const insert = db.transaction((): PostRow | undefined => {
 
         const { id } = db
-            .prepare(`INSERT INTO posts (account, board, title, path, release) VALUES (?, ?, ?, '', unixepoch()) RETURNING id`)
-            .get(user.id, board, title) as { id: number };
+            .prepare(`INSERT INTO posts (account, board, title, path, spoiler, release) VALUES (?, ?, ?, '', ?, unixepoch()) RETURNING id`)
+            .get(user.id, board, title, spoiler ? 1 : 0) as { id: number };
 
         const path = `data/user/${user.id}/posts/${id}`;
 
@@ -233,6 +233,16 @@ export async function getPostById(id: number | string): Promise<Post|BoardRespon
     }
 
     return Post.fromRow(row);
+
+}
+
+export async function getIfSpoiler(id: number | string): Promise<boolean> {
+
+    const { spoiler } = db
+        .prepare(`SELECT spoiler FROM posts WHERE id = ?`)
+        .get(id) as { spoiler: boolean };
+
+    return spoiler;
 
 }
 

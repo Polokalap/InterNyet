@@ -3,15 +3,17 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
 import Bubble from "@/app/components/bubble/Bubble";
 import {useState} from "react";
+import Image from "next/image";
 
 type Props = {
     title: string;
     contents: string;
     media: string;
+    spoiler: boolean;
     user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> };
 }
 
-export default function BoardPostPreview({ media, contents, title, user }: Props) {
+export default function BoardPostPreview({ media, contents, title, user, spoiler }: Props) {
 
     // eslint-disable-next-line react-hooks/purity
     const epoch = Date.now();
@@ -49,16 +51,14 @@ export default function BoardPostPreview({ media, contents, title, user }: Props
                     <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
 
                         { media && (
-                            <img
-                                src={media}
-                                alt="Post media"
-                                className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 border-1 self-start cursor-pointer`}
-                                onClick={() => {
-
-                                    setFullImage(!fullImage);
-
-                                }}
-                            />
+                            <div className="overflow-clip w-fit max-w-full border-1">
+                                <img
+                                    src={media}
+                                    alt={"Post media"}
+                                    className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 self-start cursor-pointer ${spoiler && !fullImage ? "blur-sm" : ""}`}
+                                    onClick={() => setFullImage(!fullImage)}
+                                />
+                            </div>
                         ) }
 
                         <ToMarkdown text={contents} />

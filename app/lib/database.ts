@@ -51,6 +51,7 @@ function init() {
             board TEXT NOT NULL,
             title TEXT NOT NULL,
             path TEXT NOT NULL,
+            spoiler BOOLEAN NOT NULL,
             release TIMESTAMP NOT NULL
         );
         CREATE TABLE IF NOT EXISTS comments (

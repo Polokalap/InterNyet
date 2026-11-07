@@ -1,5 +1,5 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import { getComments, getPostLikeCount, hasLikedPost, Post } from "@/app/lib/board";
+import { getComments, getIfSpoiler, getPostLikeCount, hasLikedPost, Post } from "@/app/lib/board";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -9,7 +9,6 @@ import CreateComment from "@/app/components/boards/posting/comment/CreateComment
 import PostComments from "@/app/components/boards/posting/comment/PostComments";
 import Link from "next/link";
 import PostReaction from "@/app/components/boards/posting/PostReaction";
-import { getMessage } from "@/app/lib/messages";
 
 type Props = {
     post: Post;
@@ -29,6 +28,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
     const content = await readFile(path.join(post.path, "post.md"), "utf-8");
     const buffer = await readFile(path.join(post.path, "media.jpg"));
     const media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+    const spoiler = await getIfSpoiler(post.id);
 
     const comments = await getComments(post.id);
     const likes = getPostLikeCount(post.id);
@@ -79,7 +79,8 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
 
                 <div className="flex flex-col gap-1 w-full pr-2 pl-2">
 
-                    <PostImage src={media} />
+                    <PostImage src={media} spoiler={spoiler} />
+
                     <ToMarkdown text={content} />
 
                     <PostReaction

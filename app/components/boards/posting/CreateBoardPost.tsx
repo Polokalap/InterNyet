@@ -15,6 +15,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
+    const [spoiler, setSpoiler] = useState(false);
 
     useEffect(() => {
 
@@ -52,7 +53,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                 <div className={"w-full"}>
 
-                    { isPreview && <BoardPostPreview user={user} title={title} media={media} contents={content} /> }
+                    { isPreview && <BoardPostPreview user={user} title={title} media={media} contents={content} spoiler={spoiler} /> }
 
                 </div>
 
@@ -64,7 +65,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                             <th className="w-25 bg-[#721C24] text-white text-left border border-black px-1">Post title</th>
 
-                            <td>
+                            <td colSpan={2}>
                                 <input
                                     className="block w-full input px-1 py-0.5"
                                     type="text"
@@ -81,7 +82,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                             <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Description</th>
 
-                            <td>
+                            <td colSpan={2}>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
                                     name={"content"}
@@ -99,7 +100,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                             <td>
                                 <input
-                                    className={"button-secondary w-full"}
+                                    className={"button-secondary w-full px-1 py-0.5"}
                                     ref={inputRef}
                                     name={"media"}
                                     type={"file"}
@@ -116,6 +117,23 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                                         }
                                     }}
                                 />
+                            </td>
+
+                            <td>
+
+                                <label className={"flex flex-row gap-1 w-full input px-1 py-0.5"}>
+
+                                    <p className={"select-none"}>Spoiler:</p>
+
+                                    <input
+                                        name={"spoiler"}
+                                        type={"checkbox"}
+                                        checked={spoiler}
+                                        onChange={() => { setSpoiler(!spoiler); }}
+                                    />
+
+                                </label>
+
                             </td>
 
                         </tr>
