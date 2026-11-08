@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function PostImage({ src, spoiler }: { src: string, spoiler: boolean }) {
+export default function PostImage({ src, spoiler = false }: { src: string, spoiler?: boolean }) {
 
     const [fullImage, setFullImage] = useState(false);
 
