@@ -97,7 +97,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
     if (!token) return false;
 
     const secret = process.env.TURNSTILE_SECRET_KEY;
-    const expectedHostname = process.env.TURNSTILE_HOSTNAME;
+    const expectedHostname = process.env.HOSTNAME;
     if (!secret || !expectedHostname) return false;
 
     const h = await headers();

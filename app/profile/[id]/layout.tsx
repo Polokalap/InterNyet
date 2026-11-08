@@ -14,7 +14,7 @@ export async function generateMetadata({
     description: `Check out ${user.display}'s profile`,
     openGraph: {
       title: `${user.display}'s profile`,
-      images: `/api/account/${user.id}/profile.jpeg`,
+      images: `https://${process.env.HOSTNAME}/api/account/${user.id}/profile.jpeg`,
     },
   };
 }
