@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "InterNyet",
   description: "InterNyet is an Image Board made to help people communicate, and find like-minded people. \n" +
       "While we allow people to posts and comment anonymously, please read our Rules and FAQ before posting!\n" +
