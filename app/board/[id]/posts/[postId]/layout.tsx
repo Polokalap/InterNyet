@@ -27,7 +27,7 @@ export async function generateMetadata({
     description: `Check out this post made by ${user.display}`,
     openGraph: {
       title: `${post.title}`,
-      images: `/api/post/${post.id}/profile.jpeg`,
+      images: `/api/post/${post.id}/media.jpeg`,
     },
   };
 }
