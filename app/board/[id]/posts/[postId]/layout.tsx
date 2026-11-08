@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getPostById, Post } from "@/app/lib/board";
 import { getUser } from "@/app/lib/auth";
+import {readFile} from "node:fs/promises";
+import path from "path";
 
 export async function generateMetadata({
   params,
@@ -22,9 +24,18 @@ export async function generateMetadata({
 
   }
 
+  const content = await readFile(path.join(post.path, "post.md"), "utf-8");
+
+  if (!content) {
+
+    return { title: "Post not found" };
+
+  }
+
   return {
     title: `${post.title} at InterNyet`,
-    description: `Check out this post made by ${user.display}`,
+    description: `Check out this post made by ${user.display}\n\n` +
+    `${content}`,
     openGraph: {
       title: `${post.title}`,
       images: `/api/post/${post.id}/media.jpeg`,
