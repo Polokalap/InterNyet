@@ -40,7 +40,7 @@ export async function generateMetadata({
     `${content}`,
     openGraph: {
       title: `${post.title}`,
-      images: spoiler ? `` : `/api/post/${post.id}/media.avif}`,
+      images: spoiler ? `` : `/api/post/${post.id}/media.avif`,
     },
   };
 }
