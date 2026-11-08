@@ -75,7 +75,7 @@ async function convertImage(input: SharpInput): Promise<Buffer<ArrayBuffer>> {
     const image = await sharp(input)
         .rotate()
         .flatten({ background: "#fff1e1"})
-        .jpeg({ quality: 80, mozjpeg: true })
+        .avif({ quality: 50, effort: 4 })
         .toBuffer();
 
     return image;
