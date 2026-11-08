@@ -118,6 +118,7 @@ export async function updatePost(formData: FormData) {
     const title = String(formData.get("title") ?? "");
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
+    const spoiler = formData.get("spoiler") !== null;
 
     if (title.length > 100) {
 
@@ -153,7 +154,7 @@ export async function updatePost(formData: FormData) {
 
     }
 
-    const result = await updateBoardPost(user, id, title, content, media instanceof File && media.size > 0 ? media : null);
+    const result = await updateBoardPost(user, id, title, content, media instanceof File && media.size > 0 ? media : null, spoiler);
 
     if (!(result instanceof Post)) {
 
