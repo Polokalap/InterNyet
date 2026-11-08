@@ -16,6 +16,9 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
     const [spoiler, setSpoiler] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const canPost = finished && content.length >= 3 && !submitted;
 
     useEffect(() => {
 
@@ -149,18 +152,30 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                     <Check action="createBoardPost" setFinished={setFinished} />
 
                     <button
-                        className={`button-secondary${finished && title.length >= 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
+                        className={`button-secondary${canPost ? "" : "-disabled"}`}
                         type="button"
                         onClick={() => {setIsPreview(!isPreview);}}
-                        disabled={ !finished || title.length < 3 || content.length < 10 || media == ""}
+                        disabled={ !canPost }
                     >
                         { isPreview ? "Edit" : "Preview" }
                     </button>
 
                     <button
-                        className={`button-primary${finished && title.length >= 3 && content.length >= 10 && media != "" ? "" : "-disabled"}`}
+                        className={`button-primary${canPost ? "" : "-disabled"}`}
                         type={"submit"}
-                        disabled={ !finished || title.length < 3 || content.length < 10 || media == ""}
+                        disabled={ !canPost }
+                        onClick={() => {
+                            setTimeout(() => {
+
+                                setSubmitted(true);
+
+                            }, 10);
+                            setTimeout(() => {
+
+                                setSubmitted(false);
+
+                            }, 5000);
+                        }}
                     >
                         Post
                     </button>

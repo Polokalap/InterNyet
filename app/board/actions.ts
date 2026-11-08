@@ -188,6 +188,7 @@ export async function createComment(formData: FormData) {
     const postId = Number(formData.get("postId"));
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
+    const spoiler = formData.get("spoiler") !== null;
 
     if (!Number.isInteger(postId)) {
 
@@ -201,7 +202,7 @@ export async function createComment(formData: FormData) {
 
     }
 
-    const result = await createBoardComment(user, postId, content, media instanceof File && media.size > 0 ? media : null);
+    const result = await createBoardComment(user, postId, content, media instanceof File && media.size > 0 ? media : null, spoiler);
 
     if ("success" in result) {
 

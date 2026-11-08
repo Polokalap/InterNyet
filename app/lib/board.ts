@@ -6,7 +6,6 @@ import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
 import { rm } from "node:fs/promises";
 import { User } from "@/app/lib/auth";
-import {redirect} from "next/navigation";
 
 const db = getDatabase();
 
@@ -75,7 +74,8 @@ async function convertImage(input: SharpInput): Promise<Buffer<ArrayBuffer>> {
     const image = await sharp(input)
         .rotate()
         .flatten({ background: "#fff1e1"})
-        .avif({ quality: 50, effort: 4 })
+        .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
+        .avif({ quality: 50, effort: 2 })
         .toBuffer();
 
     return image;
@@ -463,7 +463,17 @@ export async function getComments(id: number): Promise<PostComment[]> {
 
 }
 
-export async function createBoardComment(user: User, postId: number, content: string, media: Blob | null): Promise<PostComment|BoardResponse> {
+export async function getIfCommentSpoiler(id: number): Promise<boolean> {
+
+    const { spoiler } = db
+        .prepare(`SELECT spoiler FROM comments WHERE id = ?`)
+        .get(id) as { spoiler: boolean };
+
+    return spoiler;
+
+}
+
+export async function createBoardComment(user: User, postId: number, content: string, media: Blob | null, spoiler: boolean): Promise<PostComment|BoardResponse> {
 
     const post = await getPostById(postId);
 
@@ -502,8 +512,8 @@ export async function createBoardComment(user: User, postId: number, content: st
     const insert = db.transaction((): CommentRow | undefined => {
 
         const { id } = db
-            .prepare("INSERT INTO comments (account, post, path, release) VALUES (?, ?, ?, unixepoch()) RETURNING id")
-            .get(user.id, postId, "") as { id: number };
+            .prepare("INSERT INTO comments (account, post, spoiler, path, release) VALUES (?, ?, ?, ?, unixepoch()) RETURNING id")
+            .get(user.id, postId, spoiler ? 1 : 0, "") as { id: number };
 
         const path = `data/user/${user.id}/comments/${id}`;
 

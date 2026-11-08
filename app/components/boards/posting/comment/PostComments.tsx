@@ -23,10 +23,9 @@ export default async function PostComments({ post, limit = -1 }: Props) {
 
             <br />
 
-            { limit != -1 && limit <= shown.length &&
-                <Link
-                    href={`/board/${post.board}/posts/${post.id}`}>
-                    { comments.length - limit } more...
+            {limit !== -1 && limit < comments.length &&
+                <Link href={`/board/${post.board}/posts/${post.id}`}>
+                    {comments.length - limit} more...
                 </Link>
             }
 

@@ -6,10 +6,11 @@ import { useState } from "react";
 type Props = {
     contents: string;
     media?: string;
+    spoiler: boolean;
     user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> };
 }
 
-export default function CommentPreview({ media, contents, user }: Props) {
+export default function CommentPreview({ media, contents, user, spoiler = false }: Props) {
 
     // eslint-disable-next-line react-hooks/purity
     const epoch = Date.now();
@@ -43,14 +44,14 @@ export default function CommentPreview({ media, contents, user }: Props) {
                         <ToMarkdown text={contents} />
 
                         { media && (
-                            <img
-                                src={media}
-                                alt="Post media"
-                                className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 border-1 self-start cursor-pointer`}
-                                onClick={() => {
-                                    setFullImage(!fullImage);
-                                }}
-                            />
+                            <div className="overflow-clip w-fit max-w-full border-1">
+                                <img
+                                    src={media}
+                                    alt={"Comment media"}
+                                    className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 self-start cursor-pointer ${spoiler && !fullImage ? "blur-sm" : ""}`}
+                                    onClick={() => setFullImage(!fullImage)}
+                                />
+                            </div>
                         ) }
 
                     </div>

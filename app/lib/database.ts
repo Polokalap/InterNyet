@@ -58,6 +58,7 @@ function init() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
             post INTEGER NOT NULL,
+            spoiler BOOLEAN NOT NULL,
             path TEXT NOT NULL,
             release TIMESTAMP NOT NULL
         );

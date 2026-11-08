@@ -19,6 +19,10 @@ export default function CreateComment({ user, board, postId }: Props) {
     const [isPreview, setIsPreview] = useState(false);
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
+    const [spoiler, setSpoiler] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const canPost = finished && content.length >= 3 && !submitted;
 
     if (!user) return null;
 
@@ -54,7 +58,7 @@ export default function CreateComment({ user, board, postId }: Props) {
 
                 <div className={"w-full"}>
 
-                    { isPreview && <CommentPreview user={user} media={media} contents={content} /> }
+                    { isPreview && <CommentPreview user={user} media={media} contents={content} spoiler={spoiler} /> }
 
                 </div>
 
@@ -66,7 +70,7 @@ export default function CreateComment({ user, board, postId }: Props) {
 
                             <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Description</th>
 
-                            <td>
+                            <td colSpan={2}>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
                                     name={"content"}
@@ -84,7 +88,7 @@ export default function CreateComment({ user, board, postId }: Props) {
 
                             <td>
                                 <input
-                                    className={"button-secondary w-full"}
+                                    className={"button-secondary w-full px-1 py-0.5"}
                                     ref={inputRef}
                                     name={"media"}
                                     type={"file"}
@@ -103,6 +107,23 @@ export default function CreateComment({ user, board, postId }: Props) {
                                 />
                             </td>
 
+                            <td>
+
+                                <label className={"flex flex-row gap-1 w-full input px-1 py-0.5"}>
+
+                                    <p className={"select-none"}>Spoiler:</p>
+
+                                    <input
+                                        name={"spoiler"}
+                                        type={"checkbox"}
+                                        checked={spoiler}
+                                        onChange={() => { setSpoiler(!spoiler); }}
+                                    />
+
+                                </label>
+
+                            </td>
+
                         </tr>
 
                     </tbody>
@@ -117,18 +138,30 @@ export default function CreateComment({ user, board, postId }: Props) {
                     <Check action={"createComment"} setFinished={setFinished} />
 
                     <button
-                        className={`button-secondary${finished && content.length >= 3 ? "" : "-disabled"}`}
+                        className={`button-secondary${ canPost ? "" : "-disabled"}`}
                         type="button"
                         onClick={() => {setIsPreview(!isPreview);}}
-                        disabled={ !finished || content.length < 3 }
+                        disabled={ !canPost }
                     >
                         { isPreview ? "Edit" : "Preview" }
                     </button>
 
                     <button
-                        className={`button-primary${finished && content.length >= 3 ? "" : "-disabled"}`}
+                        className={`button-primary${canPost ? "" : "-disabled"}`}
                         type={"submit"}
-                        disabled={ !finished || content.length < 3 }
+                        disabled={ !canPost }
+                        onClick={() => {
+                            setTimeout(() => {
+
+                                setSubmitted(true);
+
+                            }, 10);
+                            setTimeout(() => {
+
+                                setSubmitted(false);
+
+                            }, 5000);
+                        }}
                     >
                         Post
                     </button>

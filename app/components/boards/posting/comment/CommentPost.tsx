@@ -2,7 +2,7 @@ import ToMarkdown from "@/app/components/markdown/Markdown";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
-import { PostComment } from "@/app/lib/board";
+import {getIfCommentSpoiler, PostComment} from "@/app/lib/board";
 import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
 import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
@@ -28,6 +28,8 @@ export default async function CommentPost({ comment, edit = false }: Props) {
     let media: string | null = null;
     const mediaPath = path.join(comment.path, "media");
     let hasMedia = false;
+
+    const spoiler = await getIfCommentSpoiler(comment.id);
 
     if (existsSync(mediaPath)) {
 
@@ -73,7 +75,7 @@ export default async function CommentPost({ comment, edit = false }: Props) {
                     <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
 
                         <ToMarkdown text={content} />
-                        { media && <PostImage src={media} /> }
+                        { media && <PostImage src={media} spoiler={spoiler} /> }
 
                     </div>
 
