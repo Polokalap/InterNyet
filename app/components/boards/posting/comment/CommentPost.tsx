@@ -25,19 +25,12 @@ export default async function CommentPost({ comment, edit = false }: Props) {
 
     const content = await readFile(path.join(comment.path, "post.md"), "utf-8");
 
-    let media: string | null = null;
-    const mediaPath = path.join(comment.path, "media");
-    let hasMedia = false;
+    const hasMedia =
+        existsSync(path.join(comment.path, "media")) ||
+        existsSync(path.join(comment.path, "media.jpg"));
+    const media = `/api/comment/${comment.id}/media.avif`;
 
     const spoiler = await getIfCommentSpoiler(comment.id);
-
-    if (existsSync(mediaPath)) {
-
-        const buffer = await readFile(mediaPath);
-        media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
-        hasMedia = true;
-
-    }
 
     return (
 
@@ -75,7 +68,7 @@ export default async function CommentPost({ comment, edit = false }: Props) {
                     <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
 
                         <ToMarkdown text={content} />
-                        { media && <PostImage src={media} spoiler={spoiler} /> }
+                        { hasMedia && <PostImage src={media} spoiler={spoiler} /> }
 
                     </div>
 
