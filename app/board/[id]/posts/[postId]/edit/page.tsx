@@ -58,7 +58,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     try {
 
-        const buffer = await readFile(path.join(post.path, "media.jpg"));
+        const buffer = await readFile(path.join(post.path, "media"));
         media = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
     } catch {

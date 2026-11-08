@@ -26,7 +26,7 @@ export default async function CommentPost({ comment, edit = false }: Props) {
     const content = await readFile(path.join(comment.path, "post.md"), "utf-8");
 
     let media: string | null = null;
-    const mediaPath = path.join(comment.path, "media.jpg");
+    const mediaPath = path.join(comment.path, "media");
     let hasMedia = false;
 
     if (existsSync(mediaPath)) {

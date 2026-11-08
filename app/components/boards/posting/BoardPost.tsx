@@ -26,7 +26,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
     const isMod = !!user && user.role > 0;
 
     const content = await readFile(path.join(post.path, "post.md"), "utf-8");
-    const media = `/api/post/${post.id}/media.jpeg`;
+    const media = `/api/post/${post.id}/media.avif`;
     const spoiler = await getIfSpoiler(post.id);
 
     const comments = await getComments(post.id);

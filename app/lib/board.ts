@@ -201,7 +201,7 @@ export async function createBoardPost(user: User, board: string, title: string, 
         writeFileSync(join(row.path, "post.md"), content, "utf8");
 
         const image = await convertImage(await media.arrayBuffer());
-        writeFileSync(join(row.path, "media.jpg"), image);
+        writeFileSync(join(row.path, "media"), image);
 
     } catch {
 
@@ -360,7 +360,7 @@ export async function removePostMedia(id: number) {
 
     if (!row) return;
 
-    const imagePath = join(row?.path, "media.jpg");
+    const imagePath = join(row?.path, "media");
 
     copyFileSync("public/media.png", imagePath);
 
@@ -435,7 +435,7 @@ export async function updateBoardPost(user: User, id: number, title: string, con
         if (media && media.size > 0) {
 
             const image = await convertImage(await media.arrayBuffer());
-            writeFileSync(join(post.path, "media.jpg"), image);
+            writeFileSync(join(post.path, "media"), image);
 
         }
 
@@ -532,7 +532,7 @@ export async function createBoardComment(user: User, postId: number, content: st
         if (hasMedia && media) {
 
             const image = await convertImage(await media.arrayBuffer());
-            writeFileSync(join(row.path, "media.jpg"), image);
+            writeFileSync(join(row.path, "media"), image);
 
         }
 
@@ -559,7 +559,7 @@ export async function deleteCommentMedia(id: number) {
 
     if (!row) return;
 
-    const imagePath = join(row?.path, "media.jpg");
+    const imagePath = join(row?.path, "media");
 
     copyFileSync("public/media.png", imagePath);
 

@@ -1,6 +1,6 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rename } from "node:fs/promises";
 import path from "node:path"
-import {getPostById, Post} from "@/app/lib/board";
+import { getPostById, Post } from "@/app/lib/board";
 
 export async function GET(
     request: Request,
@@ -23,7 +23,19 @@ export async function GET(
 
     }
 
-    const file = path.join(process.cwd(), "data", "user", `${post.account}`, "posts", `${post.id}`, "media.jpg");
+    const dir = path.join(process.cwd(), "data", "user", `${post.account}`, "posts", `${post.id}`);
+    const file = path.join(dir, "media");
+    const legacyFile = path.join(dir, "media.jpg");
+
+    try {
+
+        await rename(legacyFile, file);
+
+    } catch (err: any) {
+
+        if (err.code !== "ENOENT") throw err;
+
+    }
 
     try {
 
