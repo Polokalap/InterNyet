@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Check from "@/app/components/verification/Check";
 import { updatePost } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
@@ -28,15 +28,42 @@ type Props = {
     defaultTitle?: string;
     defaultContent?: string;
     defaultMedia?: string;
+    defaultSpoiler?: boolean;
 }
 
-export default function EditBoardPost({ user, board, editing, defaultTitle = "", defaultContent = "", defaultMedia = "" }: Props) {
+export default function EditBoardPost({ user, board, editing, defaultTitle = "", defaultContent = "", defaultMedia = "", defaultSpoiler = false }: Props) {
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const [finished, setFinished] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const [title, setTitle] = useState(defaultTitle);
     const [content, setContent] = useState(defaultContent);
     const [media, setMedia] = useState(defaultMedia);
+    const [spoiler, setSpoiler] = useState(defaultSpoiler);
+
+    useEffect(() => {
+
+        const onPaste = (e: ClipboardEvent) => {
+
+            const files = e.clipboardData?.files;
+
+            if (!files || files.length === 0) return;
+
+            const input = inputRef.current;
+            if (!input) return;
+
+            const dt = new DataTransfer();
+            for (const file of Array.from(files)) dt.items.add(file);
+            input.files = dt.files;
+
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+
+        };
+
+        document.addEventListener("paste", onPaste);
+        return () => document.removeEventListener("paste", onPaste);
+
+    }, []);
 
     if (!user) return null;
 
@@ -48,7 +75,7 @@ export default function EditBoardPost({ user, board, editing, defaultTitle = "",
 
                 <div className={"w-full"}>
 
-                    { isPreview && <BoardPostPreview user={user} title={title} media={media} contents={content} /> }
+                    { isPreview && <BoardPostPreview user={user} title={title} media={media} contents={content} spoiler={spoiler} /> }
 
                 </div>
 
@@ -60,7 +87,7 @@ export default function EditBoardPost({ user, board, editing, defaultTitle = "",
 
                             <th className="w-25 bg-[#721C24] text-white text-left border border-black px-1">Post title</th>
 
-                            <td>
+                            <td colSpan={2}>
                                 <input
                                     className="block w-full input px-1 py-0.5"
                                     type="text"
@@ -77,7 +104,7 @@ export default function EditBoardPost({ user, board, editing, defaultTitle = "",
 
                             <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Description</th>
 
-                            <td>
+                            <td colSpan={2}>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
                                     name={"content"}
@@ -95,10 +122,12 @@ export default function EditBoardPost({ user, board, editing, defaultTitle = "",
 
                             <td>
                                 <input
-                                    className={"button-secondary w-full"}
+                                    className={"button-secondary w-full px-1 py-0.5"}
+                                    ref={inputRef}
                                     name={"media"}
                                     type={"file"}
-                                    accept="image/*"
+                                    accept={"image/*"}
+                                    multiple
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
 
@@ -110,6 +139,23 @@ export default function EditBoardPost({ user, board, editing, defaultTitle = "",
                                         }
                                     }}
                                 />
+                            </td>
+
+                            <td>
+
+                                <label className={"flex flex-row gap-1 w-full input px-1 py-0.5"}>
+
+                                    <p className={"select-none"}>Spoiler:</p>
+
+                                    <input
+                                        name={"spoiler"}
+                                        type={"checkbox"}
+                                        checked={spoiler}
+                                        onChange={() => { setSpoiler(!spoiler); }}
+                                    />
+
+                                </label>
+
                             </td>
 
                         </tr>

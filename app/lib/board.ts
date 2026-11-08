@@ -382,7 +382,7 @@ export async function deletePost(id: number) {
 
 }
 
-export async function updateBoardPost(user: User, id: number, title: string, content: string, media: Blob | null): Promise<Post|BoardResponse> {
+export async function updateBoardPost(user: User, id: number, title: string, content: string, media: Blob | null, spoiler: boolean): Promise<Post|BoardResponse> {
 
     const post = await getPostById(id);
 
@@ -446,8 +446,8 @@ export async function updateBoardPost(user: User, id: number, title: string, con
     }
 
     const row = db
-        .prepare("UPDATE posts SET title = ? WHERE id = ? RETURNING *")
-        .get(title, id) as PostRow | undefined;
+        .prepare("UPDATE posts SET title = ?, spoiler = ? WHERE id = ? RETURNING *")
+        .get(title, spoiler ? 1 : 0, id) as PostRow | undefined;
 
     return row ? Post.fromRow(row) : { success: false, code: 26 };
 
