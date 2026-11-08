@@ -5,6 +5,7 @@ import Check from "@/app/components/verification/Check";
 import { updatePost } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
 import BoardPostPreview from "@/app/components/boards/posting/BoardPostPreview";
+import {getIfSpoiler} from "@/app/lib/board";
 
 type Props = {
     user:

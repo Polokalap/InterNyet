@@ -1,5 +1,5 @@
 import NavBar from "@/app/components/navbar/NavBar";
-import { getAllBoardIds, getBoardById, getPostById, Post } from "@/app/lib/board";
+import { getAllBoardIds, getBoardById, getIfSpoiler, getPostById, Post } from "@/app/lib/board";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
 import EditBoardPost from "@/app/components/boards/posting/EditBoardPost";
@@ -67,6 +67,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
     }
 
+    const spoiler = await getIfSpoiler(post.id);
+
     return (
 
         <>
@@ -91,6 +93,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                         defaultTitle={post.title}
                         defaultContent={content}
                         defaultMedia={media}
+                        defaultSpoiler={spoiler}
                     />
 
                 </div>
