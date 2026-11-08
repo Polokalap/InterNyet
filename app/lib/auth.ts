@@ -477,3 +477,18 @@ export async function getAnon(): Promise<User> {
     };
 
 }
+
+export const loadUser = cache(async (rawId: string) => {
+
+    const id = decodeURIComponent(rawId);
+
+    if (id.startsWith("@")) {
+        return getUserByUsername(id.slice(1));
+    }
+
+    const numericId = Number(id);
+    if (!Number.isInteger(numericId)) return null;
+
+    return getUser(numericId);
+
+});
