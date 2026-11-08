@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function PostImage({ src, spoiler = false }: { src: string, spoiler?: boolean }) {
 

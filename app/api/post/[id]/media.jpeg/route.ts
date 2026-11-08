@@ -23,7 +23,7 @@ export async function GET(
 
     }
 
-    const file = path.join(process.cwd(), "data", "user", `${post.id}`, "posts", id, "media.jpg");
+    const file = path.join(process.cwd(), "data", "user", `${post.account}`, "posts", `${post.id}`, "media.jpg");
 
     try {
 

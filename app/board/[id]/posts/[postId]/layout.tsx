@@ -4,9 +4,9 @@ import { getUser } from "@/app/lib/auth";
 
 export async function generateMetadata({
   params,
-}: LayoutProps<"/profile/[id]">): Promise<Metadata> {
-  const { id } = await params;
-  const post = await getPostById(id);
+}: LayoutProps<"/board/[id]/posts/[postId]">): Promise<Metadata> {
+  const { id, postId } = await params;
+  const post = await getPostById(postId);
 
   if (!post || !(post instanceof Post)) {
 
