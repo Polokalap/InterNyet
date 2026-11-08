@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getPostById, Post } from "@/app/lib/board";
+import {getIfSpoiler, getPostById, Post} from "@/app/lib/board";
 import { getUser } from "@/app/lib/auth";
 import {readFile} from "node:fs/promises";
 import path from "path";
@@ -32,13 +32,15 @@ export async function generateMetadata({
 
   }
 
+  const spoiler = await getIfSpoiler(post.id);
+
   return {
     title: `${post.title} at InterNyet`,
     description: `Check out this post made by ${user.display}\n\n` +
     `${content}`,
     openGraph: {
       title: `${post.title}`,
-      images: `/api/post/${post.id}/media.avif`,
+      images: spoiler ? `/api/post/${post.id}/media.avif}` : ``,
     },
   };
 }
