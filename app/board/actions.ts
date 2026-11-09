@@ -5,9 +5,10 @@ import { redirect } from "next/navigation";
 import { requireUser } from "@/app/lib/auth";
 import {
     createBoardPost, deletePost, getPostById, Post, removePostMedia, updateBoardPost, createBoardComment,
-    getCommentById, PostComment, deleteComment, deleteCommentMedia, hasLikedPost, removeLike, likePost
+    getCommentById, PostComment, deleteComment, deleteCommentMedia, hasLikedPost, removeLike, likePost, hasLikedComment
 } from "@/app/lib/board";
 import {revalidatePath} from "next/cache";
+import BoardPost from "@/app/components/boards/posting/BoardPost";
 
 export async function createPost(formData: FormData) {
 
@@ -166,7 +167,7 @@ export async function updatePost(formData: FormData) {
 
 }
 
-export async function createComment(formData: FormData) {
+export async function createPostComment(formData: FormData) {
 
     if (!(await verifyTurnstile(formData, "createComment"))) {
 
@@ -202,7 +203,7 @@ export async function createComment(formData: FormData) {
 
     }
 
-    const result = await createBoardComment(user, postId, content, media instanceof File && media.size > 0 ? media : null, spoiler);
+    const result = await createBoardComment(user, postId, 0, content, media instanceof File && media.size > 0 ? media : null, spoiler); // 0 = post
 
     if ("success" in result) {
 
@@ -258,14 +259,38 @@ export async function toggleLike(postId: number) {
 
     if (hasLikedPost(post.id, user.id)) {
 
-        await removeLike(user, post.id);
+        await removeLike(user, post.id, 0); // 0 = post
 
     } else {
 
-        await likePost(user, post.id);
+        await likePost(user, post.id, 0);
 
     }
 
     revalidatePath(`/board/${post.board}/posts/${post.id}`);
+
+}
+
+export async function toggleLikeComment(commentId: number) {
+
+    const user = await requireUser();
+
+    if (!Number.isInteger(commentId)) redirect("?error=true&code=26");
+
+    const comment = await getCommentById(commentId);
+
+    if (!(comment instanceof PostComment)) redirect("?error=true&code=26");
+
+    if (hasLikedComment(comment.id, user.id)) {
+
+        await removeLike(user, comment.id, 1); // 1 = comment
+
+    } else {
+
+        await likePost(user, comment.id, 1);
+
+    }
+
+    revalidatePath(`?`);
 
 }

@@ -22,16 +22,20 @@ function init() {
             role INTEGER NOT NULL DEFAULT 0,
             created INTEGER NOT NULL DEFAULT (unixepoch())
         );
+    
         CREATE TABLE IF NOT EXISTS settings (
-            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
             display TEXT NOT NULL,
-            color TEXT NOT NULL DEFAULT "#000000"
+            color TEXT NOT NULL DEFAULT '#000000'
         );
+    
         CREATE TABLE IF NOT EXISTS cooldowns (
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
             key TEXT NOT NULL,
-            expiration TIMESTAMP NOT NULL
+            expiration TIMESTAMP NOT NULL,
+            PRIMARY KEY (account, key)
         );
+    
         CREATE TABLE IF NOT EXISTS news (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
@@ -39,12 +43,14 @@ function init() {
             path TEXT NOT NULL,
             release TIMESTAMP NOT NULL
         );
+    
         CREATE TABLE IF NOT EXISTS sessions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
             token TEXT NOT NULL,
             expiration TIMESTAMP NOT NULL
         );
+    
         CREATE TABLE IF NOT EXISTS posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
@@ -54,19 +60,27 @@ function init() {
             spoiler BOOLEAN NOT NULL,
             release TIMESTAMP NOT NULL
         );
+    
         CREATE TABLE IF NOT EXISTS comments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-            post INTEGER NOT NULL,
+            post INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+            parent INTEGER REFERENCES comments(id) ON DELETE CASCADE,
             spoiler BOOLEAN NOT NULL,
             path TEXT NOT NULL,
-            release TIMESTAMP NOT NULL
+            release TIMESTAMP NOT NULL,
+            removed BOOLEAN NOT NULL DEFAULT false,
+            CHECK ((post IS NULL) != (parent IS NULL))
         );
+    
         CREATE TABLE IF NOT EXISTS likes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            post INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
-            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE
+            account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            post INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+            comment INTEGER REFERENCES comments(id) ON DELETE CASCADE,
+            CHECK ((post IS NULL) != (comment IS NULL))
         );
+    
         CREATE TABLE IF NOT EXISTS ratelimit (
             fingerprint TEXT NOT NULL,
             action TEXT NOT NULL,
@@ -74,14 +88,14 @@ function init() {
             window_start INTEGER NOT NULL,
             PRIMARY KEY (fingerprint, action)
         );
+    
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
-        CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board);
-        CREATE INDEX IF NOT EXISTS idx_likes_post ON likes(post);
         CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post);
-        CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
-        CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_post_account ON likes(post, account);
+        CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent);
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_post_account ON likes(post, account) WHERE post IS NOT NULL;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_comment_account ON likes(comment, account) WHERE comment IS NOT NULL;
     `);
 
     db.exec("ANALYZE");

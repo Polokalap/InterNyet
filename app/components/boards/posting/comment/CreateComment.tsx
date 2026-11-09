@@ -2,7 +2,7 @@
 
 import {useEffect, useRef, useState} from "react";
 import Check from "@/app/components/verification/Check";
-import { createComment } from "@/app/board/actions";
+import { createPostComment } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
 import CommentPreview from "@/app/components/boards/posting/comment/CommentPreview";
 
@@ -54,7 +54,7 @@ export default function CreateComment({ user, board, postId }: Props) {
 
         <>
 
-            <form action={createComment} className={"flex flex-col gap-3 w-full ml-3"}>
+            <form action={createPostComment} className={"flex flex-col gap-3 w-full ml-3"}>
 
                 <div className={"w-full"}>
 

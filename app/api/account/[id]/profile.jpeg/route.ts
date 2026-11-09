@@ -10,7 +10,18 @@ export async function GET(
 
     if (!/^\d+$/.test(id)) {
 
-        return new Response("Invalid id", { status: 400 });
+        const file = path.join(process.cwd(), "templates", "user", "profile.jpeg");
+
+        const buffer = await readFile(file);
+
+        return new Response(buffer, {
+
+            headers: {
+                "Content-Type": "image/png",
+                "Cache-Control": "no-cache",
+            },
+
+        });
 
     }
 
@@ -33,7 +44,18 @@ export async function GET(
 
         if (err.code === "ENOENT") {
 
-            return new Response("Not found", { status: 404 });
+            const file = path.join(process.cwd(), "templates", "user", "profile.jpeg");
+
+            const buffer = await readFile(file);
+
+            return new Response(buffer, {
+
+                headers: {
+                    "Content-Type": "image/png",
+                    "Cache-Control": "no-cache",
+                },
+
+            });
 
         }
 

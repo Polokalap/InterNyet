@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { removeComment, removeCommentMedia } from "@/app/board/actions";
-import type { PostComment } from "@/app/lib/board";
+import type { PlainComment } from "@/app/lib/board";
 
 type Props = {
-    comment: PostComment;
+    comment: PlainComment;
     canRemoveMedia: boolean;
     canRemove: boolean;
 };

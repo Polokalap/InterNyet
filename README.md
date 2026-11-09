@@ -55,21 +55,15 @@ You can contribute to this project, as long as the change you are making isn't m
       * [ ] QR Code
     * [ ] Security key support
   * [x] Turnstile CAPTCHA
-* [ ] Posting site news
+* [x] Posting site news
 
   * [x] Markdown support
-  * [ ] User comments
-  * [ ] Reactions
-* [ ] Boards
+* [x] Boards
 
   * [x] Posting
 
     * [x] Markdown support
     * [x] Image support
-  * [ ] Moderation
-
-    * [ ] AI Review (don't assume the worst)
-    * [ ] Turnstile captcha
 * [ ] Phone UI
 
 Currently WIP

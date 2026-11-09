@@ -1,5 +1,5 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import { getComments, getIfSpoiler, getPostLikeCount, hasLikedPost, Post } from "@/app/lib/board";
+import {getAllComments, getComments, getIfSpoiler, getPostLikeCount, hasLikedPost, Post} from "@/app/lib/board";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -30,6 +30,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
     const spoiler = await getIfSpoiler(post.id);
 
     const comments = await getComments(post.id);
+    const allComments = await getAllComments(post.id);
     const likes = getPostLikeCount(post.id);
     const liked = !!user && hasLikedPost(post.id, user.id);
 
@@ -85,7 +86,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
                     <PostReaction
                         postId={post.id}
                         board={post.board}
-                        comments={comments.length}
+                        comments={allComments.length}
                         liked={liked}
                         likes={likes}
                     />

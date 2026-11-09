@@ -1,6 +1,6 @@
 import boards from "@/public/boards.json";
 import { getDatabase } from "@/app/lib/database";
-import { copyFileSync, mkdirSync, writeFileSync } from "node:fs";
+import {copyFileSync, mkdirSync, rmSync, writeFileSync} from "node:fs";
 import { join } from "path";
 import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
@@ -40,9 +40,23 @@ export class Post {
 type CommentRow = {
     id: number;
     account: number;
-    post: number;
+    post: number | null;
+    parent: number | null;
+    spoiler: number;
     path: string;
-    release: number
+    release: number;
+    removed: number;
+};
+
+export type PlainComment = {
+    id: number;
+    account: number;
+    post: number | null;
+    parent: number | null;
+    spoiler: boolean;
+    path: string;
+    release: number;
+    removed: boolean;
 };
 
 export class PostComment {
@@ -50,14 +64,32 @@ export class PostComment {
     constructor(
         public id: number,
         public account: number,
-        public post: number,
+        public post: number | null,
+        public parent: number | null,
+        public spoiler: boolean,
         public path: string,
         public release: number,
+        public removed: boolean,
     ) {}
 
-    static fromRow(row: { id: number; account: number; post: number; path: string; release: number }): PostComment {
+    get isReply(): boolean {
 
-        return new PostComment(row.id, row.account, row.post, row.path, row.release);
+        return this.parent !== null;
+
+    }
+
+    static fromRow(row: CommentRow): PostComment {
+
+        return new PostComment(
+            row.id,
+            row.account,
+            row.post,
+            row.parent,
+            Boolean(row.spoiler),
+            row.path,
+            row.release,
+            Boolean(row.removed),
+        );
 
     }
 
@@ -278,16 +310,29 @@ export async function organizedBoardPosts(id: string, from: number, to: number):
 
     const rows = db
         .prepare(`
+            WITH RECURSIVE thread(id, account, post, removed) AS (
+                SELECT c.id, c.account, c.post, c.removed
+                FROM comments c
+                         JOIN posts p ON p.id = c.post
+                WHERE p.board = ?
+                UNION ALL
+                SELECT c.id, c.account, t.post, c.removed
+                FROM comments c
+                         JOIN thread t ON c.parent = t.id
+            )
             SELECT posts.*,
                    (unixepoch() - posts.release) / 86400
                        - (SELECT COUNT(*) FROM likes WHERE likes.post = posts.id)
-                       - (SELECT COUNT(*) FROM comments WHERE comments.post = posts.id AND posts.account != comments.account) AS score
+                       - (SELECT COUNT(*) FROM thread
+                          WHERE thread.post = posts.id
+                            AND thread.account != posts.account
+                AND thread.removed = 0) AS score
             FROM posts
             WHERE posts.board = ?
             ORDER BY score ASC, posts.release DESC
                 LIMIT ? OFFSET ?
         `)
-        .all(id, limit, from) as PostRow[];
+        .all(id, id, limit, from) as PostRow[];
 
     if (rows.length === 0) {
 
@@ -453,33 +498,82 @@ export async function updateBoardPost(user: User, id: number, title: string, con
 
 }
 
-export async function getComments(id: number): Promise<PostComment[]> {
+export function getComments(id: number): PostComment[] {
 
     const rows = db
-        .prepare("SELECT * FROM comments WHERE post = ?")
-        .all(id) as PostComment[];
+        .prepare(`
+            SELECT * FROM comments
+            WHERE post = ? AND parent IS NULL
+            ORDER BY release ASC
+        `)
+        .all(id) as CommentRow[];
 
-    return rows;
+    return rows.map((row) => PostComment.fromRow(row));
 
 }
 
-export async function getIfCommentSpoiler(id: number): Promise<boolean> {
+export function getAllComments(id: number): PostComment[] {
 
-    const { spoiler } = db
+    const rows = db
+        .prepare(`
+            WITH RECURSIVE thread AS (
+                SELECT * FROM comments WHERE post = ?
+                UNION ALL
+                SELECT c.* FROM comments c
+                                    JOIN thread t ON c.parent = t.id
+            )
+            SELECT * FROM thread ORDER BY release ASC
+        `)
+        .all(id) as CommentRow[];
+
+    return rows.map((row) => PostComment.fromRow(row));
+
+}
+
+export function getIfCommentSpoiler(id: number): boolean {
+
+    const row = db
         .prepare(`SELECT spoiler FROM comments WHERE id = ?`)
-        .get(id) as { spoiler: boolean };
+        .get(id) as { spoiler: number } | undefined;
 
-    return spoiler;
+    return row ? Boolean(row.spoiler) : false;
 
 }
 
-export async function createBoardComment(user: User, postId: number, content: string, media: Blob | null, spoiler: boolean): Promise<PostComment|BoardResponse> {
+export async function createBoardComment(
+    user: User,
+    id: number,
+    type: number,
+    content: string,
+    media: Blob | null,
+    spoiler: boolean,
+): Promise<PostComment | BoardResponse> {
 
-    const post = await getPostById(postId);
-
-    if (!(post instanceof Post)) {
+    if (type !== 0 && type !== 1) {
 
         return { success: false, code: 26 };
+
+    }
+
+    if (type === 0) {
+
+        const post = await getPostById(id);
+
+        if (!(post instanceof Post)) {
+
+            return { success: false, code: 26 };
+
+        }
+
+    } else {
+
+        const parent = await getCommentById(id);
+
+        if (!(parent instanceof PostComment)) {
+
+            return { success: false, code: 26 };
+
+        }
 
     }
 
@@ -499,9 +593,9 @@ export async function createBoardComment(user: User, postId: number, content: st
 
     if (hasMedia && media) {
 
-        const type = await fileTypeFromBlob(media);
+        const fileType = await fileTypeFromBlob(media);
 
-        if (!type || !["image/png", "image/jpeg", "image/webp"].includes(type.mime)) {
+        if (!fileType || !["image/png", "image/jpeg", "image/webp"].includes(fileType.mime)) {
 
             return { success: false, code: 29 };
 
@@ -509,17 +603,20 @@ export async function createBoardComment(user: User, postId: number, content: st
 
     }
 
+    const post = type === 0 ? id : null;
+    const parent = type === 1 ? id : null;
+
     const insert = db.transaction((): CommentRow | undefined => {
 
-        const { id } = db
-            .prepare("INSERT INTO comments (account, post, spoiler, path, release) VALUES (?, ?, ?, ?, unixepoch()) RETURNING id")
-            .get(user.id, postId, spoiler ? 1 : 0, "") as { id: number };
+        const { id: commentId } = db
+            .prepare("INSERT INTO comments (account, post, parent, spoiler, path, release) VALUES (?, ?, ?, ?, '', unixepoch()) RETURNING id")
+            .get(user.id, post, parent, spoiler ? 1 : 0) as { id: number };
 
-        const path = `data/user/${user.id}/comments/${id}`;
+        const path = `data/user/${user.id}/comments/${commentId}`;
 
         return db
             .prepare(`UPDATE comments SET path = ? WHERE id = ? RETURNING *`)
-            .get(path, id) as CommentRow | undefined;
+            .get(path, commentId) as CommentRow | undefined;
 
     });
 
@@ -527,10 +624,7 @@ export async function createBoardComment(user: User, postId: number, content: st
 
     if (!row) {
 
-        return {
-            success: false,
-            code: 26
-        }
+        return { success: false, code: 26 };
 
     }
 
@@ -549,11 +643,9 @@ export async function createBoardComment(user: User, postId: number, content: st
     } catch {
 
         db.prepare("DELETE FROM comments WHERE id = ?").run(row.id);
+        rmSync(row.path, { recursive: true, force: true });
 
-        return {
-            success: false,
-            code: 26
-        }
+        return { success: false, code: 26 };
 
     }
 
@@ -578,13 +670,13 @@ export async function deleteCommentMedia(id: number) {
 export async function deleteComment(id: number) {
 
     const row = db
-        .prepare("SELECT * FROM comments WHERE id = ?")
-        .get(id) as CommentRow | undefined;
+        .prepare("SELECT path FROM comments WHERE id = ? AND removed = 0")
+        .get(id) as { path: string } | undefined;
 
     if (!row) return;
 
     db
-        .prepare("DELETE FROM comments WHERE id = ?")
+        .prepare(`UPDATE comments SET removed = 1, account = -1, path = 'templates/-1/comments/-1' WHERE id = ?`)
         .run(id);
 
     await rm(row.path, { recursive: true, force: true });
@@ -606,22 +698,43 @@ export async function getCommentById(id: number | string): Promise<PostComment|B
 
     }
 
+    if (row.removed == 1) {
+
+        PostComment.fromRow(
+            {
+                id: row.id,
+                removed: 1,
+                account: -1,
+                parent: row.parent,
+                path: "templates/-1/comments/-1",
+                post: row.post,
+                spoiler: 0,
+                release: row.release,
+            }
+        );
+
+    }
+
     return PostComment.fromRow(row);
 
 }
 
-export async function likePost(user: User, id: number) {
+export async function likePost(user: User, id: number, type: number) { // 0 = post, 1 = comment
+
+    const col = type == 0 ? "post" : "comment";
 
     db
-        .prepare(`INSERT OR IGNORE INTO likes (post, account) VALUES (?, ?)`)
+        .prepare(`INSERT OR IGNORE INTO likes (${col}, account) VALUES (?, ?)`)
         .run(id, user.id);
 
 }
 
-export async function removeLike(user: User, id: number) {
+export async function removeLike(user: User, id: number, type: number) { // 0 = post, 1 = comment
+
+    const col = type == 0 ? "post" : "comment";
 
     db
-        .prepare(`DELETE FROM likes WHERE post = ? AND account = ?`)
+        .prepare(`DELETE FROM likes WHERE ${col} = ? AND account = ?`)
         .run(id, user.id);
 
 }
@@ -640,6 +753,36 @@ export function hasLikedPost(id: number, account: number): boolean {
 
     const row = db
         .prepare("SELECT 1 FROM likes WHERE post = ? AND account = ? LIMIT 1")
+        .get(id, account);
+
+    return !!row;
+
+}
+
+export async function getCommentsOnComment(id: number): Promise<PostComment[]> {
+
+    const rows = db
+        .prepare("SELECT * FROM comments WHERE parent = ? AND removed = 0 ORDER BY release ASC")
+        .all(id) as CommentRow[];
+
+    return rows.map((row) => PostComment.fromRow(row));
+
+}
+
+export function getLikesOnComment(id: number): number {
+
+    const { count } = db
+        .prepare("SELECT COUNT(*) as count FROM likes WHERE comment = ?")
+        .get(id) as { count: number };
+
+    return count;
+
+}
+
+export function hasLikedComment(id: number, account: number): boolean {
+
+    const row = db
+        .prepare("SELECT 1 FROM likes WHERE comment = ? AND account = ? LIMIT 1")
         .get(id, account);
 
     return !!row;

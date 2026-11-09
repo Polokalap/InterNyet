@@ -2,15 +2,22 @@ import ToMarkdown from "@/app/components/markdown/Markdown";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
-import {getIfCommentSpoiler, PostComment} from "@/app/lib/board";
+import {
+    getCommentsOnComment,
+    getIfCommentSpoiler,
+    getLikesOnComment,
+    hasLikedComment,
+    PlainComment
+} from "@/app/lib/board";
 import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
 import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
 import Link from "next/link";
 import Palantir from "@/app/components/palantir/Palantir";
+import CommentReaction from "@/app/components/boards/posting/comment/CommentReaction";
 
 type Props = {
-    comment: PostComment;
+    comment: PlainComment;
     edit?: boolean;
 }
 
@@ -31,6 +38,10 @@ export default async function CommentPost({ comment, edit = false }: Props) {
     const media = `/api/comment/${comment.id}/media.avif`;
 
     const spoiler = await getIfCommentSpoiler(comment.id);
+
+    const comments = await getCommentsOnComment(comment.id);
+    const likes = await getLikesOnComment(comment.id);
+    const liked = !!user && hasLikedComment(comment.id, user.id);
 
     return (
 
@@ -69,6 +80,13 @@ export default async function CommentPost({ comment, edit = false }: Props) {
 
                         <ToMarkdown text={content} />
                         { hasMedia && <PostImage src={media} spoiler={spoiler} /> }
+
+                        <CommentReaction
+                            comments={comments.length}
+                            commentId={comment.id}
+                            liked={liked}
+                            likes={likes}
+                        />
 
                     </div>
 

@@ -16,21 +16,23 @@ export default function RegisterForm({ error, code }: {error: string | undefined
 
             <p className={"text-3xl"}>Register</p>
 
-            <div className={"flex flex-col"}>
+            <div className={"flex flex-col items-center"}>
 
-                <div className={"flex flex-col"}>
+                <div className={"flex flex-col w-43.5"}>
 
                     <p>Username:</p>
                     <input name={"user"} className={"input"} type="text" maxLength={16} />
 
                 </div>
 
-                <div className={"flex flex-col"}>
+                <div className={"flex flex-col w-43.5"}>
 
                     <p>Password:</p>
                     <input name={"password"} className={"input"} type="password" maxLength={128} />
 
                 </div>
+
+                <p className={"mt-3"}>By registering, you agree to our <a href={"/rules"}>Rules</a>.</p>
 
                 <Check action={"register"} setFinished={setFinished} />
 

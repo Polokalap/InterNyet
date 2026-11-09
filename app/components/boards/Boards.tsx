@@ -73,7 +73,7 @@ export default function Boards({ title }: Props) {
 
             </div>
 
-            <div className={"flex flex-row w-full h-full gap-1 p-1 text-sm"}>
+            <div className={"flex md:flex-row w-full h-full gap-1 p-1 text-sm overflow-auto"}>
 
                 {columns.map((column, i) => (
 
