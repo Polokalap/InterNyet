@@ -21,7 +21,7 @@ export default function Card({ user }: Props) {
                 <p className={"flex flex-row gap-2 items-center text-3xl"}>{ user.display } <span className={"text-zinc-500 text-sm"}>({ user.name })</span></p>
                 <p className={"text-md"}>Created at: { date.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }</p>
                 <p className={"text-md"}>User ID: { user.id }</p>
-                <q>{ user.bio || "No bio" }</q>
+                { user.bio ? <q>{ user.bio }</q> : <p>No bio</p> }
 
             </div>
 
