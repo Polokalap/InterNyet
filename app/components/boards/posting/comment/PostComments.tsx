@@ -27,17 +27,21 @@ export default async function PostComments({ post, comment, limit = -1, small = 
 
             <>
 
-                {shown.map(comment => (
-                    <CommentPost small={small} comment={{...comment}} key={comment.id}/>
-                ))}
+                <div className={"w-full"}>
 
-                <br/>
+                    {shown.map(comment => (
+                        <CommentPost small={small} comment={{...comment}} key={comment.id}/>
+                    ))}
 
-                {limit !== -1 && limit < comments.length &&
-                    <Link href={`/board/${post.board}/posts/${post.id}`}>
-                        {allComments.length - limit} more...
-                    </Link>
-                }
+                    <br />
+
+                    {limit !== -1 && limit < comments.length &&
+                        <Link href={`/board/${post.board}/posts/${post.id}`}>
+                            {allComments.length - limit} more...
+                        </Link>
+                    }
+
+                </div>
 
             </>
 
@@ -55,9 +59,13 @@ export default async function PostComments({ post, comment, limit = -1, small = 
 
             <>
 
-                {shown.map(reply => (
-                    <CommentPost small={small} comment={{...reply}} key={reply.id}/>
-                ))}
+                <div className={"w-full"}>
+
+                    {shown.map(reply => (
+                        <CommentPost small={small} comment={{...reply}} key={reply.id}/>
+                    ))}
+
+                </div>
 
             </>
 

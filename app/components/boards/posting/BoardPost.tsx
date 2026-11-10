@@ -59,7 +59,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
 
             </div>
 
-            <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 w-full p-1 items-center"}>
+            <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 p-1 items-center"}>
 
                 <ContextMenu
                     board={post.board}
@@ -95,7 +95,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
 
             </div>
 
-            <div className={"ml-2"}>
+            <div className={"ml-2 w-full overflow-auto"}>
 
                 <PostComments post={post} small={small} limit={small ? 3 : -1} />
 

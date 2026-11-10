@@ -1,14 +1,13 @@
 "use client"
 
-import {PlainComment, User} from "@/app/lib/types";
+import { PlainComment, User } from "@/app/lib/types";
 import Link from "next/link";
 import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
 import ToMarkdown from "@/app/components/markdown/Markdown";
 import PostImage from "@/app/components/boards/posting/PostImage";
 import CommentReaction from "@/app/components/boards/posting/comment/CommentReaction";
-import {ReactNode, useState} from "react";
+import { ReactNode, useState } from "react";
 import CreateComment from "@/app/components/boards/posting/comment/CreateComment";
-import PostComments from "@/app/components/boards/posting/comment/PostComments";
 
 
 type Props = {
@@ -37,11 +36,11 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
         <>
 
-            <div className={`pl-2`}>
+            <div className={"pl-2"}>
 
                 <div className={"flex flex-col gap-1 mt-5"}>
 
-                    <div className={"flex flex-row gap-3 justify-between mb-1 items-center w-110"}>
+                    <div className={"flex flex-row gap-3 justify-between mb-1 items-center md:w-110"}>
 
                         <Link
                             href={`/profile/${uploader ? `@${uploader.name}` : comment.account}`}

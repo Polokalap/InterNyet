@@ -64,7 +64,7 @@ export default async function CommentPost({ comment, small = false }: Props) {
                 small={small}
             >
 
-                <div className={"pl-2"}>
+                <div className={"md:pl-2 pl-1 w-110"}>
 
                     <PostComments limit={small ? 3 : -1} small={small}  comment={{ ...comment }} />
 
