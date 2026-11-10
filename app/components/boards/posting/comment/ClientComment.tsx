@@ -38,9 +38,9 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
             <div className={"pl-2"}>
 
-                <div className={"flex flex-col gap-1 mt-5"}>
+                <div className={"flex flex-col gap-1 mt-5 min-w-50 max-w-110"}>
 
-                    <div className={"flex flex-row gap-3 justify-between mb-1 items-center w-110"}>
+                    <div className={"flex flex-row gap-3 justify-between mb-1 items-center"}>
 
                         <Link
                             href={`/profile/${uploader ? `@${uploader.name}` : comment.account}`}
