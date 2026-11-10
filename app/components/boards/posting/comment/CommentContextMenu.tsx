@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { removeComment, removeCommentMedia } from "@/app/board/actions";
-import type { PlainComment } from "@/app/lib/board";
+import type { PlainComment } from "@/app/lib/types";
 
 type Props = {
     comment: PlainComment;

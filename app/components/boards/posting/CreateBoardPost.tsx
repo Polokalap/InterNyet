@@ -18,7 +18,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     const [spoiler, setSpoiler] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
-    const canPost = finished && content.length >= 3 && !submitted;
+    const canPost = finished && content.length >= 10 && media !== "" && !submitted;
 
     useEffect(() => {
 

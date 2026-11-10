@@ -1,4 +1,3 @@
-import ToMarkdown from "@/app/components/markdown/Markdown";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -6,22 +5,20 @@ import {
     getCommentsOnComment,
     getIfCommentSpoiler,
     getLikesOnComment,
-    hasLikedComment,
-    PlainComment
+    hasLikedComment
 } from "@/app/lib/board";
-import PostImage from "@/app/components/boards/posting/PostImage";
 import { existsSync } from "node:fs";
-import CommentContextMenu from "@/app/components/boards/posting/comment/CommentContextMenu";
-import Link from "next/link";
 import Palantir from "@/app/components/palantir/Palantir";
-import CommentReaction from "@/app/components/boards/posting/comment/CommentReaction";
+import ClientComment from "@/app/components/boards/posting/comment/ClientComment";
+import {PlainComment} from "@/app/lib/types";
+import PostComments from "@/app/components/boards/posting/comment/PostComments";
 
 type Props = {
     comment: PlainComment;
-    edit?: boolean;
+    small?: boolean;
 }
 
-export default async function CommentPost({ comment, edit = false }: Props) {
+export default async function CommentPost({ comment, small = false }: Props) {
 
     let uploader = await getUser(comment.account);
     const user = await getIfUser();
@@ -43,56 +40,37 @@ export default async function CommentPost({ comment, edit = false }: Props) {
     const likes = await getLikesOnComment(comment.id);
     const liked = !!user && hasLikedComment(comment.id, user.id);
 
+    if (small && comment.account == -1) return null;
+
     return (
 
         <>
 
             <Palantir />
 
-            <div className={"flex flex-col gap-1 mt-5"}>
+            <ClientComment
+                user={user}
+                comment={comment}
+                isMod={isMod}
+                hasMedia={hasMedia}
+                likes={likes}
+                liked={liked}
+                comments={comments.map((reply) => ({ ...reply }))}
+                spoiler={spoiler}
+                isOwner={isOwner}
+                content={content}
+                media={media}
+                uploader={uploader}
+                small={small}
+            >
 
-                <div className={"flex flex-row gap-3 justify-between mb-1 items-center w-110"}>
+                <div className={"pl-2"}>
 
-                    <Link
-                        href={`/profile/${uploader ? `@${uploader.name}` : comment.account}`}
-                        className={"flex flex-row gap-1 items-center"}
-                        style={{ textDecoration: "none" }}
-                    >
-
-                        <img src={`/api/account/${uploader.id}/profile.jpeg`} alt="Profile picture" className="border-1 border-black" width={30} />
-                        <p className="font-bold" style={{ color: uploader.color }}>{uploader.display}</p>
-
-                    </Link>
-
-                    <p className={"text-inherit text-zinc-500"}>{ new Date(comment.release * 1000).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }</p>
-
-                </div>
-
-                <div className={"relative flex flex-col gap-2 bg-[#FFF9F0] border-1 min-w-50 max-w-110 p-1 pt-3 pb-3 items-center"}>
-
-                    <CommentContextMenu
-                        comment={comment}
-                        canRemoveMedia={isMod && hasMedia}
-                        canRemove={isOwner || isMod}
-                    />
-
-                    <div className={"flex flex-col gap-1 w-full pr-2 pl-2"}>
-
-                        <ToMarkdown text={content} />
-                        { hasMedia && <PostImage src={media} spoiler={spoiler} /> }
-
-                        <CommentReaction
-                            comments={comments.length}
-                            commentId={comment.id}
-                            liked={liked}
-                            likes={likes}
-                        />
-
-                    </div>
+                    <PostComments limit={small ? 3 : -1} small={small}  comment={{ ...comment }} />
 
                 </div>
 
-            </div>
+            </ClientComment>
 
         </>
 

@@ -2,17 +2,21 @@
 
 import {useEffect, useRef, useState} from "react";
 import Check from "@/app/components/verification/Check";
-import { createPostComment } from "@/app/board/actions";
+import { commentOnComment, createPostComment } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
 import CommentPreview from "@/app/components/boards/posting/comment/CommentPreview";
 
 type Props = {
     user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null;
-    board: string;
-    postId: number;
+    board?: string;
+    postId?: number;
+    id?: number;
 };
 
-export default function CreateComment({ user, board, postId }: Props) {
+export default function CreateComment({user, board, postId, id}: Props) {
+
+    const isPost = typeof postId === "number";
+    const action = isPost ? createPostComment : commentOnComment;
 
     const inputRef = useRef<HTMLInputElement>(null);
     const [finished, setFinished] = useState(false);
@@ -23,8 +27,6 @@ export default function CreateComment({ user, board, postId }: Props) {
     const [submitted, setSubmitted] = useState(false);
 
     const canPost = finished && content.length >= 3 && !submitted;
-
-    if (!user) return null;
 
     useEffect(() => {
 
@@ -41,7 +43,7 @@ export default function CreateComment({ user, board, postId }: Props) {
             for (const file of Array.from(files)) dt.items.add(file);
             input.files = dt.files;
 
-            input.dispatchEvent(new Event("change", { bubbles: true }));
+            input.dispatchEvent(new Event("change", {bubbles: true}));
 
         };
 
@@ -50,15 +52,17 @@ export default function CreateComment({ user, board, postId }: Props) {
 
     }, []);
 
+    if (!user) return null;
+
     return (
 
         <>
 
-            <form action={createPostComment} className={"flex flex-col gap-3 w-full ml-3"}>
+            <form action={action} className={"flex flex-col gap-3 w-full ml-3"}>
 
                 <div className={"w-full"}>
 
-                    { isPreview && <CommentPreview user={user} media={media} contents={content} spoiler={spoiler} /> }
+                    {isPreview && <CommentPreview user={user} media={media} contents={content} spoiler={spoiler}/>}
 
                 </div>
 
@@ -66,11 +70,11 @@ export default function CreateComment({ user, board, postId }: Props) {
 
                     <tbody>
 
-                        <tr>
+                    <tr>
 
-                            <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Description</th>
+                        <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Description</th>
 
-                            <td colSpan={2}>
+                        <td colSpan={2}>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
                                     name={"content"}
@@ -78,53 +82,55 @@ export default function CreateComment({ user, board, postId }: Props) {
                                     onChange={(e) => setContent(e.target.value)}
                                     value={content}
                                 />
-                            </td>
+                        </td>
 
-                        </tr>
+                    </tr>
 
-                        <tr>
+                    <tr>
 
-                            <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Media</th>
+                        <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Media</th>
 
-                            <td>
+                        <td>
+                            <input
+                                className={"button-secondary w-full px-1 py-0.5"}
+                                ref={inputRef}
+                                name={"media"}
+                                type={"file"}
+                                accept={"image/*"}
+                                multiple
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+
+                                    if (file && file.type.startsWith("image/")) {
+                                        setMedia(URL.createObjectURL(file));
+                                    } else {
+                                        setMedia("");
+                                        e.target.value = "";
+                                    }
+                                }}
+                            />
+                        </td>
+
+                        <td>
+
+                            <label className={"flex flex-row gap-1 w-full input px-1 py-0.5"}>
+
+                                <p className={"select-none"}>Spoiler:</p>
+
                                 <input
-                                    className={"button-secondary w-full px-1 py-0.5"}
-                                    ref={inputRef}
-                                    name={"media"}
-                                    type={"file"}
-                                    accept={"image/*"}
-                                    multiple
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-
-                                        if (file && file.type.startsWith("image/")) {
-                                            setMedia(URL.createObjectURL(file));
-                                        } else {
-                                            setMedia("");
-                                            e.target.value = "";
-                                        }
+                                    name={"spoiler"}
+                                    type={"checkbox"}
+                                    checked={spoiler}
+                                    onChange={() => {
+                                        setSpoiler(!spoiler);
                                     }}
                                 />
-                            </td>
 
-                            <td>
+                            </label>
 
-                                <label className={"flex flex-row gap-1 w-full input px-1 py-0.5"}>
+                        </td>
 
-                                    <p className={"select-none"}>Spoiler:</p>
-
-                                    <input
-                                        name={"spoiler"}
-                                        type={"checkbox"}
-                                        checked={spoiler}
-                                        onChange={() => { setSpoiler(!spoiler); }}
-                                    />
-
-                                </label>
-
-                            </td>
-
-                        </tr>
+                    </tr>
 
                     </tbody>
 
@@ -132,24 +138,32 @@ export default function CreateComment({ user, board, postId }: Props) {
 
                 <div className="flex flex-row gap-1 w-110 items-center justify-center">
 
-                    <input className={"hidden"} type={"text"} name={"board"} value={board} readOnly />
-                    <input className={"hidden"} type={"number"} name={"postId"} value={postId} readOnly />
+                    {isPost ? (
+                        <>
+                            <input className={"hidden"} type={"text"} name={"board"} value={board ?? ""} readOnly/>
+                            <input className={"hidden"} type={"number"} name={"postId"} value={postId} readOnly/>
+                        </>
+                    ) : (
+                        <input className={"hidden"} type={"number"} name={"id"} value={id ?? ""} readOnly/>
+                    )}
 
-                    <Check action={"createComment"} setFinished={setFinished} />
+                    <Check action={"createComment"} setFinished={setFinished}/>
 
                     <button
-                        className={`button-secondary${ canPost ? "" : "-disabled"}`}
+                        className={`button-secondary${canPost ? "" : "-disabled"}`}
                         type="button"
-                        onClick={() => {setIsPreview(!isPreview);}}
-                        disabled={ !canPost }
+                        onClick={() => {
+                            setIsPreview(!isPreview);
+                        }}
+                        disabled={!canPost}
                     >
-                        { isPreview ? "Edit" : "Preview" }
+                        {isPreview ? "Edit" : "Preview"}
                     </button>
 
                     <button
                         className={`button-primary${canPost ? "" : "-disabled"}`}
                         type={"submit"}
-                        disabled={ !canPost }
+                        disabled={!canPost}
                         onClick={() => {
                             setTimeout(() => {
 
@@ -166,7 +180,7 @@ export default function CreateComment({ user, board, postId }: Props) {
                         Post
                     </button>
 
-                    <Bubble description={"Requirements to post: \n - At least a 3 characters long description"} />
+                    <Bubble description={"Requirements to post: \n - At least a 3 characters long description"}/>
 
                 </div>
 
@@ -176,4 +190,4 @@ export default function CreateComment({ user, board, postId }: Props) {
 
     )
 
-}
+};

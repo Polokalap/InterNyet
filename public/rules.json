@@ -21,7 +21,7 @@
   },
   {
     "action": "comment",
-    "allow": 3,
+    "allow": 6,
     "timeout": 60
   }
 ]

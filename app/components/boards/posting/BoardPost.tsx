@@ -1,5 +1,5 @@
 import ToMarkdown from "@/app/components/markdown/Markdown";
-import {getAllComments, getComments, getIfSpoiler, getPostLikeCount, hasLikedPost, Post} from "@/app/lib/board";
+import { getAllComments, getComments, getIfSpoiler, getPostLikeCount, hasLikedPost, Post } from "@/app/lib/board";
 import { getAnon, getIfUser, getUser } from "@/app/lib/auth";
 import { readFile } from "node:fs/promises";
 import path from "path";
@@ -97,7 +97,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
 
             <div className={"ml-2"}>
 
-                <PostComments post={post} limit={small ? 3 : -1} />
+                <PostComments post={post} small={small} limit={small ? 3 : -1} />
 
             </div>
 

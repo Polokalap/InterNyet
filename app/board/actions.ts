@@ -191,7 +191,7 @@ export async function createPostComment(formData: FormData) {
     const media = formData.get("media");
     const spoiler = formData.get("spoiler") !== null;
 
-    if (!Number.isInteger(postId)) {
+    if (!Number.isInteger(postId) || postId <= 0 || !board) {
 
         redirect("?error=true&code=26");
 
@@ -205,7 +205,7 @@ export async function createPostComment(formData: FormData) {
 
     const result = await createBoardComment(user, postId, 0, content, media instanceof File && media.size > 0 ? media : null, spoiler); // 0 = post
 
-    if ("success" in result) {
+    if (!(result instanceof PostComment)) {
 
         redirect(`?error=true&code=${result.code}`);
 
@@ -288,6 +288,53 @@ export async function toggleLikeComment(commentId: number) {
     } else {
 
         await likePost(user, comment.id, 1);
+
+    }
+
+    revalidatePath(`?`);
+
+}
+
+export async function commentOnComment(formData: FormData) {
+
+    if (!(await verifyTurnstile(formData, "createComment"))) {
+
+        redirect("?error=true&code=16");
+
+    }
+
+    const action = await runAction("comment");
+
+    if (!action.allowed) {
+
+        redirect("?error=true&code=34")
+
+    }
+
+    const user = await requireUser();
+
+    const commentId = Number(formData.get("id"));
+    const content = String(formData.get("content") ?? "");
+    const media = formData.get("media");
+    const spoiler = formData.get("spoiler") !== null;
+
+    if (!Number.isInteger(commentId) || commentId <= 0) {
+
+        redirect("?error=true&code=26");
+
+    }
+
+    if (content.length > 1000) {
+
+        redirect("?error=true&code=31");
+
+    }
+
+    const result = await createBoardComment(user, commentId, 1, content, media instanceof File && media.size > 0 ? media : null, spoiler); // 1 = comment
+
+    if (!(result instanceof PostComment)) {
+
+        redirect(`?error=true&code=${result.code}`);
 
     }
 

@@ -5,7 +5,7 @@ import { join } from "path";
 import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
 import { rm } from "node:fs/promises";
-import { User } from "@/app/lib/auth";
+import {User} from "@/app/lib/types";
 
 const db = getDatabase();
 
@@ -46,17 +46,6 @@ type CommentRow = {
     path: string;
     release: number;
     removed: number;
-};
-
-export type PlainComment = {
-    id: number;
-    account: number;
-    post: number | null;
-    parent: number | null;
-    spoiler: boolean;
-    path: string;
-    release: number;
-    removed: boolean;
 };
 
 export class PostComment {
@@ -530,6 +519,39 @@ export function getAllComments(id: number): PostComment[] {
 
 }
 
+export function getAllCommentsOnComment(id: number): PostComment[] {
+
+    const rows = db
+        .prepare(`
+            WITH RECURSIVE thread AS (
+                SELECT * FROM comments WHERE parent = ?
+                UNION ALL
+                SELECT c.* FROM comments c
+                                    JOIN thread t ON c.parent = t.id
+            )
+            SELECT * FROM thread ORDER BY release ASC
+        `)
+        .all(id) as CommentRow[];
+
+    return rows.map((row) => PostComment.fromRow(row));
+
+}
+
+export function getTemplateComment(id: number, parent: number): PostComment {
+
+    return new PostComment(
+        id,
+        -1,
+        null,
+        parent,
+        false,
+        "templates/-1/comments/-1",
+        0,
+        true,
+    );
+
+}
+
 export function getIfCommentSpoiler(id: number): boolean {
 
     const row = db
@@ -700,7 +722,7 @@ export async function getCommentById(id: number | string): Promise<PostComment|B
 
     if (row.removed == 1) {
 
-        PostComment.fromRow(
+        return PostComment.fromRow(
             {
                 id: row.id,
                 removed: 1,
@@ -762,7 +784,7 @@ export function hasLikedPost(id: number, account: number): boolean {
 export async function getCommentsOnComment(id: number): Promise<PostComment[]> {
 
     const rows = db
-        .prepare("SELECT * FROM comments WHERE parent = ? AND removed = 0 ORDER BY release ASC")
+        .prepare("SELECT * FROM comments WHERE parent = ? ORDER BY release ASC")
         .all(id) as CommentRow[];
 
     return rows.map((row) => PostComment.fromRow(row));

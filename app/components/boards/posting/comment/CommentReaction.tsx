@@ -9,9 +9,12 @@ type Props = {
     comments: number;
     likes: number;
     liked: boolean;
+    small: boolean;
+    commenting: boolean;
+    setCommenting: (commenting: boolean) => void;
 }
 
-export default function CommentReaction({ commentId, comments, likes, liked }: Props) {
+export default function CommentReaction({ commentId, comments, likes, liked, small, commenting, setCommenting }: Props) {
 
     const [pending, startTransition] = useTransition();
     const router = useRouter();
@@ -40,10 +43,19 @@ export default function CommentReaction({ commentId, comments, likes, liked }: P
 
             </div>
 
-            <div className={"flex flex-row gap-1 items-center"}>
+            <div
+                className={`flex flex-row gap-1 items-center select-none ${small ? "" : "cursor-pointer"}`}
+                onClick={() => {
 
-                <img src="/assets/icons/comment.png" alt={"Comment"} className={"w-4 h-4"} />
-                <p>{ comments }</p>
+                    if (small) return;
+
+                    setCommenting(!commenting);
+
+                }}
+            >
+
+                <img src={`/assets/icons/${commenting ? "comment-open" : "comment"}.png`} alt={"Comment"} className={"w-4 h-4"} />
+                <p className={`${commenting ? "text-[#C62828]" : ""}`}>{ comments }</p>
 
             </div>
 

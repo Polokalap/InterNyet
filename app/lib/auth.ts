@@ -6,6 +6,7 @@ import {cache} from "react";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import { cpSync, mkdirSync } from "node:fs";
+import {User} from "@/app/lib/types";
 
 const options: HashOptions = {
     type: argon2.argon2id,
@@ -32,16 +33,6 @@ type SessionToken = {
     token: string;
     expiration: number;
 };
-
-export type User = {
-    id: number;
-    name: string;
-    display: string;
-    color: string;
-    created: number;
-    role: number;
-    cooldowns: Record<string, number>;
-}
 
 const db = getDatabase();
 const allowedCharacters = /^[a-z0-9_]{1,16}$/;
