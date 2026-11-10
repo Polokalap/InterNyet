@@ -13,9 +13,9 @@ export default function PostImage({ src, spoiler = false }: { src: string, spoil
                 alt="Post media"
                 width={0}
                 height={0}
-                sizes={fullImage ? "100vw" : "200px"}
+                sizes={fullImage ? "100vw" : spoiler ? "12px" : "200px"}
                 style={{ width: "auto", height: "auto" }}
-                className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 self-start cursor-pointer ${spoiler && !fullImage ? "blur-lg" : ""}`}
+                className={`${fullImage ? "max-w-full" : "max-w-50"} max-h-96 self-start cursor-pointer ${spoiler && !fullImage ? "min-w-45 blur-lg" : ""}`}
                 onClick={() => setFullImage(!fullImage)}
             />
         </div>
