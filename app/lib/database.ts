@@ -25,6 +25,7 @@ function init() {
     
         CREATE TABLE IF NOT EXISTS settings (
             account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+            bio TEXT NOT NULL,
             display TEXT NOT NULL,
             color TEXT NOT NULL DEFAULT '#000000'
         );
@@ -88,7 +89,13 @@ function init() {
             window_start INTEGER NOT NULL,
             PRIMARY KEY (fingerprint, action)
         );
-    
+
+        CREATE TABLE IF NOT EXISTS follows (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+            followed INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE
+        );
+
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
         CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board);

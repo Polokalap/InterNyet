@@ -1,10 +1,7 @@
+import { User } from "@/app/lib/types";
+
 type Props = {
-    user: {
-        id: number;
-        name: string;
-        display: string;
-        created: number;
-    };
+    user: User;
 }
 
 export default function Card({ user }: Props) {
@@ -19,11 +16,12 @@ export default function Card({ user }: Props) {
 
             <img src={`/api/account/${user.id}/profile.jpeg?t=${epoch}`} alt={"pfp"} className={"border-1 border-black"} width={128} height={128} />
 
-            <div className={"pt-5"}>
+            <div className={"pt-2"}>
 
                 <p className={"flex flex-row gap-2 items-center text-3xl"}>{ user.display } <span className={"text-zinc-500 text-sm"}>({ user.name })</span></p>
                 <p className={"text-md"}>Created at: { date.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }</p>
                 <p className={"text-md"}>User ID: { user.id }</p>
+                <q>{ user.bio }</q>
 
             </div>
 

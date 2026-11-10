@@ -230,3 +230,39 @@ export function setCooldown(account: number, key: string, seconds: number): Sett
     return { success: true, code: 20 };
 
 }
+
+export async function setBio(session: string, bio: string): Promise<SettingsResponse> {
+
+    if (bio.length < 0) {
+
+        return { success: false, code: 35 };
+
+    }
+
+    if (bio.length > 30) {
+
+        return { success: false, code: 36 };
+
+    }
+
+    const account = await getCurrentUser(session);
+
+    if (!account) {
+
+        return {success: false, code: 7};
+
+    }
+
+    const update = db.transaction(() => {
+
+        db
+            .prepare("UPDATE settings SET bio = ? WHERE account = ?")
+            .run(bio, account.id);
+
+    });
+
+    update();
+
+    return { success: true, code: 19 };
+
+}

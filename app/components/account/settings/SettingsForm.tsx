@@ -4,9 +4,10 @@ import { settings } from "@/app/account/actions";
 import Check from "@/app/components/verification/Check";
 import { useState } from "react";
 import Bubble from "@/app/components/bubble/Bubble";
-import {HexColorPicker} from "react-colorful";
+import { HexColorPicker } from "react-colorful";
+import { User } from "@/app/lib/types";
 
-export default function SettingsForm({ user }: { user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null }) {
+export default function SettingsForm({ user }: { user: User | null }) {
 
     const [finished, setFinished] = useState(false);
     const [color, setColor] = useState(user?.color ?? "#000000");
@@ -34,6 +35,19 @@ export default function SettingsForm({ user }: { user: { id: number; name: strin
                 <p className={"text-lg"}>Display name:</p>
 
                 <input className={"input"} name={"display"} type="text" defaultValue={user.display} placeholder={user.display} />
+
+            </div>
+
+            <div className={"flex flex-row justify-between"}>
+
+                <p className={"text-lg"}>Profile description:</p>
+
+                <div className={"flex flex-row gap-2"}>
+
+                    <Bubble description={"Profile description must be shorten than 30 characters!"} />
+                    <textarea className={"input resize-none w-50 h-15"} name={"bio"} defaultValue={user.bio} maxLength={30} placeholder={"Your profile's description"} />
+
+                </div>
 
             </div>
 

@@ -11,9 +11,17 @@ import {
     setPassword,
     verifyPassword
 } from "@/app/lib/auth";
-import { getCooldown, setColor, setCooldown, setDisplayName, setProfilePicture, setUsername } from "@/app/lib/settings";
+import {
+    getCooldown,
+    setBio,
+    setColor,
+    setCooldown,
+    setDisplayName,
+    setProfilePicture,
+    setUsername
+} from "@/app/lib/settings";
 import { revalidatePath } from "next/cache";
-import {runAction, verifyTurnstile} from "@/app/lib/security";
+import { runAction, verifyTurnstile } from "@/app/lib/security";
 
 export async function login(formData: FormData) {
 
@@ -203,8 +211,21 @@ export async function settings(formData: FormData) {
 
     }
 
+    const bio = formData.get("bio");
+
+    if (!(bio instanceof File) && bio !== "" && bio && bio.length > 0 && bio.length < 50) {
+
+        const result = await setBio(session.value, bio);
+
+        if (!result.success) {
+
+            redirect(`/account?error=true&code=${result.code}`);
+
+        }
+
+    }
+
     revalidatePath("/account");
-    redirect("/account");
 
 }
 

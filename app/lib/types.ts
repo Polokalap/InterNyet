@@ -2,6 +2,7 @@ export type User = {
     id: number;
     name: string;
     display: string;
+    bio: string;
     color: string;
     created: number;
     role: number;

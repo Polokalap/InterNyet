@@ -264,7 +264,7 @@ export async function removeUser(token: string): Promise<AuthResponse> {
 
 }
 
-export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number>; role: number; } | null> {
+export async function getCurrentUser(token: string): Promise<{ id: number; name: string; display: string; color: string; bio: string; created: number; cooldowns: Record<string, number>; role: number; } | null> {
 
     const row = db
         .prepare(`
@@ -273,6 +273,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
                    a.role,
                    st.display,
                    st.color,
+                   st.bio,
                    a.created,
                    (
                        SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
@@ -285,7 +286,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
             WHERE s.token = ? AND s.expiration > unixepoch()
         `)
         .get(hashSha(token)) as
-        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number }
+        | { id: number; name: string; display: string; color: string; bio: string; created: number; cooldowns: string; role: number }
         | undefined;
 
     if (!row) return null;
@@ -300,6 +301,7 @@ export async function getCurrentUser(token: string): Promise<{ id: number; name:
         name: row.name,
         display: row.display,
         color: row.color,
+        bio: row.bio,
         created: row.created,
         role: row.role,
         cooldowns,
@@ -316,6 +318,7 @@ export async function getUser(id: number): Promise<User | null> {
                    a.role,
                    st.display,
                    st.color,
+                   st.bio,
                    a.created,
                    (
                        SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
@@ -328,7 +331,7 @@ export async function getUser(id: number): Promise<User | null> {
             WHERE a.id = ?
         `)
         .get(id) as
-        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number; }
+        | { id: number; name: string; display: string; color: string; bio: string; created: number; cooldowns: string; role: number; }
         | undefined;
 
     if (!row) return null;
@@ -343,6 +346,7 @@ export async function getUser(id: number): Promise<User | null> {
         name: row.name,
         display: row.display,
         color: row.color,
+        bio: row.bio,
         created: row.created,
         role: row.role,
         cooldowns,
@@ -359,6 +363,7 @@ export async function getUserByUsername(username: string): Promise<User | null> 
                    a.role,
                    st.display,
                    st.color,
+                   st.bio,
                    a.created,
                    (
                        SELECT json_group_array(json_object('key', c.key, 'expiration', c.expiration))
@@ -370,7 +375,7 @@ export async function getUserByUsername(username: string): Promise<User | null> 
             WHERE a.user = ?
         `)
         .get(username.toLowerCase()) as
-        | { id: number; name: string; display: string; color: string; created: number; cooldowns: string; role: number }
+        | { id: number; name: string; display: string; color: string; bio: string; created: number; cooldowns: string; role: number }
         | undefined;
 
     if (!row) return null;
@@ -385,6 +390,7 @@ export async function getUserByUsername(username: string): Promise<User | null> 
         name: row.name,
         display: row.display,
         color: row.color,
+        bio: row.bio,
         created: row.created,
         role: row.role,
         cooldowns,
@@ -462,6 +468,7 @@ export async function getAnon(): Promise<User> {
         name: "anonymous",
         display: "Anonymous",
         color: "#000000",
+        bio: "Anonymous user :3",
         created: 0,
         role: 0,
         cooldowns: {},

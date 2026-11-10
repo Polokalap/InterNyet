@@ -32,5 +32,7 @@
   "31": "Your description is too long!",
   "32": "Your title is too long!",
   "33": "Your comment is too long!",
-  "34": "You are being rate limited!"
+  "34": "You are being rate limited!",
+  "35": "Bio too short",
+  "36": "Bio must not be longer than 30 characters"
 }
