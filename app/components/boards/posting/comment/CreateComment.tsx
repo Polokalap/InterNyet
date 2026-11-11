@@ -1,13 +1,14 @@
 "use client"
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import Check from "@/app/components/verification/Check";
 import { commentOnComment, createPostComment } from "@/app/board/actions";
 import Bubble from "@/app/components/bubble/Bubble";
 import CommentPreview from "@/app/components/boards/posting/comment/CommentPreview";
+import { User } from "@/app/lib/types";
 
 type Props = {
-    user: { id: number; name: string; display: string; color: string; created: number; cooldowns: Record<string, number> } | null;
+    user: User | null;
     board?: string;
     postId?: number;
     id?: number;
@@ -58,7 +59,7 @@ export default function CreateComment({user, board, postId, id}: Props) {
 
         <>
 
-            <form action={action} className={"flex flex-col gap-3 w-full ml-3"}>
+            <form action={action} className={"flex flex-col gap-3 w-full md:ml-3"}>
 
                 <div className={"w-full"}>
 

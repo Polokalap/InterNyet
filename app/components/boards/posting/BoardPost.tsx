@@ -95,7 +95,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
 
             </div>
 
-            <div className={"ml-2 w-full overflow-auto"}>
+            <div className={"md:ml-2 w-full md:overflow-clip overflow-auto"}>
 
                 <PostComments post={post} small={small} limit={small ? 3 : -1} />
 
