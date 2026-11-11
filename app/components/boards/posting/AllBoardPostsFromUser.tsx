@@ -1,15 +1,15 @@
 import BoardPost from "./BoardPost";
 import PageNavigator from "@/app/components/navigator/PageNavigator";
-import { getAllUserPosts, getUserPostCount } from "@/app/lib/board";
+import {getAllUserInteractions, getAllUserPosts, getUserInteractionCount, getUserPostCount} from "@/app/lib/board";
 
 const LIMIT = 10;
 
 export default async function AllBoardPostsFromUser({ id, page }: { id: string; page?: string; }) {
 
     const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
-    const totalPages = Math.max(Math.ceil(await getUserPostCount(id) / LIMIT), 1);
+    const totalPages = Math.max(Math.ceil(await getUserInteractionCount(id) / LIMIT), 1);
 
-    const posts = await getAllUserPosts(id, currentPage * LIMIT - LIMIT, currentPage * LIMIT);
+    const posts = await getAllUserInteractions(id, currentPage * LIMIT - LIMIT, currentPage * LIMIT);
 
     return (
 

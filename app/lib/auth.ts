@@ -102,7 +102,7 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
     }
 
     db
-        .prepare(`INSERT INTO settings (account, display) VALUES (?, ?)`)
+        .prepare(`INSERT INTO settings (account, display, bio) VALUES (?, ?, '')`)
         .run(account.id, user);
 
     const session = await createSession(account, 180);

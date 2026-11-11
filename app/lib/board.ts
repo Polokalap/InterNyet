@@ -5,7 +5,7 @@ import { join } from "path";
 import sharp, { SharpInput } from "sharp";
 import { fileTypeFromBlob } from "file-type";
 import { rm } from "node:fs/promises";
-import {User} from "@/app/lib/types";
+import { User } from "@/app/lib/types";
 
 const db = getDatabase();
 
@@ -362,6 +362,48 @@ export async function getAllUserPosts(id: string, from: number, to: number): Pro
 
 }
 
+export async function getAllUserInteractions(id: string, from: number, to: number): Promise<Post[]|BoardResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            SELECT * FROM posts
+            WHERE account = ?
+               OR id IN (
+                WITH RECURSIVE tree(id, root) AS (
+                    SELECT id, post
+                    FROM comments
+                    WHERE post IS NOT NULL
+                    UNION ALL
+                    SELECT c.id, t.root
+                    FROM comments c
+                             JOIN tree t ON c.parent = t.id
+                )
+                SELECT tree.root
+                FROM tree
+                         JOIN comments c ON c.id = tree.id
+                WHERE c.account = ?
+                  AND c.removed = 0
+            )
+            ORDER BY release DESC
+                LIMIT ? OFFSET ?
+        `)
+        .all(id, id, limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
 export async function getBoardPostCount(id: string): Promise<number> {
 
     const row = db
@@ -381,6 +423,36 @@ export async function getUserPostCount(id: string): Promise<number> {
                   FROM posts
                   WHERE account = ?`)
         .get(id) as { count: number };
+
+    return row.count;
+
+}
+
+export async function getUserInteractionCount(id: string): Promise<number> {
+
+    const row = db
+        .prepare(`
+            SELECT COUNT(*) AS count
+            FROM posts
+            WHERE account = ?
+               OR id IN (
+                WITH RECURSIVE tree(id, root) AS (
+                SELECT id, post
+                FROM comments
+                WHERE post IS NOT NULL
+                UNION ALL
+                SELECT c.id, t.root
+                FROM comments c
+                JOIN tree t ON c.parent = t.id
+                )
+                SELECT tree.root
+                FROM tree
+                JOIN comments c ON c.id = tree.id
+                WHERE c.account = ?
+              AND c.removed = 0
+                )
+        `)
+        .get(id, id) as { count: number };
 
     return row.count;
 
