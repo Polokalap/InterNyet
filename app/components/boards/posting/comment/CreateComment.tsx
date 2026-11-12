@@ -15,12 +15,13 @@ type Props = {
     setCommenting?: (commenting: boolean) => void;
 };
 
-export default function CreateComment({user, board, postId, id, setCommenting}: Props) {
+export default function CreateComment({ user, board, postId, id, setCommenting }: Props) {
 
     const isPost = typeof postId === "number";
     const action = isPost ? createPostComment : commentOnComment;
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const contentRef = useRef<HTMLTextAreaElement>(null);
     const [finished, setFinished] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const [content, setContent] = useState("");
@@ -33,6 +34,8 @@ export default function CreateComment({user, board, postId, id, setCommenting}: 
     useEffect(() => {
 
         const onPaste = (e: ClipboardEvent) => {
+
+            if (e.target !== contentRef.current) return;
 
             const files = e.clipboardData?.files;
 
@@ -60,7 +63,7 @@ export default function CreateComment({user, board, postId, id, setCommenting}: 
 
         <>
 
-            <form action={action} className={"flex flex-col gap-3 w-full md:ml-3"}>
+            <form action={action} className={"flex flex-col gap-3 w-full md:ml-3.5"}>
 
                 <div className={"w-full"}>
 
@@ -79,6 +82,7 @@ export default function CreateComment({user, board, postId, id, setCommenting}: 
                         <td colSpan={2}>
                                 <textarea
                                     className={"block w-full h-28 input px-1 py-0.5 resize-none"}
+                                    ref={contentRef}
                                     name={"content"}
                                     placeholder="Your comment's description"
                                     onChange={(e) => setContent(e.target.value)}

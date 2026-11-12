@@ -36,7 +36,7 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
         <>
 
-            <div className={"pl-2"}>
+            <div className={`pl-2 ${commenting ? "border-l" : "ml-px"}`}>
 
                 <div className={"flex flex-col gap-1 mt-5 min-w-50 max-w-110"}>
 
@@ -92,7 +92,7 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
                     { commenting && (
                         user ?
-                            <CreateComment user={user} id={comment.id} setCommenting={setCommenting}  />
+                            <CreateComment user={user} id={comment.id} setCommenting={setCommenting} />
                             :
                             <p className={"text-red-700 m-auto"}>You must have an account to comment!</p>
                         )
