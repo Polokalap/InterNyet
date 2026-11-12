@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
 
                     <h1 className={"text-3xl"}>Account information</h1>
 
-                    <Card user={user} />
+                    <Card user={user} self={true} />
 
                 </div>
 

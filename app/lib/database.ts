@@ -103,6 +103,7 @@ function init() {
         CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent);
         CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_post_account ON likes(post, account) WHERE post IS NOT NULL;
         CREATE UNIQUE INDEX IF NOT EXISTS idx_likes_comment_account ON likes(comment, account) WHERE comment IS NOT NULL;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_follows_pair ON follows(user, followed);
     `);
 
     db.exec("ANALYZE");

@@ -47,6 +47,13 @@ body {
 
 }
 
+.button-follow {
+
+    @apply border-1 border-black pl-1 pr-1 bg-[#C62828] hover:bg-[#721C24] font-bold cursor-pointer text-white;
+
+
+}
+
 a {
 
     color: #721C24;

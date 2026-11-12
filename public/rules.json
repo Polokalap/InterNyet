@@ -23,5 +23,10 @@
     "action": "comment",
     "allow": 6,
     "timeout": 60
+  },
+  {
+    "action": "follow",
+    "allow": 5,
+    "timeout": 10
   }
 ]
