@@ -36,7 +36,10 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
         <>
 
-            <div className={`pl-2 ${commenting ? "border-l" : "ml-px"}`}>
+            <div
+                className={`pl-2 ${commenting ? "border-l" : "ml-px"}`}
+                id={`comment-${comment.id}`}
+            >
 
                 <div className={"flex flex-col gap-1 mt-5 min-w-50 max-w-110"}>
 

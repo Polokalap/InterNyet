@@ -1,8 +1,9 @@
 "use client"
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import { toggleLikeComment } from "@/app/board/actions";
+import {comment} from "postcss";
 
 type Props = {
     commentId: number;

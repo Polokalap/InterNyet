@@ -11,9 +11,10 @@ type Props = {
     comments: number;
     likes: number;
     liked: boolean;
+    small?: boolean;
 }
 
-export default function PostReaction({ postId, board, comments, likes, liked }: Props) {
+export default function PostReaction({ postId, board, comments, likes, liked, small = true }: Props) {
 
     const [pending, startTransition] = useTransition();
     const router = useRouter();
@@ -42,10 +43,19 @@ export default function PostReaction({ postId, board, comments, likes, liked }: 
 
             </div>
 
-            <div className={"flex flex-row gap-1 items-center"}>
+            <div
+                className={`flex flex-row gap-1 items-center select-none ${small ? "cursor-pointer" : ""}`}
+                onClick={() => {
+
+                    if (!small) return;
+
+                    window.location.href = `/board/${board}/posts/${postId}`
+
+                }}
+            >
 
                 <img src="/assets/icons/comment.png" alt={"Comment"} className={"w-4 h-4"} />
-                <Link href={`/board/${board}/posts/${postId}`}>{ comments }</Link>
+                <p>{ comments }</p>
 
             </div>
 

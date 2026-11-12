@@ -89,6 +89,7 @@ export default async function BoardPost({ post, edit = false, small = true }: Pr
                         comments={allComments.length}
                         liked={liked}
                         likes={likes}
+                        small={small}
                     />
 
                 </div>
