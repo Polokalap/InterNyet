@@ -92,7 +92,7 @@ export default function ClientComment({ user, uploader, comment, isMod, hasMedia
 
                     { commenting && (
                         user ?
-                            <CreateComment user={user} id={comment.id}/>
+                            <CreateComment user={user} id={comment.id} setCommenting={setCommenting}  />
                             :
                             <p className={"text-red-700 m-auto"}>You must have an account to comment!</p>
                         )

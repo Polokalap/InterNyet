@@ -12,9 +12,10 @@ type Props = {
     board?: string;
     postId?: number;
     id?: number;
+    setCommenting?: (commenting: boolean) => void;
 };
 
-export default function CreateComment({user, board, postId, id}: Props) {
+export default function CreateComment({user, board, postId, id, setCommenting}: Props) {
 
     const isPost = typeof postId === "number";
     const action = isPost ? createPostComment : commentOnComment;
@@ -170,12 +171,19 @@ export default function CreateComment({user, board, postId, id}: Props) {
 
                                 setSubmitted(true);
 
+                                if (setCommenting) {
+
+                                    setCommenting(false);
+
+                                }
+
                             }, 10);
                             setTimeout(() => {
 
                                 setSubmitted(false);
 
                             }, 5000);
+
                         }}
                     >
                         Post
