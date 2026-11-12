@@ -14,7 +14,7 @@ export async function generateMetadata({
 
   return {
     title: `${user.display}'s profile`,
-    description: `Check out ${user.display}'s profile${user.bio ? `\n\n"${user.bio}"` : `\n${followers} Followers`}`,
+    description: `Check out ${user.display}'s profile\n${user.bio ? `\n"${user.bio}"` : ""}\n${followers} Followers`,
     openGraph: {
       title: `${user.display}'s profile`,
       images: `/api/account/${user.id}/profile.jpeg`,
