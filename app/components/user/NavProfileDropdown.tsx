@@ -119,7 +119,7 @@ export default function NavProfileDropdown({ user }: Props) {
 
                             </Link>
 
-                            <Link href={"/donate"} className={"flex flex-row gap-2 items-center"} style={{ textDecoration: "none" }}>
+                            <Link href={"/logout"} className={"flex flex-row gap-2 items-center"} style={{ textDecoration: "none" }}>
 
                                 <img
                                     src={"/assets/icons/logout.png"}
