@@ -1,13 +1,11 @@
 import NavLink from "@/app/components/navbar/NavLink";
 import { getIfUser } from "@/app/lib/auth";
-import Link from "next/link";
 import "./NavBar.css";
+import NavProfileDropdown from "@/app/components/user/NavProfileDropdown";
 
 export default async function NavBar() {
 
     const user = await getIfUser();
-    // eslint-disable-next-line react-hooks/purity
-    const epoch = Date.now();
 
     return (
 
@@ -23,31 +21,15 @@ export default async function NavBar() {
 
             <ul>
 
-                <NavLink title={"Donate"} path={"/donate"} />
+                { /* <NavLink title={"Inbox"} path={"/inbox"} /> */ }
 
                 {user ? (
 
-                    <li>
-
-                        <Link className="flex flex-row gap-1 items-center" href="/account">
-
-                            <img
-                                src={`/api/account/${user.id}/profile.jpeg?t=${epoch}`}
-                                alt="Your profile picture"
-                                className="border border-black"
-                                width={26}
-                                height={26}
-                            />
-
-                            <p>{user.display}</p>
-
-                        </Link>
-
-                    </li>
+                    <NavProfileDropdown user={user} />
 
                 ) : (
 
-                    <NavLink title="Account" path="/account" />
+                    <NavLink title={"Account"} path={"/account"} />
 
                 )}
 

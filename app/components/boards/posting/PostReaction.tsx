@@ -36,7 +36,7 @@ export default function PostReaction({ postId, board, comments, likes, liked, sm
 
         <div className="flex flex-row gap-2">
 
-            <div className={"flex flex-row gap-1 items-center cursor-pointer"} onClick={handleLike}>
+            <div className={"flex flex-row gap-1 items-center cursor-pointer select-none"} onClick={handleLike}>
 
                 <img src={`/assets/icons/${liked ? "liked.png" : "like.png"}`} alt={"Like"} className={"w-4 h-4"} />
                 <p className={`${liked ? "text-[#C62828]" : ""}`}>{ likes }</p>
