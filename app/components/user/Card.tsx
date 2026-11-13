@@ -1,6 +1,6 @@
 import { User } from "@/app/lib/types";
 import { getIfUser } from "@/app/lib/auth";
-import {getFollowers, isFollowing} from "@/app/lib/profile";
+import { getClout, getFollowers, isFollowing } from "@/app/lib/profile";
 import FollowForm from "@/app/components/account/follow/FollowForm";
 
 type Props = {
@@ -13,6 +13,7 @@ export default async function Card({ user, self = false }: Props) {
     const viewer = await getIfUser()
     const following = viewer ? await isFollowing(viewer.id, user.id) : false;
     const followers = await getFollowers(user.id);
+    const clout = await getClout(user.id);
 
     // eslint-disable-next-line react-hooks/purity
     const epoch = Date.now();
@@ -36,7 +37,7 @@ export default async function Card({ user, self = false }: Props) {
                         timeStyle: "short"
                     })}</p>
                     <p className={"text-md"}>User ID: {user.id}</p>
-                    <p>{ followers } Followers</p>
+                    <p>{ followers } Followers, { clout } Clout</p>
                     {user.bio ? <q>{user.bio}</q> : <p>No bio</p>}
 
                 </div>
@@ -62,7 +63,7 @@ export default async function Card({ user, self = false }: Props) {
                     dateStyle: "medium",
                     timeStyle: "short"
                 })}</p>
-                <p>{ followers } Followers</p>
+                <p>{ followers } Followers, { clout } Clout</p>
                 {user.bio ? <q>{user.bio}</q> : <p>No bio</p>}
 
                 <FollowForm user={user} viewer={viewer ? viewer : undefined} following={following} />
