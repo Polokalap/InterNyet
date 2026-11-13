@@ -10,19 +10,22 @@
       {
         "name": "Cute",
         "id": "ct",
-        "description": ""
+        "description": "Any cute characters go here:3"
       },
       {
         "name": "Cosplay",
-        "id": "cos"
+        "id": "cos",
+        "description": "Post cosplay pics!"
       },
       {
         "name": "Culture",
-        "id": "japan"
+        "id": "japan",
+        "description": "Learn about Japanese culture"
       },
       {
         "name": "Visual Novels",
-        "id": "vn"
+        "id": "vn",
+        "description": ""
       },
       {
         "name": "Vtubers",
@@ -43,47 +46,58 @@
     "boards": [
       {
         "name": "General",
-        "id": "goon"
+        "id": "goon",
+        "description": "Anything generally internet releated"
       },
       {
         "name": "Linux",
-        "id": "linux"
+        "id": "linux",
+        "description": "silly os made by mr. torvalds"
       },
       {
         "name": "Spyware",
-        "id": "il"
+        "id": "il",
+        "description": "Learn and tell about spyware, or vulnerabilities in software"
       },
       {
         "name": "Decentralization",
-        "id": "d"
+        "id": "d",
+        "description": "tell people why you hate the government and how we should protect ourselves against it"
       },
       {
         "name": "Security",
-        "id": "sec"
+        "id": "sec",
+        "description": "we offer the bestest security experts around the world"
       },
       {
         "name": "IT",
-        "id": "it"
+        "id": "it",
+        "description": "learn why putting wifi in your robot vacuum is a bad idea"
       },
       {
         "name": "Programming",
-        "id": "prog"
+        "id": "prog",
+        "description": "hey claude make me a billion dollar idea"
       },
       {
         "name": "Web Development",
-        "id": "web"
+        "id": "web",
+        "description": "supply chain attacks!"
       },
       {
         "name": "Privacy",
-        "id": "priv"
+        "id": "priv",
+        "description": "sadly this concept doesn't exist anymore, I should kill myself"
       },
       {
         "name": "Open Source",
-        "id": "oss"
+        "id": "oss",
+        "description": "I love Richard Stallman"
       },
       {
         "name": "Retro Computing",
-        "id": "retro"
+        "id": "retro",
+        "description": "haha nerd"
       }
     ]
   },
@@ -92,27 +106,33 @@
     "boards": [
       {
         "name": "Video Games",
-        "id": "v"
+        "id": "v",
+        "description": "mom im a gamer"
       },
       {
         "name": "Half-Life",
-        "id": "hl"
+        "id": "hl",
+        "description": "\"Portal better\""
       },
       {
         "name": "Portal",
-        "id": "aperture"
+        "id": "aperture",
+        "description": "\"Half-Life better\""
       },
       {
         "name": "Pokémon",
-        "id": "pk"
+        "id": "pk",
+        "description": "one word post and we are getting sued"
       },
       {
         "name": "Minecraft",
-        "id": "mc"
+        "id": "mc",
+        "description": "silly block game"
       },
       {
         "name": "ULTRAKILL",
-        "id": "peak"
+        "id": "peak",
+        "description": "MANKIND IS DEAD. BLOOD IS FUEL. HELL IS FULL."
       },
       {
         "name": "Counter-Strike",

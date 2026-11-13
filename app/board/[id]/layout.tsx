@@ -11,7 +11,7 @@ export async function generateMetadata({
   const description = getBoardDescription(id);
 
   return {
-    title: `${name} at InterNyet`,
+    title: `/${id.toLowerCase()}/ at InterNyet`,
     description: `${name}: ${description}`,
     openGraph: {
       title: `${name} at InterNyet`
