@@ -18,6 +18,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     const [spoiler, setSpoiler] = useState(false);
     const [anon, setAnon] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const canPost = finished && content.length >= 10 && media !== "" && !submitted;
 
@@ -46,6 +47,24 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     }, []);
 
     if (!user) return null;
+
+    if (!open) {
+
+        return (
+
+            <>
+
+                <h1
+                    className={"text-2xl select-none"}
+                >
+                    [<span className={"font-bold text-[#721C24] hover:text-[#C62828] cursor-pointer"} onClick={() => { setOpen(true); }}>Start a New Thread</span>]
+                </h1>
+
+            </>
+
+        )
+
+    }
 
     return (
 

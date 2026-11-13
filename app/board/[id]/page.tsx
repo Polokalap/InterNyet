@@ -3,7 +3,7 @@ import { getAllBoardIds, getBoardById } from "@/app/lib/board";
 import { redirect } from "next/navigation";
 import CreateBoardPost from "@/app/components/boards/posting/CreateBoardPost";
 import { getIfUser } from "@/app/lib/auth";
-import {getMessage} from "@/app/lib/messages";
+import { getMessage } from "@/app/lib/messages";
 import AllBoardsPosts from "@/app/components/boards/posting/AllBoardPosts";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ error?: string, code?: string; page?: string; }>; }) {
@@ -51,11 +51,15 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                         {
                             user ?
 
-                                <CreateBoardPost user={user} board={board.id} />
+                                (
 
-                        :
+                                    <CreateBoardPost user={user} board={board.id} />
 
-                                <p className={"text-red-600"}>For this demonstration, only registered users can post!</p>
+                                )
+
+                            :
+
+                                <p className={"text-red-600"}>Create an account to post!</p>
 
                         }
 
