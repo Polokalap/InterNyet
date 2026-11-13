@@ -19,7 +19,6 @@ export default async function PostComments({ post, comment, limit = -1, small = 
     if (post) {
 
         const comments = getComments(post.id);
-        const allComments = getAllComments(post.id);
 
         const shown = limit && limit > 0 ? comments.slice(0, limit) : comments;
 

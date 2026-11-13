@@ -3,6 +3,7 @@ import { FileNotice } from "@/app/components/notice/Notice";
 import Boards from "@/app/components/boards/Boards";
 import NavBar from "@/app/components/navbar/NavBar";
 import Palantir from "@/app/components/palantir/Palantir";
+import Trending from "@/app/components/boards/Trending";
 
 export default async function Home() {
 
@@ -23,6 +24,8 @@ export default async function Home() {
                 {!welcome && <FileNotice title={"Welcome to InterNyet!"} file={"./notices/welcome.md"} id={"welcome-notice"} onClose={handleCloseWelcome} />}
 
                 <Boards title={"Boards"}/>
+
+                <Trending />
 
             </div>
 

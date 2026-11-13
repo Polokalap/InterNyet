@@ -968,3 +968,44 @@ export async function markInboxViewed(id: number) {
         .run(id);
 
 }
+
+export async function getTrending(from: number, to: number): Promise<Post[]|BoardResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            WITH RECURSIVE thread(id, account, post, removed) AS (
+                SELECT c.id, c.account, c.post, c.removed
+                FROM comments c
+                         JOIN posts p ON p.id = c.post
+                UNION ALL
+                SELECT c.id, c.account, t.post, c.removed
+                FROM comments c
+                         JOIN thread t ON c.parent = t.id
+            )
+            SELECT posts.*,
+                   (unixepoch() - posts.release) / 86400
+                       - (SELECT COUNT(*) FROM likes WHERE likes.post = posts.id)
+                       - (SELECT COUNT(*) FROM thread
+                          WHERE thread.post = posts.id
+                            AND thread.account != posts.account
+                AND thread.removed = 0) AS score
+            FROM posts
+            ORDER BY score ASC, posts.release DESC
+                LIMIT ? OFFSET ?
+        `)
+        .all(limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
