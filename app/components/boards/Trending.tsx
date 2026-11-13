@@ -29,7 +29,7 @@ export default async function Trending() {
 
             </div>
 
-            <div className={"flex flex-col gap-13 w-full h-full bg-[#FFF9F0] justify-between text-sm p-5 pt-6"}>
+            <div className={"flex flex-col gap-13 w-full h-full overflow-x-auto overflow-y-hidden bg-[#FFF9F0] justify-between text-sm p-5 pt-6"}>
 
                 <div className={"flex flex-row justify-evenly"}>
 
