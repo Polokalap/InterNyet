@@ -80,7 +80,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
 
                 </div>
 
-                <table className={`w-full max-w-100 border-separate border-spacing-[2px] ${isPreview ? "hidden" : ""}`}>
+                <table className={`relative w-full max-w-100 border-separate border-spacing-[2px] ${isPreview ? "hidden" : ""}`}>
 
                     <tbody>
 
@@ -226,6 +226,13 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                     <Bubble description={"Requirements to post: \n- At least a 3 characters long title \n - At least a 10 characters long description \n - Some kind of media (must be an image)"} />
 
                 </div>
+
+                <a
+                    className={"absolute right-0 bottom-0 cursor-pointer"}
+                    onClick={() => { setOpen(false); }}
+                >
+                    Hide
+                </a>
 
             </form>
 

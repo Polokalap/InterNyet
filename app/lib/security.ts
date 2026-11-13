@@ -1,10 +1,10 @@
 import { headers } from "next/headers";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { createHash } from "crypto";
-import {clients, fingerprints, getClientByIp, getFingerprintByIp} from "@/app/lib/store";
+import { fingerprints, getFingerprintByIp } from "@/app/lib/store";
 import { getDatabase } from "@/app/lib/database";
 import rules from "@/public/rules.json";
-import {RateLimiterMemory, RateLimiterRes} from "rate-limiter-flexible";
+import { RateLimiterMemory } from "rate-limiter-flexible";
 
 export class Fingerprint {
 
@@ -100,11 +100,7 @@ export async function verifyTurnstile(formData: FormData, expectedAction: string
     const expectedHostname = process.env.WEBSITE_HOSTNAME;
     if (!secret || !expectedHostname) return false;
 
-    const h = await headers();
-    const ip =
-        h.get("CF-Connecting-IP") ??
-        h.get("x-forwarded-for")?.split(",")[0].trim() ??
-        null;
+    const ip = await getClientIp();
 
     const body = new URLSearchParams({
         secret,
@@ -147,7 +143,10 @@ export async function getFingerprint(ip: string): Promise<Fingerprint> {
     const existing = getFingerprintByIp(ip);
     if (existing) return existing;
 
-    const fingerprint = new Fingerprint(hashSha(JSON.stringify(getClientByIp(ip))));
+    const h = await headers();
+    const ua = h.get("user-agent") ?? "";
+
+    const fingerprint = new Fingerprint(hashSha(`${ip}|${ua}`));
     fingerprints.set(ip, fingerprint);
 
     return fingerprint;
@@ -160,15 +159,11 @@ export async function runAction(action: string): Promise<RateLimit> {
 
     if (!rule) {
 
-        return { allowed: true };
+        return { allowed: false };
 
     }
 
-    const header = await headers();
-    const ip =
-        header.get("cf-connecting-ip") ??
-        header.get("x-forwarded-for")?.split(",")[0].trim() ??
-        "127.0.0.1";
+    const ip = await getClientIp();
 
     const result = await checkLimit(ip, action);
 
@@ -188,7 +183,7 @@ export async function runAction(action: string): Promise<RateLimit> {
 
     } catch (e) {
 
-        return { allowed: true };
+        return { allowed: false };
 
     }
 
@@ -203,9 +198,28 @@ async function checkLimit(ip: string, key: string) {
 
     } catch (e) {
 
-        if (e instanceof RateLimiterRes) return { ok: false };
-        throw e;
+        return { ok: false };
 
     }
+
+}
+
+export async function getClientIp(): Promise<string> {
+
+    const TRUSTED_IP_HEADER = process.env.TRUSTED_IP_HEADER ?? "cf-connecting-ip";
+    const IPV4 = /^(\d{1,3}\.){3}\d{1,3}$/;
+    const IPV6 = /^[0-9a-fA-F:]+$/;
+
+    const h = await headers();
+
+    const raw = h.get(TRUSTED_IP_HEADER)?.split(",")[0]?.trim();
+
+    if (!raw || (!IPV4.test(raw) && !IPV6.test(raw))) {
+
+        return "unknown";
+
+    }
+
+    return raw;
 
 }

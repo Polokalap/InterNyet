@@ -15,6 +15,12 @@ export async function createPost(formData: FormData) {
 
     const user = await requireUser();
 
+    if (user.role < 1) {
+
+        return redirect("/");
+
+    }
+
     const title = String(formData.get("title") ?? "");
     const content = String(formData.get("content") ?? "");
 

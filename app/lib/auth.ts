@@ -149,7 +149,7 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
         .prepare(`INSERT INTO settings (account, display, bio) VALUES (?, ?, '')`)
         .run(account.id, user);
 
-    const session = await createSession(account, 180);
+    const session = await createSession(account, 45);
 
     cpSync(`templates/user`, `data/user/${account.id}`, { recursive: true });
 
@@ -186,7 +186,7 @@ export async function authenticate(user: string, password: string): Promise<Auth
 
     }
 
-    const session = await createSession(account, 180);
+    const session = await createSession(account, 45);
 
     return { success: true, code: 6, key: session };
 
@@ -229,6 +229,16 @@ async function createSession(account: Account, days: number) {
 
     const token = randomBytes(256).toString("base64url");
     const expiration = Math.floor(Date.now() / 1000) + days * 86400;
+
+    db
+        .prepare(`
+            DELETE FROM sessions
+            WHERE account = ?
+              AND id NOT IN (
+                  SELECT id FROM sessions WHERE account = ? ORDER BY id DESC LIMIT 5
+              )
+        `)
+        .run(account.id, account.id);
 
     db
         .prepare("INSERT INTO sessions (account, token, expiration) VALUES (?, ?, ?)")
@@ -479,7 +489,7 @@ export async function setPassword(id: number, newPassword: string): Promise<Auth
         .prepare("DELETE FROM sessions WHERE account = ?")
         .run(account.id);
 
-    const session = await createSession(account, 180);
+    const session = await createSession(account, 45);
 
     return { success: true, code: 23, key: session };
 
