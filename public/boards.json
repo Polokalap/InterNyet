@@ -162,6 +162,10 @@
     "name": "Interests",
     "boards": [
       {
+        "name": "Liam Vickers",
+        "id": "lva"
+      },
+      {
         "name": "Sports",
         "id": "sp"
       },
