@@ -37,7 +37,7 @@ export default async function PostComments({ post, comment, limit = -1, small = 
 
                     {limit !== -1 && limit < comments.length &&
                         <Link href={`/board/${post.board}/posts/${post.id}`}>
-                            {allComments.length - limit} more...
+                            {comments.length - limit} more...
                         </Link>
                     }
 
