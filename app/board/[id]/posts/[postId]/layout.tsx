@@ -45,6 +45,6 @@ export async function generateMetadata({
   };
 }
 
-export default function Layout({ children }: LayoutProps<"/profile/[id]">) {
+export default function Layout({ children }: LayoutProps<"/board/[id]/posts/[postId]">) {
   return <>{children}</>;
 }

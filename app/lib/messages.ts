@@ -40,3 +40,23 @@ export function getBoardByName(board: string) {
     return "Unknown board";
 
 }
+
+export function getBoardDescription(board: string) {
+
+    for (const category of boards) {
+
+        for (const entry of category.boards) {
+
+            if (entry.id === board && entry.description) {
+
+                return entry.description;
+
+            }
+
+        }
+
+    }
+
+    return "No description";
+
+}

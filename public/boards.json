@@ -4,11 +4,13 @@
     "boards": [
       {
         "name": "Anime & Manga",
-        "id": "weeb"
+        "id": "weeb",
+        "description": "Everything about anime & manga"
       },
       {
         "name": "Cute",
-        "id": "ct"
+        "id": "ct",
+        "description": ""
       },
       {
         "name": "Cosplay",
