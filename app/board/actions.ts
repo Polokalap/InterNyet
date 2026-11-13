@@ -121,6 +121,7 @@ export async function updatePost(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
     const spoiler = formData.get("spoiler") !== null;
+    const anon = formData.get("anonymous") !== null;
 
     if (title.length > 100) {
 
@@ -191,6 +192,7 @@ export async function createPostComment(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
     const spoiler = formData.get("spoiler") !== null;
+    const anon = formData.get("anonymous") !== null;
 
     if (!Number.isInteger(postId) || postId <= 0 || !board) {
 
@@ -204,7 +206,7 @@ export async function createPostComment(formData: FormData) {
 
     }
 
-    const result = await createBoardComment(user, postId, 0, content, media instanceof File && media.size > 0 ? media : null, spoiler); // 0 = post
+    const result = await createBoardComment(user, postId, 0, content, media instanceof File && media.size > 0 ? media : null, spoiler, anon); // 0 = post
 
     if (!(result instanceof PostComment)) {
 
@@ -318,6 +320,7 @@ export async function commentOnComment(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
     const spoiler = formData.get("spoiler") !== null;
+    const anon = formData.get("anonymous") !== null;
 
     if (!Number.isInteger(commentId) || commentId <= 0) {
 
@@ -331,7 +334,7 @@ export async function commentOnComment(formData: FormData) {
 
     }
 
-    const result = await createBoardComment(user, commentId, 1, content, media instanceof File && media.size > 0 ? media : null, spoiler); // 1 = comment
+    const result = await createBoardComment(user, commentId, 1, content, media instanceof File && media.size > 0 ? media : null, spoiler, anon); // 1 = comment
 
     if (!(result instanceof PostComment)) {
 

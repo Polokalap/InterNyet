@@ -657,6 +657,7 @@ export async function createBoardComment(
     content: string,
     media: Blob | null,
     spoiler: boolean,
+    anon: boolean,
 ): Promise<PostComment | BoardResponse> {
 
     if (type !== 0 && type !== 1) {
@@ -718,15 +719,35 @@ export async function createBoardComment(
 
     const insert = db.transaction((): CommentRow | undefined => {
 
-        const { id: commentId } = db
-            .prepare("INSERT INTO comments (account, post, parent, spoiler, path, release) VALUES (?, ?, ?, ?, '', unixepoch()) RETURNING id")
-            .get(user.id, post, parent, spoiler ? 1 : 0) as { id: number };
+        if (anon) {
 
-        const path = `data/user/${user.id}/comments/${commentId}`;
+            const {id: commentId} = db
+                .prepare("INSERT INTO comments (account, post, parent, spoiler, path, release) VALUES (-1, ?, ?, ?, '', unixepoch()) RETURNING id")
+                .get(post, parent, spoiler ? 1 : 0) as { id: number };
 
-        return db
-            .prepare(`UPDATE comments SET path = ? WHERE id = ? RETURNING *`)
-            .get(path, commentId) as CommentRow | undefined;
+            const path = `data/user/-1/comments/${commentId}`;
+
+            return db
+                .prepare(`UPDATE comments
+                          SET path = ?
+                          WHERE id = ? RETURNING *`)
+                .get(path, commentId) as CommentRow | undefined;
+
+        } else {
+
+            const {id: commentId} = db
+                .prepare("INSERT INTO comments (account, post, parent, spoiler, path, release) VALUES (?, ?, ?, ?, '', unixepoch()) RETURNING id")
+                .get(user.id, post, parent, spoiler ? 1 : 0) as { id: number };
+
+            const path = `data/user/${user.id}/comments/${commentId}`;
+
+            return db
+                .prepare(`UPDATE comments
+                          SET path = ?
+                          WHERE id = ? RETURNING *`)
+                .get(path, commentId) as CommentRow | undefined;
+
+        }
 
     });
 
