@@ -1046,3 +1046,21 @@ export async function getTrending(from: number, to: number): Promise<Post[]|Boar
     return rows.map((row) => Post.fromRow(row));
 
 }
+
+export async function getRandomCover(id: string): Promise<string> {
+
+    const rows = db
+        .prepare("SELECT id FROM posts WHERE board = ?")
+        .all(id) as { id: number }[];
+
+    if (rows.length === 0) {
+
+        return "/media.png";
+
+    }
+
+    const random = Math.floor(Math.random() * rows.length);
+
+    return `/api/post/${rows[random].id}/media.avif`;
+
+}
