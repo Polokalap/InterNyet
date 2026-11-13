@@ -145,7 +145,7 @@ export function getBoardById(boardId: string) {
 
 }
 
-export async function createBoardPost(user: User, board: string, title: string, content: string, media: Blob, spoiler: boolean): Promise<Post|BoardResponse> {
+export async function createBoardPost(user: User, board: string, title: string, content: string, media: Blob, spoiler: boolean, anon: boolean): Promise<Post|BoardResponse> {
 
     if (media.size > 10 * 1024 * 1024) {
 
@@ -193,15 +193,31 @@ export async function createBoardPost(user: User, board: string, title: string, 
 
     const insert = db.transaction((): PostRow | undefined => {
 
-        const { id } = db
-            .prepare(`INSERT INTO posts (account, board, title, path, spoiler, release) VALUES (?, ?, ?, '', ?, unixepoch()) RETURNING id`)
-            .get(user.id, board, title, spoiler ? 1 : 0) as { id: number };
+        if (anon) {
 
-        const path = `data/user/${user.id}/posts/${id}`;
+            const { id } = db
+                .prepare(`INSERT INTO posts (account, board, title, path, spoiler, release) VALUES (-1, ?, ?, '', ?, unixepoch()) RETURNING id`)
+                .get(board, title, spoiler ? 1 : 0) as { id: number };
 
-        return db
-            .prepare(`UPDATE posts SET path = ? WHERE id = ? RETURNING *`)
-            .get(path, id) as PostRow | undefined;
+            const path = `data/user/-1/posts/${id}`;
+
+            return db
+                .prepare(`UPDATE posts SET path = ? WHERE id = ? RETURNING *`)
+                .get(path, id) as PostRow | undefined;
+
+        } else {
+
+            const { id } = db
+                .prepare(`INSERT INTO posts (account, board, title, path, spoiler, release) VALUES (?, ?, ?, '', ?, unixepoch()) RETURNING id`)
+                .get(user.id, board, title, spoiler ? 1 : 0) as { id: number };
+
+            const path = `data/user/${user.id}/posts/${id}`;
+
+            return db
+                .prepare(`UPDATE posts SET path = ? WHERE id = ? RETURNING *`)
+                .get(path, id) as PostRow | undefined;
+
+        }
 
     });
 

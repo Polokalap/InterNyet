@@ -5,8 +5,9 @@ import "server-only";
 import {cache} from "react";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import { cpSync, mkdirSync } from "node:fs";
+import {cpSync, existsSync, mkdirSync} from "node:fs";
 import {User} from "@/app/lib/types";
+import path from "path";
 
 const options: HashOptions = {
     type: argon2.argon2id,
@@ -38,6 +39,49 @@ const db = getDatabase();
 const allowedCharacters = /^[a-z0-9_]{1,16}$/;
 
 mkdirSync("data/user", { recursive: true });
+
+const userDataDir = path.join(process.cwd(), "data", "user");
+const templateDir = path.join(process.cwd(), "templates");
+
+function ensureAnonymous() {
+
+    mkdirSync(userDataDir, { recursive: true });
+
+    const exists = db
+        .prepare("SELECT 1 FROM accounts WHERE id = -1")
+        .get();
+
+    if (!exists) {
+
+        try {
+
+            db
+                .prepare(`INSERT INTO accounts (id, user, password) VALUES (-1, ?, ?)`)
+                .run("anonymous", randomBytes(32).toString("hex"));
+
+            db
+                .prepare(`INSERT INTO settings (account, display, bio) VALUES (?, ?, ?)`)
+                .run(-1, "Anonymous", "Anonymous user");
+
+        } catch (err) {
+
+            if ((err as { code?: string }).code !== "SQLITE_CONSTRAINT_PRIMARYKEY") throw err;
+
+        }
+
+    }
+
+    const target = path.join(userDataDir, "-1");
+
+    if (!existsSync(target)) {
+
+        cpSync(path.join(templateDir, "-1"), target, { recursive: true });
+
+    }
+
+}
+
+ensureAnonymous();
 
 async function hash(tohash: string) {
 

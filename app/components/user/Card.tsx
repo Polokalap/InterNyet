@@ -63,10 +63,17 @@ export default async function Card({ user, self = false }: Props) {
                     dateStyle: "medium",
                     timeStyle: "short"
                 })}</p>
-                <p>{ followers } Followers, { clout } Clout</p>
-                {user.bio ? <q>{user.bio}</q> : <p>No bio</p>}
 
-                <FollowForm user={user} viewer={viewer ? viewer : undefined} following={following} />
+                {
+                    user.id != -1 ? (
+                        <>
+                            <p>{ followers } Followers, { clout } Clout</p>
+                            {user.bio ? <q>{user.bio}</q> : <p>No bio</p>}
+                            <FollowForm user={user} viewer={viewer ? viewer : undefined} following={following} />
+                        </>
+                    ) : null
+
+                }
 
             </div>
 

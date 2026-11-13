@@ -16,6 +16,7 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
     const [content, setContent] = useState("");
     const [media, setMedia] = useState("");
     const [spoiler, setSpoiler] = useState(false);
+    const [anon, setAnon] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
     const canPost = finished && content.length >= 10 && media !== "" && !submitted;
@@ -133,6 +134,29 @@ export default function CreateBoardPost({ user, board }: { user: { id: number; n
                                         type={"checkbox"}
                                         checked={spoiler}
                                         onChange={() => { setSpoiler(!spoiler); }}
+                                    />
+
+                                </label>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th className="w-25 h-full bg-[#721C24] text-white text-left border border-black px-1">Author</th>
+
+                            <td colSpan={2}>
+
+                                <label className={"flex flex-row gap-1 input px-1 py-0.5"}>
+
+                                    <p className={"select-none"}>Anonymous:</p>
+
+                                    <input
+                                        name={"anonymous"}
+                                        type={"checkbox"}
+                                        checked={anon}
+                                        onChange={() => { setAnon(!anon); }}
                                     />
 
                                 </label>

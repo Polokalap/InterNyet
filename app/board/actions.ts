@@ -33,6 +33,7 @@ export async function createPost(formData: FormData) {
     const content = String(formData.get("content") ?? "");
     const media = formData.get("media");
     const spoiler = formData.get("spoiler") !== null;
+    const anon = formData.get("anonymous") !== null;
 
     if (title.length > 100) {
 
@@ -60,7 +61,7 @@ export async function createPost(formData: FormData) {
 
     }
 
-    const result = await createBoardPost(user, board, title, content, media, spoiler || false);
+    const result = await createBoardPost(user, board, title, content, media, spoiler || false, anon);
 
     if ("success" in result && !result.success || !(result instanceof Post)) {
 
