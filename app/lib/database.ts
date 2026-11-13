@@ -96,6 +96,11 @@ function init() {
             followed INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE
         );
 
+        CREATE TABLE IF NOT EXISTS inbox_views (
+            account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+            viewed TIMESTAMP NOT NULL
+        );
+
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
         CREATE INDEX IF NOT EXISTS idx_sessions_expiration ON sessions(expiration);
         CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board);

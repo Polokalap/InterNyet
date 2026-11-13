@@ -882,3 +882,89 @@ export function hasLikedComment(id: number, account: number): boolean {
     return !!row;
 
 }
+
+const interactions = `
+    WITH RECURSIVE roots(id, root) AS (
+        SELECT id, post FROM comments WHERE post IS NOT NULL
+        UNION ALL
+        SELECT c.id, r.root FROM comments c
+            JOIN roots r ON c.parent = r.id
+    ),
+    interactions(post, release) AS (
+        SELECT p.id, p.release
+        FROM posts p
+            JOIN follows f ON f.followed = p.account
+        WHERE f.user = ?
+        UNION ALL
+        SELECT c.post, c.release
+        FROM comments c
+            JOIN follows f ON f.followed = c.account
+        WHERE f.user = ? AND c.post IS NOT NULL AND c.removed = 0
+        UNION ALL
+        SELECT c.post, c.release
+        FROM comments c
+            JOIN posts p ON p.id = c.post
+        WHERE p.account = ? AND c.account != ? AND c.removed = 0
+        UNION ALL
+        SELECT r.root, reply.release
+        FROM comments reply
+            JOIN comments parent ON parent.id = reply.parent
+            JOIN roots r ON r.id = reply.id
+        WHERE parent.account = ? AND reply.removed = 0 AND r.root IS NOT NULL
+    )`;
+
+export async function isNewInteraction(id: number): Promise<boolean> {
+
+    const row = db
+        .prepare(`
+            ${interactions}
+            SELECT 1
+            FROM interactions
+            WHERE release > COALESCE((SELECT viewed FROM inbox_views WHERE account = ?), 0)
+            LIMIT 1
+        `)
+        .get(id, id, id, id, id, id);
+
+    return row !== undefined;
+
+}
+
+export async function getInboxPosts(id: number, from: number, to: number): Promise<Post[]|BoardResponse> {
+
+    const limit = to - from;
+
+    const rows = db
+        .prepare(`
+            ${interactions}
+            SELECT posts.*
+            FROM posts
+                JOIN (SELECT post AS id, MAX(release) AS activity FROM interactions GROUP BY post) a
+                    ON a.id = posts.id
+            ORDER BY a.activity DESC, posts.release DESC
+            LIMIT ? OFFSET ?
+        `)
+        .all(id, id, id, id, id, limit, from) as PostRow[];
+
+    if (rows.length === 0) {
+
+        return {
+            success: false,
+            code: 26
+        }
+
+    }
+
+    return rows.map((row) => Post.fromRow(row));
+
+}
+
+export async function markInboxViewed(id: number) {
+
+    db
+        .prepare(`
+            INSERT INTO inbox_views (account, viewed) VALUES (?, unixepoch())
+            ON CONFLICT(account) DO UPDATE SET viewed = unixepoch()
+        `)
+        .run(id);
+
+}

@@ -38,11 +38,41 @@
 
 }
 
+.old-menu-red {
+
+    background-image: linear-gradient(to top, #8c1616, #cd2626);
+    padding: 4px;
+    border-radius: 3px;
+    box-shadow: 1px -1px 1px #00000022 inset, 0 1px 1px #ffffff44 inset, -1px 0 1px #ffffff33 inset, 1px 1px 5px #00000066;
+
+}
+
 .old-menu {
 
     background-image: linear-gradient(to top, #8c1616, #cd2626);
     padding: 4px;
     border-radius: 3px;
     box-shadow: 1px -1px 1px #00000022 inset, 0 1px 1px #ffffff44 inset, -1px 0 1px #ffffff33 inset, 1px 1px 5px #00000066;
+
+}
+
+.old-menu:hover {
+
+    background-image: linear-gradient(to top, #af1b1b, #ed2a2a);
+
+}
+
+.old-menu-green {
+
+    background-image: linear-gradient(to top, #498c0c, #69cc10);
+    padding: 4px;
+    border-radius: 3px;
+    box-shadow: 1px -1px 1px #00000022 inset, 0 1px 1px #ffffff44 inset, -1px 0 1px #ffffff33 inset, 1px 1px 5px #00000066;
+
+}
+
+.old-menu-green:hover {
+
+    background-image: linear-gradient(to top, #58a512, #72dc13);
 
 }
