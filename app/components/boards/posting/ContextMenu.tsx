@@ -18,6 +18,7 @@ export default function ContextMenu({ board, postId, canEdit, canRemoveMedia, ca
 
     const [open, setOpen] = useState(false);
     const [pending, startTransition] = useTransition();
+    const [copied, setCopied] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
@@ -47,12 +48,10 @@ export default function ContextMenu({ board, postId, canEdit, canRemoveMedia, ca
 
     }, [open]);
 
-    if (!canEdit && !canRemoveMedia && !canRemove) return null;
-
-    const run = (action: () => Promise<unknown>, confirmText?: string) => {
+    const run = (action: () => Promise<unknown>, confirmText?: string, keepOpen = false) => {
 
         if (confirmText && !confirm(confirmText)) return;
-        setOpen(false);
+        if (!keepOpen) setOpen(false);
 
         startTransition(async () => {
 
@@ -80,6 +79,18 @@ export default function ContextMenu({ board, postId, canEdit, canRemoveMedia, ca
             { open && (
 
                 <form role="menu" className={"absolute right-0 z-10 flex w-30 flex-col gap-1 border-1 p-1 bg-[#FFF9F0]"}>
+
+                    <p role="menuitem"
+                       className={itemClass}
+                       onClick={() => run(async () => {
+
+                           await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/board/${board}/posts/${postId}`);
+                           setCopied(true);
+                           setTimeout(() => setCopied(false), 2000)
+
+                       }, undefined, true)}>
+                        { copied ? "Link copied!" : "Share" }
+                    </p>
 
                     { canEdit && (
 
