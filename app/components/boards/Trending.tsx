@@ -80,7 +80,7 @@ export async function TrendingElement({ post }: { post: Post }) {
 
             <p className={"text-[#721C24] font-bold"}>{ getBoardByName(post.board) }</p>
 
-            <Link href={"/board/r/posts/1"} className={"!no-underline flex flex-col items-center text-center w-full"}>
+            <Link href={`/board/${post.board}/posts/${post.id}`} className={"!no-underline flex flex-col items-center text-center w-full"}>
 
                 <div className={"relative w-[125px] h-[125px] shrink-0 border border-black"}>
 
