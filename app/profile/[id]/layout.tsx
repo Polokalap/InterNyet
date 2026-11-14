@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { loadUser } from "@/app/lib/auth";
-import {getFollowers} from "@/app/lib/profile";
+import { getClout, getFollowers } from "@/app/lib/profile";
 
 export async function generateMetadata({
   params,
@@ -11,10 +11,11 @@ export async function generateMetadata({
   if (!user) return { title: "InterNyet User not found" };
 
   const followers = await getFollowers(user.id);
+  const clout = await getClout(user.id);
 
   return {
     title: `${user.display}'s profile`,
-    description: `Check out ${user.display}'s profile\n${user.bio ? `\n"${user.bio}"` : ""}\n${followers} Followers`,
+    description: `Check out ${user.display}'s profile\n${user.bio ? `\n"${user.bio}"` : ""}\n${followers} Followers. ${clout} Clout`,
     openGraph: {
       title: `${user.display}'s profile`,
       images: `/api/account/${user.id}/profile.jpeg`,
