@@ -1,3 +1,6 @@
+import { useRef, useState } from "react";
+import ToMarkdown from "@/app/components/markdown/Markdown";
+
 type Props = {
     description: string;
 }
@@ -8,9 +11,26 @@ export default function Bubble({ description }: Props) {
 
         <>
 
-            <div className={"flex flex-col items-center justify-center select-none"} title={description}>
+            <div
+                className={"relative flex flex-col items-center justify-center select-none"}
+                title={description}
+            >
 
-                <img src="/assets/icons/information.png" alt="Icon" width={"16px"} />
+                <img
+                    src={"/assets/icons/information.png"}
+                    alt={"Icon"}
+                    width={"16px"}
+                    className={"md:cursor-default cursor-pointer"}
+                    onClick={() => {
+
+                        if (window.innerWidth < 768) {
+
+                            alert(description);
+
+                        }
+
+                    }}
+                />
                 
             </div>
 
