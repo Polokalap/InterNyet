@@ -83,6 +83,8 @@ function ensureAnonymous() {
 
 ensureAnonymous();
 
+const disabledUsernames: string[] = ["anonymous"];
+
 async function hash(tohash: string) {
 
     return argon2.hash(tohash, options);
@@ -115,7 +117,7 @@ export async function addUser(user: string, password: string): Promise<AuthRespo
         .prepare("SELECT 1 FROM accounts WHERE user = ?")
         .get(username);
 
-    if (userCheck) {
+    if (userCheck || disabledUsernames.includes(username)) {
 
         return { success: false, code: 3 };
 

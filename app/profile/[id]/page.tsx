@@ -1,5 +1,5 @@
 import NavBar from "@/app/components/navbar/NavBar";
-import { getIfUser, getUser, getUserByUsername } from "@/app/lib/auth";
+import {getAnon, getIfUser, getUser, getUserByUsername} from "@/app/lib/auth";
 import Card from "@/app/components/user/Card";
 import AllBoardPostsFromUser from "@/app/components/boards/posting/AllBoardPostsFromUser";
 import {getMessage} from "@/app/lib/messages";
@@ -22,6 +22,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         user = await getUser(id);
 
     }
+
+    if (id == -1 || id.toString().toLowerCase() === "@anonymous") user = await getAnon();
 
     if (!user) {
 
