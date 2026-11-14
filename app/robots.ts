@@ -1,5 +1,7 @@
 import { MetadataRoute } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+
 const clankers = [
     'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',
     'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'anthropic-ai',
@@ -15,7 +17,8 @@ export default function robot(): MetadataRoute.Robots {
         rules: [
             { userAgent: '*', allow: '/' },
             { userAgent: clankers, allow: '/$', disallow: '/' },
-        ]
+        ],
+        sitemap: `${baseUrl}/sitemap.xml`
     }
 
 }
