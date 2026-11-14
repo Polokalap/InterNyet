@@ -331,7 +331,7 @@ export async function organizedBoardPosts(id: string, from: number, to: number):
                        - (SELECT COUNT(*) FROM thread
                           WHERE thread.post = posts.id
                             AND thread.account != posts.account
-                            AND post.account != -1
+                            AND thread.account != -1
                 AND thread.removed = 0) AS score
             FROM posts
             WHERE posts.board = ?
