@@ -32,12 +32,19 @@ export async function generateMetadata({
 
   }
 
+  const text = content
+      .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/[#>*_`~-]+/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 200);
+
   const spoiler = await getIfSpoiler(post.id);
 
   return {
     title: `${post.title} at InterNyet`,
     description: `Check out this post made by ${user.display}\n\n` +
-    `${content}`,
+    `${text}`,
     openGraph: {
       title: `${post.title}`,
       images: spoiler ? `` : `/api/post/${post.id}/media.avif`,
