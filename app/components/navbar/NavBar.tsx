@@ -48,7 +48,12 @@ export default async function NavBar() {
 
                 ) : (
 
-                    <NavLink title={"Account"} path={"/account"} />
+                    <>
+
+                        <NavLink title={"Donate"} path={"/donate"} />
+                        <NavLink title={"Account"} path={"/account"} />
+
+                    </>
 
                 )}
 
