@@ -64,6 +64,6 @@ You can contribute to this project, as long as the change you are making isn't m
 
     * [x] Markdown support
     * [x] Image support
-* [ ] Phone UI
+* [x] Phone UI
 
 Currently WIP
