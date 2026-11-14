@@ -30,7 +30,7 @@ export default async function Card({ user, self = false }: Props) {
 
                 <div>
 
-                    <p className={"flex flex-row gap-2 items-center text-2xl"}>{user.display} <span
+                    <p className={"flex flex-row gap-2 items-center md:text-2xl text-xl"}>{user.display} <span
                         className={"text-zinc-500 text-sm"}>(@{user.name})</span></p>
                     <p className={"text-md"}>Created at: {date.toLocaleString("en-GB", {
                         dateStyle: "medium",
@@ -57,7 +57,7 @@ export default async function Card({ user, self = false }: Props) {
 
             <div>
 
-                <p className={"flex flex-row gap-2 items-center text-2xl"}>{user.display} <span
+                <p className={"flex flex-row gap-2 items-center md:text-2xl text-xl"}>{user.display} <span
                     className={"text-zinc-500 text-sm"}>(@{user.name})</span></p>
                 <p className={"text-md"}>Created at: {date.toLocaleString("en-GB", {
                     dateStyle: "medium",
