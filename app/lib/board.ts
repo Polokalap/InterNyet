@@ -1066,3 +1066,27 @@ export async function getRandomCover(id: string): Promise<string> {
     return `/api/post/${rows[random].id}/media.avif`;
 
 }
+
+export async function getThreads() {
+
+    const { count } = db
+        .prepare("SELECT COUNT(1) as count FROM posts")
+        .get() as { count: number };
+
+    return count || 0;
+
+}
+
+export async function getInteractions() {
+
+    const { count } = db
+        .prepare(`
+                SELECT
+                    (SELECT COUNT(1) FROM posts)
+                        + (SELECT COUNT(1) FROM comments) AS count
+            `)
+        .get() as { count: number };
+
+    return count || 0;
+
+}

@@ -546,3 +546,13 @@ export const loadUser = cache(async (rawId: string) => {
     return getUser(numericId);
 
 });
+
+export async function getUserCount(): Promise<number> {
+
+    const { count } = db
+        .prepare("SELECT COUNT(1) as count FROM accounts")
+        .get() as { count: number };
+
+    return count || 0;
+
+}

@@ -4,6 +4,7 @@ import Boards from "@/app/components/boards/Boards";
 import NavBar from "@/app/components/navbar/NavBar";
 import Palantir from "@/app/components/palantir/Palantir";
 import Trending from "@/app/components/boards/Trending";
+import Statistics from "@/app/components/statistics/Statistics";
 
 export default async function Home() {
 
@@ -26,6 +27,8 @@ export default async function Home() {
                 <Boards title={"Boards"}/>
 
                 <Trending />
+
+                <Statistics />
 
             </div>
 
