@@ -19,7 +19,7 @@ export default async function Statistics() {
 
                 </div>
 
-                <div className={"flex flex-row w-full h-full overflow-x-auto overflow-y-hidden bg-[#FFF9F0] md:pr-15 md:pl-15 justify-center md:justify-between text-sm pt-6"}>
+                <div className={"flex flex-row w-full h-full overflow-x-auto overflow-y-hidden bg-[#FFF9F0] md:pr-15 md:pl-15 md:justify-between text-sm pt-6"}>
 
                     <div className={"flex flex-row p-5 justify-between"}>
 
