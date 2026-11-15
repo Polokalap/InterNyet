@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import {redirect, useRouter} from "next/navigation";
 import { toggleLikeComment } from "@/app/board/actions";
 import {comment} from "postcss";
+import {prettyNumber} from "@/app/lib/messages";
 
 type Props = {
     commentId: number;
@@ -40,7 +41,7 @@ export default function CommentReaction({ commentId, comments, likes, liked, sma
             <div className={"flex flex-row gap-1 items-center cursor-pointer select-none"} onClick={handleLike}>
 
                 <img src={`/assets/icons/${liked ? "liked.png" : "like.png"}`} alt={"Like"} className={"w-4 h-4"} />
-                <p className={`${liked ? "text-[#C62828]" : ""}`}>{ likes }</p>
+                <p className={`${liked ? "text-[#C62828]" : ""}`}>{ prettyNumber(likes) }</p>
 
             </div>
 
@@ -56,7 +57,7 @@ export default function CommentReaction({ commentId, comments, likes, liked, sma
             >
 
                 <img src={`/assets/icons/${commenting ? "comment-open" : "comment"}.png`} alt={"Comment"} className={"w-4 h-4"} />
-                <p className={`${commenting ? "text-[#C62828]" : ""}`}>{ comments }</p>
+                <p className={`${commenting ? "text-[#C62828]" : ""}`}>{ prettyNumber(comments) }</p>
 
             </div>
 

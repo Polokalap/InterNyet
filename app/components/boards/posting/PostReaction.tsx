@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toggleLike } from "@/app/board/actions";
+import {prettyNumber} from "@/app/lib/messages";
 
 type Props = {
     postId: number;
@@ -39,7 +40,7 @@ export default function PostReaction({ postId, board, comments, likes, liked, sm
             <div className={"flex flex-row gap-1 items-center cursor-pointer select-none"} onClick={handleLike}>
 
                 <img src={`/assets/icons/${liked ? "liked.png" : "like.png"}`} alt={"Like"} className={"w-4 h-4"} />
-                <p className={`${liked ? "text-[#C62828]" : ""}`}>{ likes }</p>
+                <p className={`${liked ? "text-[#C62828]" : ""}`}>{ prettyNumber(likes) }</p>
 
             </div>
 
@@ -55,7 +56,7 @@ export default function PostReaction({ postId, board, comments, likes, liked, sm
             >
 
                 <img src="/assets/icons/comment.png" alt={"Comment"} className={"w-4 h-4"} />
-                <p>{ comments }</p>
+                <p>{ prettyNumber(comments) }</p>
 
             </div>
 
