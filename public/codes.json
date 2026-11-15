@@ -34,5 +34,6 @@
   "33": "Your comment is too long!",
   "34": "You are being rate limited!",
   "35": "Bio too short",
-  "36": "Bio must not be longer than 30 characters"
+  "36": "Bio must not be longer than 30 characters",
+  "37": "Post deleted successfully"
 }

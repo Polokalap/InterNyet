@@ -103,6 +103,8 @@ export async function removePost(id: number) {
 
     await deletePost(post.id);
 
+    redirect(`/board/${post.board}?error=true?code=37`);
+
 }
 
 export async function updatePost(formData: FormData) {
