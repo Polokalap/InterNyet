@@ -29,9 +29,9 @@ export default async function Trending() {
 
             </div>
 
-            <div className={"flex flex-col gap-13 w-full h-full overflow-x-auto overflow-y-hidden bg-[#FFF9F0] justify-between text-sm p-5 pt-6"}>
+            <div className={"flex flex-col gap-13 w-full h-full overflow-x-auto overflow-y-hidden bg-[#FFF9F0] justify-between text-sm p-5 pt-6 pb-6"}>
 
-                <div className={"flex flex-row justify-evenly md:gap-0 gap-5"}>
+                <div className={"flex flex-row justify-evenly md:gap-0 gap-5 align-top"}>
 
                     {
                         col1.map((item, i) => (
@@ -43,7 +43,7 @@ export default async function Trending() {
 
                 </div>
 
-                <div className={"flex flex-row justify-evenly md:gap-0 gap-5"}>
+                <div className={"flex flex-row justify-evenly md:gap-0 gap-5 align-top"}>
 
                     {
                         col2.map((item, i) => (
@@ -76,7 +76,7 @@ export async function TrendingElement({ post }: { post: Post }) {
 
     return (
 
-        <div className={"flex flex-col gap-1 items-center justify-center text-center w-40 h-40"}>
+        <div className={"flex flex-col gap-1 items-center justify-center text-center w-40 h-45 align-top"}>
 
             <p className={"text-[#721C24] font-bold"}>{ getBoardByName(post.board) }</p>
 
