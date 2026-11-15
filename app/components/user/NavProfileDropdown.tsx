@@ -3,6 +3,7 @@
 import { User } from "@/app/lib/types";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Props = {
     user: User;
