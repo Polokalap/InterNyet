@@ -1,4 +1,4 @@
-This website is entirely [donation funded](/donation), and the moderation is kept to the minimum. We do not use human moderators, as humans tend to be biased on controversial topic, and politics. We believe there should be a place where users can post and discuss their ideas freely, anonymously.
+This website is entirely [donation funded](/donate), and the moderation is kept to the minimum. We do not use human moderators, as humans tend to be biased on controversial topic, and politics. We believe there should be a place where users can post and discuss their ideas freely, anonymously.
 That said, we do have rules to keep conversations productive, and avoid [shitposting](https://en.wikipedia.org/wiki/Shitposting).
 
 ## 1: Post quality

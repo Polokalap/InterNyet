@@ -1,5 +1,6 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import SmallPost from "@/app/components/news/posts/SmallPost";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 
@@ -20,6 +21,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

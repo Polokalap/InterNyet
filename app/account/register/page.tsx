@@ -1,6 +1,7 @@
 import {requireNoUser, validate} from "@/app/lib/auth";
 import NavBar from "@/app/components/navbar/NavBar";
 import RegisterForm from "@/app/components/account/register/RegisterForm";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -28,6 +29,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

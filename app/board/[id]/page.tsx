@@ -5,6 +5,7 @@ import CreateBoardPost from "@/app/components/boards/posting/CreateBoardPost";
 import { getIfUser } from "@/app/lib/auth";
 import { getMessage } from "@/app/lib/messages";
 import AllBoardsPosts from "@/app/components/boards/posting/AllBoardPosts";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ error?: string, code?: string; page?: string; }>; }) {
 
@@ -70,6 +71,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

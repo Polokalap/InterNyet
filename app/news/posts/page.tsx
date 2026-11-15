@@ -3,6 +3,7 @@ import { requireUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import Card from "@/app/components/user/Card";
 import AllPostsFromUser from "@/app/components/news/posts/AllPostsFromUser";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }>; }) {
 
@@ -31,6 +32,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

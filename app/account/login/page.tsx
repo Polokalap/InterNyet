@@ -1,6 +1,7 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import { requireNoUser } from "@/app/lib/auth";
 import LoginForm from "@/app/components/account/login/LoginForm";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -28,6 +29,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

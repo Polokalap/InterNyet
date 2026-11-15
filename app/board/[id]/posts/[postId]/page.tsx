@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getIfUser } from "@/app/lib/auth";
 import BoardPost from "@/app/components/boards/posting/BoardPost";
 import { getMessage } from "@/app/lib/messages";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string, postId: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -57,6 +58,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

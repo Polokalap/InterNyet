@@ -5,6 +5,7 @@ import { getIfUser } from "@/app/lib/auth";
 import { getMessage } from "@/app/lib/messages";
 import AllInboxPosts from "@/app/components/inbox/AllInboxPosts";
 import { redirect } from "next/navigation";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string; page?: string; }>; }) {
 
@@ -43,6 +44,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

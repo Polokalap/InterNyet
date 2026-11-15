@@ -3,6 +3,7 @@ import { requireUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import CreateForm from "@/app/components/news/create/CreateForm";
 import {getMessage} from "@/app/lib/messages";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -30,6 +31,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ e
                 {error && <p className="text-red-700 m-auto">{getMessage(code) ?? "Invalid username or password"}</p>}
 
             </div>
+
+            <Footer />
 
         </>
 

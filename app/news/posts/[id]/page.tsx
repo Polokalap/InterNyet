@@ -2,6 +2,7 @@ import NavBar from "@/app/components/navbar/NavBar";
 import { getUser } from "@/app/lib/auth";
 import Card from "@/app/components/user/Card";
 import AllPostsFromUser from "@/app/components/news/posts/AllPostsFromUser";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: number }>; searchParams: Promise<{ page?: string }>; }) {
 
@@ -49,6 +50,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

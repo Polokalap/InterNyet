@@ -5,6 +5,7 @@ import NavBar from "@/app/components/navbar/NavBar";
 import Palantir from "@/app/components/palantir/Palantir";
 import Trending from "@/app/components/boards/Trending";
 import Statistics from "@/app/components/statistics/Statistics";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Home() {
 
@@ -29,6 +30,8 @@ export default async function Home() {
                 <Trending />
 
                 <Statistics />
+
+                <Footer />
 
             </div>
 

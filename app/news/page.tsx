@@ -1,6 +1,7 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import { getIfUser } from "@/app/lib/auth";
 import AllPosts from "@/app/components/news/posts/AllPosts";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }>; }) {
 
@@ -37,6 +38,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
                 <AllPosts searchParams={searchParams} />
 
             </div>
+
+            <Footer />
 
         </>
 

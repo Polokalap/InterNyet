@@ -1,5 +1,6 @@
 import NavBar from "@/app/components/navbar/NavBar";
 import FileMarkdown from "@/app/components/markdown/FileMarkdown";
+import Footer from "@/app/components/footer/Footer";
 
 export default function Page({ searchParams }: { searchParams: Promise<{ page?: string }>; }) {
 
@@ -23,6 +24,8 @@ export default function Page({ searchParams }: { searchParams: Promise<{ page?: 
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

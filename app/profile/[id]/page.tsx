@@ -3,6 +3,7 @@ import {getAnon, getIfUser, getUser, getUserByUsername} from "@/app/lib/auth";
 import Card from "@/app/components/user/Card";
 import AllBoardPostsFromUser from "@/app/components/boards/posting/AllBoardPostsFromUser";
 import {getMessage} from "@/app/lib/messages";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: number; }>; searchParams: Promise<{ page?: string; error: boolean; code: string; }>; }) {
 
@@ -70,6 +71,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

@@ -5,6 +5,7 @@ import { requireUser } from "@/app/lib/auth";
 import EditBoardPost from "@/app/components/boards/posting/EditBoardPost";
 import { readFile } from "node:fs/promises";
 import path from "path";
+import Footer from "@/app/components/footer/Footer";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ id: string, postId: string }>, searchParams: Promise<{ error?: string, code?: string }>; }) {
 
@@ -99,6 +100,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 
