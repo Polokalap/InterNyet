@@ -14,7 +14,7 @@ export default function Page({ searchParams }: { searchParams: Promise<{ page?: 
                 <div className={"flex flex-col gap-2 items-center p-2 bg-[#FFF9F0] border-1"}>
 
                     <h1 className={"text-4xl font-bold"}>Donate</h1>
-                    <div className={"justify-start w-full"}>
+                    <div className={"justify-start w-full overflow-auto"}>
 
                         <FileMarkdown path={"texts/donate.md"} />
 
