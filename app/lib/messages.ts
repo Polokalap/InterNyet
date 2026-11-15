@@ -60,3 +60,12 @@ export function getBoardDescription(board: string) {
     return "No description";
 
 }
+
+export function prettyNumber(value: number): string {
+
+    if (value >= 1_000_000) return `${value / 1_000_000}M`;
+    if (value >= 1_000) return `${value / 1_000}K`;
+
+    return `${value}`;
+
+}

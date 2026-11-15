@@ -1,5 +1,6 @@
 import { getUserCount } from "@/app/lib/auth";
 import { getInteractions, getThreads } from "@/app/lib/board";
+import {prettyNumber} from "@/app/lib/messages";
 
 export default async function Statistics() {
 
@@ -31,7 +32,7 @@ export default async function Statistics() {
                                 width={96}
                             />
 
-                            <h1 className={"text-2xl"}>{ users } Users</h1>
+                            <h1 className={"text-2xl"}>{ prettyNumber(users) } Users</h1>
 
                         </div>
 
@@ -47,7 +48,7 @@ export default async function Statistics() {
                                 width={96}
                             />
 
-                            <h1 className={"text-2xl"}>{ threads } Threads</h1>
+                            <h1 className={"text-2xl"}>{ prettyNumber(threads) } Threads</h1>
 
                         </div>
 
@@ -63,7 +64,7 @@ export default async function Statistics() {
                                 width={96}
                             />
 
-                            <h1 className={"text-2xl"}>{ interactions } Interactions</h1>
+                            <h1 className={"text-2xl"}>{ prettyNumber(interactions) } Interactions</h1>
 
                         </div>
 
